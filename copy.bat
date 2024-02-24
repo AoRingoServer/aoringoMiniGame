@@ -1,0 +1,1 @@
+D:\デスクトップ\copuPlugin3.bat

@@ -37,6 +37,12 @@ configure<BukkitPluginDescription> {
     main = "com.github.Ringoame196.Main"
     version = gitVersion()
     apiVersion = "1." + pluginVersion.split(".")[1]
+    commands {
+        register("lobby") {
+            description = "ロビーにテレポートするコマンド"
+            usage = "/lobby"
+        }
+    }
 }
 
 tasks.withType<ShadowJar> {
