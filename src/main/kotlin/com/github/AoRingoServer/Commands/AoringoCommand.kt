@@ -7,8 +7,11 @@ import org.bukkit.command.CommandSender
 import org.bukkit.command.TabExecutor
 import org.bukkit.plugin.Plugin
 
-class AoringoOpCommand(val plugin: Plugin) : CommandExecutor, TabExecutor {
+class AoringoCommand(private val plugin: Plugin) : CommandExecutor, TabExecutor {
     override fun onCommand(sender: CommandSender, command: Command, label: String, args: Array<out String>): Boolean {
+        if (args.isEmpty()) { return false }
+        val subCommand = args[0]
+        subCommandMap()[subCommand]?.invoke()
         return true
     }
 
@@ -18,7 +21,7 @@ class AoringoOpCommand(val plugin: Plugin) : CommandExecutor, TabExecutor {
             else -> mutableListOf()
         }
     }
-    private fun subCommandMap(): Map<String, *> {
+    private fun subCommandMap(): Map<String, () -> Unit> {
         return mapOf(
             "reloadResourcePack" to {
                 ResourcePack(plugin).update()

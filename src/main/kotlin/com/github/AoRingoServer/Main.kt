@@ -1,6 +1,6 @@
 package com.github.AoRingoServer
 
-import com.github.AoRingoServer.Commands.AoringoOpCommand
+import com.github.AoRingoServer.Commands.AoringoCommand
 import com.github.AoRingoServer.Commands.LobbyCommand
 import org.bukkit.plugin.java.JavaPlugin
 
@@ -10,7 +10,7 @@ class Main : JavaPlugin() {
         makePluginFolder()
         saveDefaultConfig()
         getCommand("lobby")!!.setExecutor(LobbyCommand())
-        getCommand("aoringoop")!!.setExecutor(AoringoOpCommand(this))
+        getCommand("aoringo")!!.setExecutor(AoringoCommand(this))
         server.pluginManager.registerEvents(Events(this), this)
     }
     private fun makePluginFolder() {

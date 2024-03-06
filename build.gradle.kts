@@ -42,6 +42,17 @@ configure<BukkitPluginDescription> {
             description = "ロビーにテレポートするコマンド"
             usage = "/lobby"
         }
+        register("aoringo") {
+            description = "管理用コマンド"
+            usage = "/aoringo"
+            permission = "aoringoServer.admin"
+        }
+    }
+    permissions {
+        register("aoringoServer.admin") {
+            description = "青りんごサーバー運営権限"
+            default = BukkitPluginDescription.Permission.Default.FALSE
+        }
     }
 }
 
