@@ -10,6 +10,8 @@ class Events(private val plugin: Plugin) : Listener {
     @EventHandler
     fun onPlayerJoin(e: PlayerJoinEvent) {
         val player = e.player
+        val aoringoPlayer = AoringoPlayer(player)
         ResourcePack(plugin).adaptation(player)
+        aoringoPlayer.setPrefix()
     }
 }
