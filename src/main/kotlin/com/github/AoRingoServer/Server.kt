@@ -25,7 +25,7 @@ class Server(private val plugin: Plugin) {
                     2 -> kickAllPlayer()
                     in 1..10 -> countDownMessage(c)
                     else -> {
-                        if (c % 10 == 0) {
+                        if (c % 5 == 0) {
                             countDownMessage(c)
                         }
                     }
@@ -42,7 +42,7 @@ class Server(private val plugin: Plugin) {
     }
     private fun kickAllPlayer() {
         val players = Bukkit.getOnlinePlayers()
-        val message = "${ChatColor.YELLOW}サーバーはシャットダウンしました"
+        val message = "${ChatColor.RED}サーバーが停止されました"
         for (player in players) {
             player.kickPlayer(message)
         }
