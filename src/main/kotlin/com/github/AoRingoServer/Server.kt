@@ -23,15 +23,19 @@ class Server(private val plugin: Plugin) {
                         this.cancel()
                     }
                     2 -> kickAllPlayer()
+                    in 1..10 -> countDownMessage(c)
                     else -> {
                         if (c % 10 == 0) {
-                            val countDownMessage = "${ChatColor.YELLOW}[サーバー] シャットダウンまで残り${c}秒"
-                            Bukkit.broadcastMessage(countDownMessage)
+                            countDownMessage(c)
                         }
                     }
                 }
             }
         }.runTaskTimer(plugin, 0L, 20L) // 1秒間隔 (20 ticks) でタスクを実行
+    }
+    private fun countDownMessage(c: Int) {
+        val countDownMessage = "${ChatColor.YELLOW}[サーバー] シャットダウンまで残り${c}秒"
+        Bukkit.broadcastMessage(countDownMessage)
     }
     private fun isPlayerPresent(): Boolean {
         return Bukkit.getServer().onlinePlayers.isNotEmpty()
