@@ -6,9 +6,11 @@ import org.bukkit.command.BlockCommandSender
 import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
 import org.bukkit.entity.Villager
+import org.bukkit.inventory.ItemStack
+import org.bukkit.inventory.MerchantRecipe
 
 class Customer {
-    val name = "${ChatColor.YELLOW}お客様"
+    private val name = "${ChatColor.YELLOW}お客様"
     private fun summon(location: Location) {
         val world = location.world
         val villager: Villager = world!!.spawn(location, org.bukkit.entity.Villager::class.java)
@@ -32,5 +34,15 @@ class Customer {
         val z = args[3].toDouble()
         val world = location.world
         return Location(world, x, y, z)
+    }
+    fun makeTradeRecipe(tradeItem:ItemStack,paymentItem:ItemStack): MerchantRecipe {
+        val trade = MerchantRecipe(tradeItem,
+            0
+        )
+        trade.addIngredient(paymentItem)
+        return trade
+    }
+    fun setTrading(villager: Villager,tradeList: MutableList<MerchantRecipe>){
+        villager.recipes = tradeList
     }
 }
