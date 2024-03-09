@@ -5,19 +5,19 @@ import org.bukkit.plugin.Plugin
 import java.io.File
 import java.io.IOException
 
-class Yml {
-    fun makePluginFolder(plugin: Plugin) {
+class Yml(private val plugin: Plugin) {
+    fun makePluginFolder() {
         val dataFolder = plugin.dataFolder
         if (dataFolder.exists()) { return }
         dataFolder.mkdirs()
     }
-    fun makePlayerDataFolder(plugin: Plugin) {
+    fun makePlayerDataFolder() {
         val path = plugin.dataFolder.path + "/playerData"
         val file = File(path)
         if (file.exists()) { return }
         file.mkdirs()
     }
-    fun addToList(plugin: Plugin, path: String, fileName: String, key: String, item: String) {
+    fun addToList(path: String, fileName: String, key: String, item: String) {
         val playerDataFolder = File(plugin.dataFolder, path)
         if (!playerDataFolder.exists()) {
             playerDataFolder.mkdirs()
@@ -40,7 +40,7 @@ class Yml {
             println("Error while saving data: ${e.message}")
         }
     }
-    fun getYml(plugin: Plugin, path: String, fileName: String): YamlConfiguration {
+    fun getYml(path: String, fileName: String): YamlConfiguration {
         val playerDataFolder = File(plugin.dataFolder, path)
         if (!playerDataFolder.exists()) {
             playerDataFolder.mkdirs()
@@ -48,11 +48,11 @@ class Yml {
         val filePath = File(playerDataFolder, "$fileName.yml")
         return YamlConfiguration.loadConfiguration(filePath)
     }
-    fun getList(plugin: Plugin, path: String, fileName: String, key: String): MutableList<String>? {
-        val yamlConfiguration = getYml(plugin, path, fileName)
+    fun getList(path: String, fileName: String, key: String): MutableList<String>? {
+        val yamlConfiguration = getYml(path, fileName)
         return yamlConfiguration.getStringList(key)
     }
-    fun removeToList(plugin: Plugin, path: String, fileName: String, key: String, item: String) {
+    fun removeToList(path: String, fileName: String, key: String, item: String) {
         val playerDataFolder = File(plugin.dataFolder, path)
         if (!playerDataFolder.exists()) {
             playerDataFolder.mkdirs()
@@ -75,7 +75,7 @@ class Yml {
             println("Error while saving data: ${e.message}")
         }
     }
-    fun setList(plugin: Plugin, path: String, fileName: String, key: String, item: MutableList<String>) {
+    fun setList(path: String, fileName: String, key: String, item: MutableList<String>) {
         val playerDataFolder = File(plugin.dataFolder, path)
         if (!playerDataFolder.exists()) {
             playerDataFolder.mkdirs()

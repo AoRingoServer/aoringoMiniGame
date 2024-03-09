@@ -14,6 +14,8 @@ class Main : JavaPlugin() {
         getCommand("aoringo")!!.setExecutor(AoringoCommand(this))
         getCommand("cookgame")!!.setExecutor(CookGameCommand(this))
         server.pluginManager.registerEvents(Events(this), this)
+        saveResource("FoodInfo.yml", true)
+        saveResource("cookGameConfig.yml", false)
     }
     private fun makePluginFolder() {
         val dataFolder = this.dataFolder

@@ -1,0 +1,8 @@
+appetizer :
+  name : "§aお通し"
+  customModelData : 109
+  price : 100
+parfait :
+  name: "§eパフェ"
+  customModelData: 64
+  price : 100

@@ -11,7 +11,7 @@ import java.io.IOException
 
 class ResourcePack(val plugin: Plugin) {
     private val configFile = File(plugin.dataFolder, "/config.yml")
-    private val yml = Yml()
+    private val yml = Yml(plugin)
     private val resourcePackId = "ResourcePack.URL"
     private fun save(key: String, text: String) {
         val yamlConfiguration = YamlConfiguration.loadConfiguration(configFile)
@@ -26,7 +26,7 @@ class ResourcePack(val plugin: Plugin) {
     }
     fun update() {
         val gasID = "ResourcePack.GET"
-        val configFIle = yml.getYml(plugin, "", "config")
+        val configFIle = yml.getYml("", "config")
         val url = configFIle.getString(resourcePackId)
         val gas = configFIle.getString(gasID) ?: return
 

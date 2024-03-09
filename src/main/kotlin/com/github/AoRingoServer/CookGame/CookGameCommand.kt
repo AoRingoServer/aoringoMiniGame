@@ -8,7 +8,7 @@ import org.bukkit.plugin.Plugin
 
 class CookGameCommand(private val plugin: Plugin) : CommandExecutor, TabExecutor {
     override fun onCommand(sender: CommandSender, command: Command, label: String, args: Array<out String>): Boolean {
-        if (args.size < 2) { return false }
+        if (args.isEmpty()) { return false }
         val subCommand = args[0]
         subCommands()[subCommand]?.invoke(args, sender)
         return true
@@ -16,7 +16,7 @@ class CookGameCommand(private val plugin: Plugin) : CommandExecutor, TabExecutor
     private fun subCommands(): Map<String, (args: Array<out String>, sender: CommandSender) ->Unit> {
         return mapOf(
             "summonCustomer" to { args: Array<out String>, sender: CommandSender ->
-                Customer().commandProcess(sender, args)
+                Customer(plugin).commandProcess(sender, args)
             }
         )
     }
