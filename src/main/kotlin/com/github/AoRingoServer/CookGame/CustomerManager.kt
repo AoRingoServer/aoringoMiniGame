@@ -5,6 +5,7 @@ import org.bukkit.ChatColor
 import org.bukkit.Location
 import org.bukkit.command.BlockCommandSender
 import org.bukkit.command.CommandSender
+import org.bukkit.entity.Entity
 import org.bukkit.entity.Player
 import org.bukkit.entity.Villager
 import org.bukkit.inventory.Inventory
@@ -16,7 +17,8 @@ class CustomerManager(private val plugin: Plugin) {
     private val name = "${ChatColor.YELLOW}お客様"
     val customerTag = "cookGameCustomer"
     val customorRecipManager = CustomorRecipManager(plugin)
-    private fun summonCustomor(location: Location) {
+    fun summon(sender: CommandSender, args: Array<out String>) {
+        val location = acquisitionLocation(sender,args)?:return
         val world = location.world
         val villager: Villager = world!!.spawn(location, org.bukkit.entity.Villager::class.java)
         villager.customName = name
@@ -24,16 +26,20 @@ class CustomerManager(private val plugin: Plugin) {
         villager.scoreboardTags.add(customerTag)
         setDefaultRecipe(villager)
     }
-    fun summon(sender: CommandSender, args: Array<out String>) {
-        val senderLocation = when (sender) {
+    private fun acquisitionLocation(sender: CommandSender, args: Array<out String>):Location?{
+        val commandSenderLocation = acquisitionCommandSenderLocation(sender) ?:return null
+        return if (args.size == 4){
+            coordinateSpecified(commandSenderLocation, args)
+        } else {
+            commandSenderLocation
+        }
+    }
+    private fun acquisitionCommandSenderLocation(sender: CommandSender):Location?{
+        return when(sender){
             is Player -> sender.location
             is BlockCommandSender -> sender.block.location.clone().add(0.5, 2.0, 0.5)
-            else -> return
+            else -> return null
         }
-        val location = if (args.size == 4) {
-            coordinateSpecified(senderLocation, args)
-        } else senderLocation
-        summonCustomor(location ?: return)
     }
     private fun coordinateSpecified(location: Location, args: Array<out String>): Location? {
         val x = args[1].toDouble()
