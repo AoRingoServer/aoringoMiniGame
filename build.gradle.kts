@@ -71,6 +71,12 @@ tasks.withType<ShadowJar> {
 
 tasks.named("build") {
     dependsOn("shadowJar")
+    doFirst {
+        copy {
+            from(buildDir.resolve("libs/${project.name}.jar"))
+            into("D:\\デスクトップ\\青リンゴサーバープラグイン")
+        }
+    }
 }
 
 task<LaunchMinecraftServerTask>("buildAndLaunchServer") {

@@ -16,7 +16,7 @@ class CookGameCommand(private val plugin: Plugin) : CommandExecutor, TabExecutor
     private fun subCommands(): Map<String, (args: Array<out String>, sender: CommandSender) ->Unit> {
         return mapOf(
             "summonCustomer" to { args: Array<out String>, sender: CommandSender ->
-                Customer(plugin).commandProcess(sender, args)
+                CustomerManager(plugin).summon(sender, args)
             }
         )
     }

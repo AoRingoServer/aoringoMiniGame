@@ -1,8 +1,20 @@
 appetizer :
   name : "§aお通し"
   customModelData : 109
-  price : 100
+  price : 200
 parfait :
   name: "§eパフェ"
   customModelData: 64
   price : 100
+frenchFries :
+  name : "§eポテト"
+  customModelData : 58
+  price : 150
+doria :
+  name: "§cドリア"
+  customModelData: 55
+  price: 230
+udon :
+  name: "うどん"
+  customModelData: 60
+  price: 250
