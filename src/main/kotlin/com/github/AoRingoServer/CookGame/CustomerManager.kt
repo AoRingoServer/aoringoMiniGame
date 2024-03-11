@@ -27,8 +27,9 @@ class CustomerManager(private val plugin: Plugin) {
         setDefaultRecipe(villager)
     }
     private fun acquisitionLocation(sender: CommandSender, args: Array<out String>):Location?{
+        val sizeAtCoordinateInput = 4
         val commandSenderLocation = acquisitionCommandSenderLocation(sender) ?:return null
-        return if (args.size == 4){
+        return if (args.size == sizeAtCoordinateInput){
             coordinateSpecified(commandSenderLocation, args)
         } else {
             commandSenderLocation
