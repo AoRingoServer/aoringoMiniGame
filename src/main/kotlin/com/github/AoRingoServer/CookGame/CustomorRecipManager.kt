@@ -34,7 +34,7 @@ class CustomorRecipManager(private val plugin: Plugin) {
         trade.addIngredient(paymentItem)
         return trade
     }
-    fun acquisitionParfaitRecipeMerchantRecipe(): MerchantRecipe {
+    fun makeParfaitRecipeMerchantRecipe(): MerchantRecipe {
         val foodID = "parfait"
         val foodManager = FoodManager(plugin)
         val parfaitFoodInfo = foodManager.makeFoodInfo(foodID)

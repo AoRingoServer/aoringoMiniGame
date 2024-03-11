@@ -66,7 +66,7 @@ class CustomerManager(private val plugin: Plugin) {
     }
     private fun setDefaultRecipe(villager: Villager) {
         val appetizer = "appetizer"
-        val parfaitItem = customorRecipManager.acquisitionParfaitRecipeMerchantRecipe()
+        val parfaitItem = customorRecipManager.makeParfaitRecipeMerchantRecipe()
         val appetizerItem = customorRecipManager.makeMerchantRecipe(appetizer)
         val tradeRecipe = mutableListOf<MerchantRecipe>()
         tradeRecipe.add(parfaitItem)
@@ -84,7 +84,7 @@ class CustomerManager(private val plugin: Plugin) {
     fun skipTrade(villager: Villager) {
         val additionalRecipe = acquisitionCompletionGoodsID() ?: return
         val recipes = mutableListOf<MerchantRecipe>()
-        recipes.add(customorRecipManager.acquisitionParfaitRecipeMerchantRecipe())
+        recipes.add(customorRecipManager.makeParfaitRecipeMerchantRecipe())
         recipes.add(customorRecipManager.makeMerchantRecipe(additionalRecipe))
         customorRecipManager.setTrading(villager, recipes)
     }
