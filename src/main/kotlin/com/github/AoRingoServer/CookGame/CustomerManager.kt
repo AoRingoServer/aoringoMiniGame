@@ -15,7 +15,6 @@ import kotlin.random.Random
 class CustomerManager(private val plugin: Plugin) {
     private val name = "${ChatColor.YELLOW}お客様"
     val customerTag = "cookGameCustomer"
-    val tradingTag = "traded"
     val customorRecipManager = CustomorRecipManager(plugin)
     private fun summonCustomor(location: Location) {
         val world = location.world

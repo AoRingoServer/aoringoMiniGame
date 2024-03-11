@@ -9,7 +9,6 @@ import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.inventory.InventoryClickEvent
-import org.bukkit.event.inventory.InventoryCloseEvent
 import org.bukkit.event.player.PlayerJoinEvent
 import org.bukkit.plugin.Plugin
 
@@ -44,17 +43,8 @@ class Events(private val plugin: Plugin) : Listener {
             customerManager.skipTrade(villager)
             player.playSound(player, Sound.BLOCK_BELL_USE, 1f, 1f)
         } else if (tradingItem.type == Material.PAPER && itemName == customerManager.customorRecipManager.receiptName) {
-            villager.scoreboardTags.add(customerManager.tradingTag)
+            customerManager.takeOrder(villager)
             player.playSound(player, Sound.BLOCK_ANVIL_USE, 1f, 1f)
         }
-    }
-    @EventHandler
-    fun onInventoryClose(e: InventoryCloseEvent) {
-        val customerManager = CustomerManager(plugin)
-        val inventory = e.inventory
-        val villager = customerManager.acquisitionCustomer(inventory) ?: return
-        if (!villager.scoreboardTags.contains(customerManager.tradingTag)) { return }
-        customerManager.takeOrder(villager)
-        villager.scoreboardTags.remove(customerManager.tradingTag)
     }
 }
