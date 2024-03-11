@@ -24,7 +24,7 @@ class CustomerManager(private val plugin: Plugin) {
         villager.customName = name
         villager.setAI(false)
         villager.scoreboardTags.add(customerTag)
-        setDefaultRecipe(villager)
+        customorRecipManager.setDefaultRecipe(villager)
     }
     private fun acquisitionLocation(sender: CommandSender, args: Array<out String>):Location?{
         val sizeAtCoordinateInput = 4
@@ -49,36 +49,10 @@ class CustomerManager(private val plugin: Plugin) {
         val world = location.world
         return Location(world, x, y, z)
     }
-    fun reduceMaterial(inventory: Inventory) {
-        val materialSlot = when {
-            inventory.getItem(0) != null -> 0
-            inventory.getItem(1) != null -> 1
-            else -> return
-        }
-        val materialItem = inventory.getItem(materialSlot)?.clone() ?: return
-        val amount = materialItem.amount
-        materialItem.amount = amount - 1
-        inventory.setItem(materialSlot, materialItem)
-    }
     fun takeOrder(villager: Villager) {
-        val additionalRecipe = acquisitionCompletionGoodsID() ?: return
+        val additionalRecipe = customorRecipManager.acquisitionCompletionGoodsID() ?: return
         val recipe = customorRecipManager.makeMerchantRecipe(additionalRecipe)
         customorRecipManager.additionalTrading(villager, recipe)
-    }
-    private fun acquisitionCompletionGoodsID(): String? {
-        val finishedProductList = Yml(plugin).getList("", "FinishedProductList", "basic") ?: return null
-        val size = finishedProductList.size
-        val r = Random.nextInt(0, size - 1)
-        return finishedProductList[r]
-    }
-    private fun setDefaultRecipe(villager: Villager) {
-        val appetizer = "appetizer"
-        val parfaitItem = customorRecipManager.makeParfaitRecipeMerchantRecipe()
-        val appetizerItem = customorRecipManager.makeMerchantRecipe(appetizer)
-        val tradeRecipe = mutableListOf<MerchantRecipe>()
-        tradeRecipe.add(parfaitItem)
-        tradeRecipe.add(appetizerItem)
-        customorRecipManager.setTrading(villager, tradeRecipe)
     }
     fun acquisitionCustomer(inventory: Inventory): Villager? {
         val villager = inventory.holder as? Villager ?: return null
@@ -89,7 +63,7 @@ class CustomerManager(private val plugin: Plugin) {
         }
     }
     fun skipTrade(villager: Villager) {
-        val additionalRecipe = acquisitionCompletionGoodsID() ?: return
+        val additionalRecipe = customorRecipManager.acquisitionCompletionGoodsID() ?: return
         val recipes = mutableListOf<MerchantRecipe>()
         recipes.add(customorRecipManager.makeParfaitRecipeMerchantRecipe())
         recipes.add(customorRecipManager.makeMerchantRecipe(additionalRecipe))

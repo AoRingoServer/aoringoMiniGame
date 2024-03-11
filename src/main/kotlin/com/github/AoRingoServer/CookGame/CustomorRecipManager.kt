@@ -1,12 +1,15 @@
 package com.github.AoRingoServer.CookGame
 
 import com.github.AoRingoServer.ItemManager
+import com.github.Ringoame196.Yml
 import org.bukkit.ChatColor
 import org.bukkit.Material
 import org.bukkit.entity.Villager
+import org.bukkit.inventory.Inventory
 import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.MerchantRecipe
 import org.bukkit.plugin.Plugin
+import kotlin.random.Random
 
 class CustomorRecipManager(private val plugin: Plugin) {
     private val foodManager = FoodManager(plugin)
@@ -49,5 +52,33 @@ class CustomorRecipManager(private val plugin: Plugin) {
         newRecipes.addAll(villager.recipes)
         newRecipes.add(recipe)
         setTrading(villager, newRecipes)
+    }
+    fun acquisitionCompletionGoodsID(): String? {
+        val finishedProductList = Yml(plugin).getList("", "FinishedProductList", "basic") ?: return null
+        val size = finishedProductList.size
+        val r = Random.nextInt(0, size - 1)
+        return finishedProductList[r]
+    }
+    fun setDefaultRecipe(villager: Villager) {
+        val appetizer = "appetizer"
+        val parfaitItem = makeParfaitRecipeMerchantRecipe()
+        val appetizerItem = makeMerchantRecipe(appetizer)
+        val tradeRecipe = mutableListOf<MerchantRecipe>()
+        tradeRecipe.add(parfaitItem)
+        tradeRecipe.add(appetizerItem)
+        setTrading(villager, tradeRecipe)
+    }
+    fun reduceMaterial(inventory: Inventory) {
+        val slot0Item = inventory.getItem(0)
+        val slot1Item = inventory.getItem(1)
+        val materialSlot = when {
+            slot0Item != null -> 0
+            slot1Item != null -> 1
+            else -> return
+        }
+        val materialItem = inventory.getItem(materialSlot)?.clone() ?: return
+        val amount = materialItem.amount
+        materialItem.amount = amount - 1
+        inventory.setItem(materialSlot, materialItem)
     }
 }
