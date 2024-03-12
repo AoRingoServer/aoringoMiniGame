@@ -39,7 +39,7 @@ spaghetti:
   customModelData: 46
   price: 260
 yakitori:
-  name: "§eスパゲッティ"
+  name: "§e焼き鳥"
   customModelData: 100
   price: 200
 pizza:
