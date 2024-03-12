@@ -7,6 +7,7 @@ import java.awt.TextComponent
 
 class AoringoPlayer(val player: Player) {
     private val adminPermissionName = "aoringoserver.admin"
+    val teamName: String? = player.scoreboard.teams.firstOrNull { it.hasEntry(player.name) }?.name
     fun setPrefix() {
         when {
             checkAdmin() -> changeName("${ChatColor.YELLOW}[運営]")

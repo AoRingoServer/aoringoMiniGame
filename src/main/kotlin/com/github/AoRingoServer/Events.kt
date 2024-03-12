@@ -22,28 +22,29 @@ class Events(private val plugin: Plugin) : Listener {
     }
     @EventHandler
     fun onVillagePeopleAndTrading(e: InventoryClickEvent) {
-        val tradingItem = e.currentItem ?: return
-        val itemName = tradingItem.itemMeta?.displayName ?: return
+        val obtainedItem = e.currentItem ?: return
+        val itemName = obtainedItem.itemMeta?.displayName ?: return
         val slot = e.slot
         val completionGoodsSlot = 2
         val inventory = e.clickedInventory ?: return
         val player = e.whoClicked as? Player ?: return
+        val aoringoPlayer = AoringoPlayer(player)
         val customerManager = CustomerManager(plugin)
         val villager = customerManager.acquisitionCustomer(inventory) ?: return
         val customerTag = customerManager.customerTag
-        if (tradingItem.type == Material.AIR) { return }
+        if (obtainedItem.type == Material.AIR) { return }
         if (!villager.scoreboardTags.contains(customerTag)) { return }
         if (slot != completionGoodsSlot) { return }
 
         val message = "${ChatColor.GOLD}村人のインベントリを閉じ 取引内容を更新してください"
         player.sendMessage(message)
-        if (tradingItem == customerManager.customorRecipManager.skipItem) {
+        if (obtainedItem == customerManager.customorRecipManager.skipItem) {
             e.isCancelled = true
             customerManager.customorRecipManager.reduceMaterial(inventory)
             customerManager.skipTrade(villager)
             player.playSound(player, Sound.BLOCK_BELL_USE, 1f, 1f)
-        } else if (tradingItem.type == Material.PAPER && itemName == customerManager.customorRecipManager.receiptName) {
-            customerManager.takeOrder(villager)
+        } else if (obtainedItem.type == Material.PAPER && itemName == customerManager.customorRecipManager.receiptName) {
+            customerManager.takeOrder(villager, obtainedItem, aoringoPlayer)
             player.playSound(player, Sound.BLOCK_ANVIL_USE, 1f, 1f)
         }
     }
