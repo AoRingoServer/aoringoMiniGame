@@ -18,3 +18,31 @@ udon :
   name: "うどん"
   customModelData: 60
   price: 250
+steak :
+  name: "§eステーキ"
+  customModelData: 50
+  price: 240
+friedChicken:
+  name: "§eからあげ"
+  customModelData: 48
+  price: 130
+riceBall:
+  name: "おにぎり"
+  customModelData: 85
+  price: 90
+salad:
+  name: "§aサラダ"
+  customModelData: 59
+  price: 150
+spaghetti:
+  name: "§eスパゲッティ"
+  customModelData: 46
+  price: 260
+yakitori:
+  name: "§eスパゲッティ"
+  customModelData: 100
+  price: 200
+pizza:
+  name: "§eピザ"
+  customModelData: 51
+  price: 280

@@ -31,6 +31,7 @@ class Events(private val plugin: Plugin) : Listener {
         val aoringoPlayer = AoringoPlayer(player)
         val customerManager = CustomerManager(plugin)
         val villager = customerManager.acquisitionCustomer(inventory) ?: return
+        val recipeCount = villager.recipeCount
         val customerTag = customerManager.customerTag
         if (obtainedItem.type == Material.AIR) { return }
         if (!villager.scoreboardTags.contains(customerTag)) { return }
@@ -44,7 +45,7 @@ class Events(private val plugin: Plugin) : Listener {
             customerManager.skipTrade(villager)
             player.playSound(player, Sound.BLOCK_BELL_USE, 1f, 1f)
         } else if (obtainedItem.type == Material.PAPER && itemName == customerManager.customorRecipManager.receiptName) {
-            customerManager.takeOrder(villager, obtainedItem, aoringoPlayer)
+            customerManager.takeOrder(villager, obtainedItem, aoringoPlayer, recipeCount)
             player.playSound(player, Sound.BLOCK_ANVIL_USE, 1f, 1f)
         }
     }

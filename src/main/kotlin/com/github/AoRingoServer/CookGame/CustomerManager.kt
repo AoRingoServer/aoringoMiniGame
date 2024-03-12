@@ -50,9 +50,10 @@ class CustomerManager(private val plugin: Plugin) {
         val world = location.world
         return Location(world, x, y, z)
     }
-    fun takeOrder(villager: Villager, recipe: ItemStack, aoringoPlayer: AoringoPlayer) {
+    fun takeOrder(villager: Villager, recipe: ItemStack, aoringoPlayer: AoringoPlayer, recipeCount: Int) {
         additionalUpdateRecipe(villager)
-        val price = acquisitionPrice(recipe) ?: return
+        val productsPrice = acquisitionproductsPrice(recipe) ?: return
+        val price = additionalSalesCalculating(productsPrice, recipeCount)
         salesManager.addition(price, aoringoPlayer)
     }
     private fun additionalUpdateRecipe(villager: Villager) {
@@ -60,7 +61,15 @@ class CustomerManager(private val plugin: Plugin) {
         val recipe = customorRecipManager.makeMerchantRecipe(additionalRecipe)
         customorRecipManager.additionalTrading(villager, recipe)
     }
-    private fun acquisitionPrice(recipe: ItemStack): Int? {
+    private fun additionalSalesCalculating(productsPrice: Int, count: Int): Int {
+        val additionalSalesRate = 1.5
+        return if (count >= 5) {
+            (productsPrice * additionalSalesRate).toInt()
+        } else {
+            productsPrice
+        }
+    }
+    private fun acquisitionproductsPrice(recipe: ItemStack): Int? {
         val loreNumber = 1
         val priceDisplay = recipe.itemMeta?.lore?.get(loreNumber) ?: return null
         val priceString = priceDisplay.replace("金額：", "").replace("円", "")
