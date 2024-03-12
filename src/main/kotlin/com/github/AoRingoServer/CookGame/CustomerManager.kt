@@ -1,7 +1,7 @@
 package com.github.AoRingoServer.CookGame
 
 import com.github.AoRingoServer.AoringoPlayer
-import org.bukkit.Bukkit
+import com.github.Ringoame196.Yml
 import org.bukkit.ChatColor
 import org.bukkit.Location
 import org.bukkit.Sound
@@ -19,9 +19,16 @@ class CustomerManager(private val plugin: Plugin) {
     val customerTag = "cookGameCustomer"
     val customorRecipManager = CustomorRecipManager(plugin)
     private val salesManager = SalesManager(plugin)
+    private val yml = Yml(plugin)
+    private val cookGameConfig = yml.getYml("", "cookGameConfig")
+    private val bonus = cookGameConfig.getInt("bonus")
+    private val chip = cookGameConfig.getInt("chip")
 
     fun summon(sender: CommandSender, args: Array<out String>) {
         val location = acquisitionLocation(sender, args) ?: return
+        summonCustomor(location)
+    }
+    private fun summonCustomor(location: Location) {
         val world = location.world
         val villager: Villager = world!!.spawn(location, org.bukkit.entity.Villager::class.java)
         villager.customName = name
@@ -57,22 +64,27 @@ class CustomerManager(private val plugin: Plugin) {
         val price = acquisitionproductsPrice(recipe) ?: return
         continuousBonus(recipeCount, aoringoPlayer)
         salesManager.addition(price, aoringoPlayer)
+        if (customorRecipManager.isRecipeCountMax(villager)) {
+            customorReplacement(villager, aoringoPlayer)
+        }
     }
-    private fun additionalUpdateRecipe(villager: Villager) {
-        val additionalRecipe = customorRecipManager.acquisitionCompletionGoodsID() ?: return
-        val recipe = customorRecipManager.makeMerchantRecipe(additionalRecipe)
-        customorRecipManager.additionalTrading(villager, recipe)
+    private fun customorReplacement(villager: Villager, aoringoPlayer: AoringoPlayer) {
+        val player = aoringoPlayer.player
+        villager.remove()
+        summonCustomor(villager.location)
+        player.sendMessage("${ChatColor.YELLOW}お客様は満足して帰宅していった(チップ +$chip")
+        salesManager.addition(chip, aoringoPlayer)
+        player.sendMessage("${ChatColor.AQUA}お客様は満足して帰宅していった")
     }
     private fun continuousBonus(count: Int, aoringoPlayer: AoringoPlayer) {
         val player = aoringoPlayer.player
-        val bonus = 500
         val delimiter = 5
-        Bukkit.broadcastMessage((count % 5).toString())
-        if ((count - 2) % delimiter != 0 && count != 0) {
+        val optionCount = 2
+        if ((count - optionCount) % delimiter != 0 && count != optionCount) {
             return
         }
         salesManager.addition(bonus, aoringoPlayer)
-        player.sendMessage("${ChatColor.AQUA}ボーナス獲得 +500")
+        player.sendMessage("${ChatColor.AQUA}ボーナス獲得 +$bonus")
         player.playSound(player, Sound.ENTITY_FIREWORK_ROCKET_LARGE_BLAST, 1f, 1f)
     }
     private fun acquisitionproductsPrice(recipe: ItemStack): Int? {
@@ -92,8 +104,16 @@ class CustomerManager(private val plugin: Plugin) {
     fun skipTrade(villager: Villager) {
         val additionalRecipe = customorRecipManager.acquisitionCompletionGoodsID() ?: return
         val recipes = mutableListOf<MerchantRecipe>()
+        val orderPaper = customorRecipManager.makeOrderPaper(additionalRecipe)
         recipes.add(customorRecipManager.makeParfaitRecipeMerchantRecipe())
+        recipes.add(orderPaper)
         recipes.add(customorRecipManager.makeMerchantRecipe(additionalRecipe))
         customorRecipManager.setTrading(villager, recipes)
+    }
+    private fun additionalUpdateRecipe(villager: Villager) {
+        val additionalRecipe = customorRecipManager.acquisitionCompletionGoodsID() ?: return
+        val recipe = customorRecipManager.makeMerchantRecipe(additionalRecipe)
+        val orderPaper = customorRecipManager.makeOrderPaper(additionalRecipe)
+        customorRecipManager.additionalTrading(villager, recipe, orderPaper)
     }
 }

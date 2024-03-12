@@ -45,14 +45,16 @@ class CustomorRecipManager(private val plugin: Plugin) {
         val item = foodManager.makeFoodItem(parfaitFoodInfo)
         return makeTradeRecipe(skipItem, item, 1)
     }
+    fun makeOrderPaper(foodID: String): MerchantRecipe {
+        val foodManager = FoodManager(plugin)
+        val foodInfo = foodManager.makeFoodInfo(foodID)
+        val foodName = foodInfo.foodName
+        val orderPaper = itemManager.make(Material.MOJANG_BANNER_PATTERN, "注文内容：$foodName")
+        val paper = itemManager.make(Material.PAPER, "メモ用紙")
+        return makeTradeRecipe(orderPaper, paper, 1)
+    }
     fun setTrading(villager: Villager, tradeList: MutableList<MerchantRecipe>) {
         villager.recipes = tradeList
-    }
-    fun additionalTrading(villager: Villager, recipe: MerchantRecipe) {
-        val newRecipes = mutableListOf<MerchantRecipe>()
-        newRecipes.addAll(villager.recipes)
-        newRecipes.add(recipe)
-        setTrading(villager, newRecipes)
     }
     fun acquisitionCompletionGoodsID(): String? {
         val finishedProductList = Yml(plugin).getList("", "FinishedProductList", "basic") ?: return null
@@ -65,7 +67,9 @@ class CustomorRecipManager(private val plugin: Plugin) {
         val parfaitItem = makeParfaitRecipeMerchantRecipe()
         val appetizerItem = makeMerchantRecipe(appetizer)
         val tradeRecipe = mutableListOf<MerchantRecipe>()
+        val orderPaper = makeOrderPaper(appetizer)
         tradeRecipe.add(parfaitItem)
+        tradeRecipe.add(orderPaper)
         tradeRecipe.add(appetizerItem)
         setTrading(villager, tradeRecipe)
     }
@@ -81,5 +85,17 @@ class CustomorRecipManager(private val plugin: Plugin) {
         val amount = materialItem.amount
         materialItem.amount = amount - 1
         inventory.setItem(materialSlot, materialItem)
+    }
+    fun additionalTrading(villager: Villager, recipe: MerchantRecipe, orderPaper: MerchantRecipe) {
+        val newRecipes = mutableListOf<MerchantRecipe>()
+        newRecipes.addAll(villager.recipes)
+        newRecipes.add(2, recipe)
+        newRecipes[1] = orderPaper
+        setTrading(villager, newRecipes)
+    }
+    fun isRecipeCountMax(villager: Villager): Boolean {
+        val count = villager.recipeCount
+        val max = 20
+        return count == max
     }
 }
