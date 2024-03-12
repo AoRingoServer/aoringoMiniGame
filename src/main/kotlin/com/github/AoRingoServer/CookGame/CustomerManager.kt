@@ -1,8 +1,10 @@
 package com.github.AoRingoServer.CookGame
 
 import com.github.AoRingoServer.AoringoPlayer
+import org.bukkit.Bukkit
 import org.bukkit.ChatColor
 import org.bukkit.Location
+import org.bukkit.Sound
 import org.bukkit.command.BlockCommandSender
 import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
@@ -52,8 +54,8 @@ class CustomerManager(private val plugin: Plugin) {
     }
     fun takeOrder(villager: Villager, recipe: ItemStack, aoringoPlayer: AoringoPlayer, recipeCount: Int) {
         additionalUpdateRecipe(villager)
-        val productsPrice = acquisitionproductsPrice(recipe) ?: return
-        val price = additionalSalesCalculating(productsPrice, recipeCount)
+        val price = acquisitionproductsPrice(recipe) ?: return
+        continuousBonus(recipeCount, aoringoPlayer)
         salesManager.addition(price, aoringoPlayer)
     }
     private fun additionalUpdateRecipe(villager: Villager) {
@@ -61,13 +63,17 @@ class CustomerManager(private val plugin: Plugin) {
         val recipe = customorRecipManager.makeMerchantRecipe(additionalRecipe)
         customorRecipManager.additionalTrading(villager, recipe)
     }
-    private fun additionalSalesCalculating(productsPrice: Int, count: Int): Int {
-        val additionalSalesRate = 1.5
-        return if (count >= 5) {
-            (productsPrice * additionalSalesRate).toInt()
-        } else {
-            productsPrice
+    private fun continuousBonus(count: Int, aoringoPlayer: AoringoPlayer) {
+        val player = aoringoPlayer.player
+        val bonus = 500
+        val delimiter = 5
+        Bukkit.broadcastMessage((count % 5).toString())
+        if ((count - 2) % delimiter != 0 && count != 0) {
+            return
         }
+        salesManager.addition(bonus, aoringoPlayer)
+        player.sendMessage("${ChatColor.AQUA}ボーナス獲得 +500")
+        player.playSound(player, Sound.ENTITY_FIREWORK_ROCKET_LARGE_BLAST, 1f, 1f)
     }
     private fun acquisitionproductsPrice(recipe: ItemStack): Int? {
         val loreNumber = 1
