@@ -39,7 +39,7 @@ class Events(private val plugin: Plugin) : Listener {
         player.sendMessage(message)
         if (tradingItem == customerManager.customorRecipManager.skipItem) {
             e.isCancelled = true
-            customerManager.reduceMaterial(inventory)
+            customerManager.customorRecipManager.reduceMaterial(inventory)
             customerManager.skipTrade(villager)
             player.playSound(player, Sound.BLOCK_BELL_USE, 1f, 1f)
         } else if (tradingItem.type == Material.PAPER && itemName == customerManager.customorRecipManager.receiptName) {

@@ -26,7 +26,8 @@ class CustomorRecipManager(private val plugin: Plugin) {
         val itemManager = ItemManager()
         val customModelData = 12
         val price = foodInfo.price
-        val lore = mutableListOf("合計金額${price}円")
+        val foodName = foodInfo.foodName
+        val lore = mutableListOf("注文品：$foodName", "金額：${price}円")
         return itemManager.make(Material.PAPER, receiptName, lore = lore, customModelData = customModelData)
     }
     private fun makeTradeRecipe(tradeItem: ItemStack, paymentItem: ItemStack, tradingTimes: Int): MerchantRecipe {

@@ -1,24 +1,21 @@
 package com.github.AoRingoServer.CookGame
 
-import com.github.Ringoame196.Yml
 import org.bukkit.ChatColor
 import org.bukkit.Location
 import org.bukkit.command.BlockCommandSender
 import org.bukkit.command.CommandSender
-import org.bukkit.entity.Entity
 import org.bukkit.entity.Player
 import org.bukkit.entity.Villager
 import org.bukkit.inventory.Inventory
 import org.bukkit.inventory.MerchantRecipe
 import org.bukkit.plugin.Plugin
-import kotlin.random.Random
 
 class CustomerManager(private val plugin: Plugin) {
     private val name = "${ChatColor.YELLOW}お客様"
     val customerTag = "cookGameCustomer"
     val customorRecipManager = CustomorRecipManager(plugin)
     fun summon(sender: CommandSender, args: Array<out String>) {
-        val location = acquisitionLocation(sender,args)?:return
+        val location = acquisitionLocation(sender, args) ?: return
         val world = location.world
         val villager: Villager = world!!.spawn(location, org.bukkit.entity.Villager::class.java)
         villager.customName = name
@@ -26,17 +23,17 @@ class CustomerManager(private val plugin: Plugin) {
         villager.scoreboardTags.add(customerTag)
         customorRecipManager.setDefaultRecipe(villager)
     }
-    private fun acquisitionLocation(sender: CommandSender, args: Array<out String>):Location?{
+    private fun acquisitionLocation(sender: CommandSender, args: Array<out String>): Location? {
         val sizeAtCoordinateInput = 4
-        val commandSenderLocation = acquisitionCommandSenderLocation(sender) ?:return null
-        return if (args.size == sizeAtCoordinateInput){
+        val commandSenderLocation = acquisitionCommandSenderLocation(sender) ?: return null
+        return if (args.size == sizeAtCoordinateInput) {
             coordinateSpecified(commandSenderLocation, args)
         } else {
             commandSenderLocation
         }
     }
-    private fun acquisitionCommandSenderLocation(sender: CommandSender):Location?{
-        return when(sender){
+    private fun acquisitionCommandSenderLocation(sender: CommandSender): Location? {
+        return when (sender) {
             is Player -> sender.location
             is BlockCommandSender -> sender.block.location.clone().add(0.5, 2.0, 0.5)
             else -> return null
