@@ -1,6 +1,7 @@
 package com.github.AoRingoServer
 
 import com.github.AoRingoServer.CookGame.CustomerManager
+import com.github.AoRingoServer.CookGame.FoodMenu
 import com.github.Ringoame196.ResourcePack
 import org.bukkit.ChatColor
 import org.bukkit.Material
@@ -8,12 +9,17 @@ import org.bukkit.Sound
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
+import org.bukkit.event.block.Action
 import org.bukkit.event.inventory.InventoryClickEvent
 import org.bukkit.event.inventory.InventoryCloseEvent
+import org.bukkit.event.player.PlayerInteractEvent
 import org.bukkit.event.player.PlayerJoinEvent
 import org.bukkit.plugin.Plugin
 
 class Events(private val plugin: Plugin) : Listener {
+    private val makeGUIs = mapOf(
+        "レシピ" to FoodMenu(plugin)
+    )
     @EventHandler
     fun onPlayerJoin(e: PlayerJoinEvent) {
         val player = e.player
@@ -51,6 +57,31 @@ class Events(private val plugin: Plugin) : Listener {
             customerManager.setCustomorInfo(villager, "next")
         } else if (obtainedItem.type == Material.MOJANG_BANNER_PATTERN) {
             player.playSound(player, Sound.BLOCK_ENCHANTMENT_TABLE_USE, 1f, 1f)
+        }
+    }
+    @EventHandler
+    fun onPlayerInteract(e: PlayerInteractEvent) {
+        val player = e.player
+        val item = e.item ?: return
+        val itemName = item.itemMeta?.displayName ?: return
+        val action = e.action
+        if (action != Action.RIGHT_CLICK_BLOCK && action != Action.RIGHT_CLICK_AIR) { return }
+        if (makeGUIs.keys.contains(itemName)) {
+            val gui = makeGUIs[item.itemMeta?.displayName]?.make(player) ?: return
+            player.openInventory(gui)
+        }
+    }
+    @EventHandler
+    fun onInventoryClick(e: InventoryClickEvent) {
+        val player = e.whoClicked as? Player ?: return
+        val gui = e.view
+        val isShift = e.isShiftClick
+        val guiName = gui.title
+        val item = e.currentItem ?: return
+        if (makeGUIs.keys.contains(guiName)) {
+            e.isCancelled = true
+            player.playSound(player, Sound.UI_BUTTON_CLICK, 1f, 1f)
+            makeGUIs[guiName]?.clickProcess(item, player, isShift)
         }
     }
     @EventHandler

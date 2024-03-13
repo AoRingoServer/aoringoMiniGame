@@ -12,7 +12,7 @@ class FoodManager(private val plugin: Plugin) {
     private val nbt = NBT(plugin)
     private val foodIDKey = "foodID"
     fun foodInfoList(): MutableList<String> {
-        return acquisitionFoodInfo().getKeys(true).toMutableList()
+        return acquisitionFoodInfo().getKeys(false).toMutableList()
     }
     fun makeFoodInfo(foodID: String): FoodInfo {
         val yml = acquisitionFoodInfo()
