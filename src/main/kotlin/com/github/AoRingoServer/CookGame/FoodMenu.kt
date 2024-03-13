@@ -13,14 +13,22 @@ class FoodMenu(private val plugin: Plugin) : GUIs {
     override val guiName: String = "${ChatColor.DARK_BLUE}メニュー"
     override fun make(player: Player): Inventory {
         val foodManager = FoodManager(plugin)
-        val gui = Bukkit.createInventory(null, 45, guiName)
         val foodInfoList = foodManager.foodInfoList()
+        val guiSize = autoGUISize(foodInfoList)
+        val gui = Bukkit.createInventory(null, guiSize, guiName)
         for (foodID in foodInfoList) {
             val foodInfo = foodManager.makeFoodInfo(foodID)
             val food = foodManager.makeFoodItem(foodInfo)
             gui.addItem(food)
         }
         return gui
+    }
+    private fun autoGUISize(foodInfoList: MutableList<String>): Int {
+        val listSize = foodInfoList.size
+        val maxSize = 54
+        val column = listSize / 9 + 1
+        val size = column * 9
+        return if (size > maxSize) { maxSize } else { size }
     }
 
     override fun clickProcess(item: ItemStack, player: Player, isShift: Boolean) {

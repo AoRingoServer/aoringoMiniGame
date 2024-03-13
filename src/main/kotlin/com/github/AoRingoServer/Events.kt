@@ -74,7 +74,7 @@ class Events(private val plugin: Plugin) : Listener {
     @EventHandler
     fun onInventoryClick(e: InventoryClickEvent) {
         val makeGUIs = mapOf(
-            FoodMenu(plugin).let {foodMenu -> foodMenu.guiName to foodMenu }
+            FoodMenu(plugin).let { foodMenu -> foodMenu.guiName to foodMenu }
         )
         val player = e.whoClicked as? Player ?: return
         val gui = e.view
