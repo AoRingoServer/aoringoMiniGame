@@ -1,8 +1,8 @@
 package com.github.AoRingoServer
 
-import com.github.AoRingoServer.Commands.AoringoCommand
-import com.github.AoRingoServer.Commands.LobbyCommand
-import com.github.AoRingoServer.CookGame.CookGameCommand
+import com.github.AoRingoServer.CookGame.Commands.CookGameCommand
+import com.github.AoRingoServer.PlenaryCommands.AoringoCommand
+import com.github.AoRingoServer.PlenaryCommands.LobbyCommand
 import org.bukkit.plugin.java.JavaPlugin
 
 class Main : JavaPlugin() {

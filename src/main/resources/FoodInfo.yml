@@ -30,10 +30,6 @@ riceBall:
   name: "おにぎり"
   customModelData: 85
   price: 90
-salad:
-  name: "§aサラダ"
-  customModelData: 59
-  price: 150
 spaghetti:
   name: "§eスパゲッティ"
   customModelData: 46

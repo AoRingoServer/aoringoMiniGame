@@ -1,4 +1,4 @@
-package com.github.AoRingoServer.Commands
+package com.github.AoRingoServer.PlenaryCommands
 
 import org.bukkit.Bukkit
 import org.bukkit.Sound

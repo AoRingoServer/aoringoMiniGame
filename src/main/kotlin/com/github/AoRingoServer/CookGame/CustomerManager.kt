@@ -124,9 +124,9 @@ class CustomerManager(private val plugin: Plugin) {
         customorRecipManager.additionalTrading(villager, recipe, orderPaper)
     }
     fun setCustomorInfo(villager: Villager, value: String?) {
-        nbt.setCustomNBT(villager, customorInfoKey, value)
+        nbt.set(villager, customorInfoKey, value)
     }
     fun acquisitionCustomorInfo(villager: Villager): String? {
-        return nbt.acquisitionCustomNBT(villager, customorInfoKey)
+        return nbt.acquisition(villager, customorInfoKey)
     }
 }

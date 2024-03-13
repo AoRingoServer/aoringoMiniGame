@@ -1,4 +1,4 @@
-package com.github.AoRingoServer.Commands
+package com.github.AoRingoServer.PlenaryCommands
 
 import com.github.AoRingoServer.Server
 import com.github.Ringoame196.ResourcePack
