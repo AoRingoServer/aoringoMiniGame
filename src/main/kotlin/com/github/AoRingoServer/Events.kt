@@ -17,9 +17,6 @@ import org.bukkit.event.player.PlayerJoinEvent
 import org.bukkit.plugin.Plugin
 
 class Events(private val plugin: Plugin) : Listener {
-    private val makeGUIs = mapOf(
-        "レシピ" to FoodMenu(plugin)
-    )
     @EventHandler
     fun onPlayerJoin(e: PlayerJoinEvent) {
         val player = e.player
@@ -61,6 +58,9 @@ class Events(private val plugin: Plugin) : Listener {
     }
     @EventHandler
     fun onPlayerInteract(e: PlayerInteractEvent) {
+        val makeGUIs = mapOf(
+            "レシピ" to FoodMenu(plugin)
+        )
         val player = e.player
         val item = e.item ?: return
         val itemName = item.itemMeta?.displayName ?: return
@@ -73,6 +73,9 @@ class Events(private val plugin: Plugin) : Listener {
     }
     @EventHandler
     fun onInventoryClick(e: InventoryClickEvent) {
+        val makeGUIs = mapOf(
+            FoodMenu(plugin).let {foodMenu -> foodMenu.guiName to foodMenu }
+        )
         val player = e.whoClicked as? Player ?: return
         val gui = e.view
         val isShift = e.isShiftClick
