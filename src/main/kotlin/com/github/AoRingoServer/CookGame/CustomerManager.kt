@@ -24,6 +24,7 @@ class CustomerManager(private val plugin: Plugin) {
     private val cookGameConfig = yml.getYml("", "cookGameConfig")
     private val bonus = cookGameConfig.getInt("bonus")
     private val chip = cookGameConfig.getInt("chip")
+    private val max = cookGameConfig.getInt("max")
     private val nbt = NBT(plugin)
     private val customorInfoKey = "customInfo"
 
@@ -66,7 +67,7 @@ class CustomerManager(private val plugin: Plugin) {
         val price = acquisitionproductsPrice(recipe) ?: return
         continuousBonus(recipeCount, aoringoPlayer)
         salesManager.addition(price, aoringoPlayer)
-        if (customorRecipManager.isRecipeCountMax(villager)) {
+        if (customorRecipManager.isRecipeCountMax(villager, max)) {
             customorReplacement(villager, aoringoPlayer)
         }
     }
@@ -121,12 +122,10 @@ class CustomerManager(private val plugin: Plugin) {
         val orderPaper = customorRecipManager.makeOrderPaper(additionalRecipe)
         customorRecipManager.additionalTrading(villager, recipe, orderPaper)
     }
-    fun setCustomorInfo(villager: Villager, value: String) {
+    fun setCustomorInfo(villager: Villager, value: String?) {
         nbt.setCustomNBT(villager, customorInfoKey, value)
     }
     fun acquisitionCustomorInfo(villager: Villager): String? {
-        val info = nbt.acquisitionCustomNBT(villager, customorInfoKey)
-        nbt.setCustomNBT(villager, customorInfoKey, null)
-        return info
+        return nbt.acquisitionCustomNBT(villager, customorInfoKey)
     }
 }

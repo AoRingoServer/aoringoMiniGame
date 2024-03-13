@@ -93,9 +93,8 @@ class CustomorRecipManager(private val plugin: Plugin) {
         newRecipes[1] = orderPaper
         setTrading(villager, newRecipes)
     }
-    fun isRecipeCountMax(villager: Villager): Boolean {
+    fun isRecipeCountMax(villager: Villager, max: Int): Boolean {
         val count = villager.recipeCount
-        val max = 20
         return count == max
     }
 }
