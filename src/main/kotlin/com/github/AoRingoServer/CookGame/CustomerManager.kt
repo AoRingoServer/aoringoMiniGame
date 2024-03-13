@@ -1,6 +1,7 @@
 package com.github.AoRingoServer.CookGame
 
 import com.github.AoRingoServer.AoringoPlayer
+import com.github.AoRingoServer.Datas.NBT
 import com.github.Ringoame196.Yml
 import org.bukkit.ChatColor
 import org.bukkit.Location
@@ -23,6 +24,8 @@ class CustomerManager(private val plugin: Plugin) {
     private val cookGameConfig = yml.getYml("", "cookGameConfig")
     private val bonus = cookGameConfig.getInt("bonus")
     private val chip = cookGameConfig.getInt("chip")
+    private val nbt = NBT(plugin)
+    private val customorInfoKey = "customInfo"
 
     fun summon(sender: CommandSender, args: Array<out String>) {
         val location = acquisitionLocation(sender, args) ?: return
@@ -60,7 +63,6 @@ class CustomerManager(private val plugin: Plugin) {
         return Location(world, x, y, z)
     }
     fun takeOrder(villager: Villager, recipe: ItemStack, aoringoPlayer: AoringoPlayer, recipeCount: Int) {
-        additionalUpdateRecipe(villager)
         val price = acquisitionproductsPrice(recipe) ?: return
         continuousBonus(recipeCount, aoringoPlayer)
         salesManager.addition(price, aoringoPlayer)
@@ -68,13 +70,16 @@ class CustomerManager(private val plugin: Plugin) {
             customorReplacement(villager, aoringoPlayer)
         }
     }
+    fun newTradingPreparation(villager: Villager) {
+        additionalUpdateRecipe(villager)
+    }
     private fun customorReplacement(villager: Villager, aoringoPlayer: AoringoPlayer) {
         val player = aoringoPlayer.player
         villager.remove()
         summonCustomor(villager.location)
-        player.sendMessage("${ChatColor.YELLOW}お客様は満足して帰宅していった(チップ +$chip")
+        player.sendMessage("${ChatColor.YELLOW}お客様は満足して帰宅していった(チップ +$chip)")
         salesManager.addition(chip, aoringoPlayer)
-        player.sendMessage("${ChatColor.AQUA}お客様は満足して帰宅していった")
+        player.sendMessage("${ChatColor.AQUA}新しいお客さんが入ってきた")
     }
     private fun continuousBonus(count: Int, aoringoPlayer: AoringoPlayer) {
         val player = aoringoPlayer.player
@@ -115,5 +120,13 @@ class CustomerManager(private val plugin: Plugin) {
         val recipe = customorRecipManager.makeMerchantRecipe(additionalRecipe)
         val orderPaper = customorRecipManager.makeOrderPaper(additionalRecipe)
         customorRecipManager.additionalTrading(villager, recipe, orderPaper)
+    }
+    fun setCustomorInfo(villager: Villager, value: String) {
+        nbt.setCustomNBT(villager, customorInfoKey, value)
+    }
+    fun acquisitionCustomorInfo(villager: Villager): String? {
+        val info = nbt.acquisitionCustomNBT(villager, customorInfoKey)
+        nbt.setCustomNBT(villager, customorInfoKey, null)
+        return info
     }
 }

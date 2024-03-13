@@ -9,6 +9,7 @@ import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.inventory.InventoryClickEvent
+import org.bukkit.event.inventory.InventoryCloseEvent
 import org.bukkit.event.player.PlayerJoinEvent
 import org.bukkit.plugin.Plugin
 
@@ -42,11 +43,24 @@ class Events(private val plugin: Plugin) : Listener {
         if (obtainedItem == customerManager.customorRecipManager.skipItem) {
             e.isCancelled = true
             customerManager.customorRecipManager.reduceMaterial(inventory)
-            customerManager.skipTrade(villager)
             player.playSound(player, Sound.BLOCK_BELL_USE, 1f, 1f)
+            customerManager.setCustomorInfo(villager, "skip")
         } else if (obtainedItem.type == Material.PAPER && itemName == customerManager.customorRecipManager.receiptName) {
             customerManager.takeOrder(villager, obtainedItem, aoringoPlayer, recipeCount)
             player.playSound(player, Sound.BLOCK_ANVIL_USE, 1f, 1f)
+            customerManager.setCustomorInfo(villager, "next")
+        } else if (obtainedItem.type == Material.MOJANG_BANNER_PATTERN) {
+            player.playSound(player, Sound.BLOCK_ENCHANTMENT_TABLE_USE, 1f, 1f)
+        }
+    }
+    @EventHandler
+    fun onInventoryClose(e: InventoryCloseEvent) {
+        val customerManager = CustomerManager(plugin)
+        val inventory = e.inventory
+        val villager = customerManager.acquisitionCustomer(inventory) ?: return
+        when (customerManager.acquisitionCustomorInfo(villager)) {
+            "skip" -> customerManager.skipTrade(villager)
+            "next" -> customerManager.newTradingPreparation(villager)
         }
     }
 }
