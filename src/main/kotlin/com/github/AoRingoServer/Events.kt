@@ -58,9 +58,11 @@ class Events(private val plugin: Plugin) : Listener {
         val customerManager = CustomerManager(plugin)
         val inventory = e.inventory
         val villager = customerManager.acquisitionCustomer(inventory) ?: return
-        when (customerManager.acquisitionCustomorInfo(villager)) {
-            "skip" -> customerManager.skipTrade(villager)
-            "next" -> customerManager.newTradingPreparation(villager)
-        }
+        val updateTrading = mapOf(
+            "skip" to { customerManager.skipTrade(villager) },
+            "next" to { customerManager.newTradingPreparation(villager) }
+        )
+        val customInfo = customerManager.acquisitionCustomorInfo(villager)
+        updateTrading[customInfo] ?: return
     }
 }
