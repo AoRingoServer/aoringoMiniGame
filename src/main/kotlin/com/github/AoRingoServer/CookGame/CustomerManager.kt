@@ -38,6 +38,7 @@ class CustomerManager(private val plugin: Plugin) {
         villager.customName = name
         villager.setAI(false)
         villager.scoreboardTags.add(customerTag)
+        villager.isInvulnerable = true
         customorRecipManager.setDefaultRecipe(villager)
     }
     private fun acquisitionLocation(sender: CommandSender, args: Array<out String>): Location? {
