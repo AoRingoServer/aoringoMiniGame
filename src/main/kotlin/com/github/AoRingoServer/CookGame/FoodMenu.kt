@@ -48,20 +48,27 @@ class FoodMenu(private val plugin: Plugin) : GUIs {
     }
     private fun makeRecipeGUI(finishedProduct: ItemStack): Inventory? {
         val guiSize = 9
-        val arrow = ItemManager().make(Material.PAPER, "${ChatColor.YELLOW}→", customModelData = 1)
         val gui = Bukkit.createInventory(null, guiSize, guiName)
         val finishedProductID = foodManager.acquisitionFoodID(finishedProduct) ?: return null
         val cookingFullKey = foodManager.acquisitionCookingMethodKey(finishedProductID) ?: return null
+        installationRecipeGUIItem(gui, cookingFullKey, finishedProduct)
+        return gui
+    }
+    private fun installationRecipeGUIItem(gui: Inventory, cookingFullKey: String, finishedProduct: ItemStack) {
+        val arrow = ItemManager().make(Material.PAPER, "${ChatColor.YELLOW}→", customModelData = 1)
         val parts = cookingFullKey.split(".")
-        val cookingKey = parts[0]
+        val cookingType = parts[0]
         val materialID = parts[2]
         val materialFoodInfo = foodManager.makeFoodInfo(materialID)
         val materialItem = foodManager.makeFoodItem(materialFoodInfo)
-        val cookingItem = cookingMap[cookingKey] ?: return null
-        gui.setItem(1, materialItem)
-        gui.setItem(2, cookingItem)
-        gui.setItem(4, arrow)
-        gui.setItem(6, finishedProduct)
-        return gui
+        val cookingItem = cookingMap[cookingType] ?: return
+        val materialItemSlot = 1
+        val cookingTypeSlot = 2
+        val arrowSlot = 4
+        val finishedProductSlot = 6
+        gui.setItem(materialItemSlot, materialItem)
+        gui.setItem(cookingTypeSlot, cookingItem)
+        gui.setItem(arrowSlot, arrow)
+        gui.setItem(finishedProductSlot, finishedProduct)
     }
 }
