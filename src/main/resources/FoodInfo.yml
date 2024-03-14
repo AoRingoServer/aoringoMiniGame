@@ -51,6 +51,6 @@ cutPotato:
   customModelData: 8
   price: 80
 veryCutPotato:
-  name: "§6細かく切ったじゃがいも"
+  name: "§6細く切ったじゃがいも"
   customModelData: 84
   price: 80
