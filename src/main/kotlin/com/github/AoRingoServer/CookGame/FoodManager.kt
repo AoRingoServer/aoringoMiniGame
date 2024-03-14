@@ -45,4 +45,15 @@ class FoodManager(private val plugin: Plugin) {
         nbt.set(food, foodIDKey, foodID)
         return food
     }
+    fun acquisitionCookingCompletionGoodsData(food: ItemStack, method: String): ItemStack? {
+        val foodID = acquisitionFoodID(food) ?: return null
+        val completionGoodsId = acquisitionCompletionGoodsId(foodID, method) ?: return null
+        val completionGoodsFoodInfo = makeFoodInfo(completionGoodsId)
+        return makeFoodItem(completionGoodsFoodInfo)
+    }
+    private fun acquisitionCompletionGoodsId(ingredientId: String, method: String): String? {
+        val yml = Yml(plugin)
+        val cutCookingData = yml.acquisitionCookingMethodData(method) ?: return null
+        return yml.acquisitionKey(cutCookingData, ingredientId)
+    }
 }
