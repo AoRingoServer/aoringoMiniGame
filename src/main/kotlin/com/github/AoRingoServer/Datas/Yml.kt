@@ -25,8 +25,11 @@ class Yml(private val plugin: Plugin) {
         return yml.getStringList(key)
     }
     fun acquisitionCookingMethodData(cookingKey: String): ConfigurationSection? {
-        val cookingMethodData = acquisitionYml("", "CookingMethodData")
+        val cookingMethodData = cookingMethodData()
         return cookingMethodData.getConfigurationSection(cookingKey)
+    }
+    fun cookingMethodData(): YamlConfiguration {
+        return acquisitionYml("", "CookingMethodData")
     }
     fun acquisitionKey(data: ConfigurationSection, value: String): String? {
         data.getKeys(false).forEach { key ->
