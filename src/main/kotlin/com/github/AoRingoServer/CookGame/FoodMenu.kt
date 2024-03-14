@@ -13,7 +13,8 @@ class FoodMenu(private val plugin: Plugin) : GUIs {
     override val guiName: String = "${ChatColor.DARK_BLUE}メニュー"
     override fun make(player: Player): Inventory {
         val foodManager = FoodManager(plugin)
-        val foodInfoList = foodManager.foodInfoList()
+        val playerGamemode = player.gameMode
+        val foodInfoList = if (playerGamemode == GameMode.CREATIVE) { foodManager.foodInfoKeyList() } else { foodManager.finishedProductKeyList() }
         val guiSize = autoGUISize(foodInfoList)
         val gui = Bukkit.createInventory(null, guiSize, guiName)
         for (foodID in foodInfoList) {

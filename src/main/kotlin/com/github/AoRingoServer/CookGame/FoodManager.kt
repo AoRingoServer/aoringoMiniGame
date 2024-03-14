@@ -11,9 +11,13 @@ import org.bukkit.plugin.Plugin
 class FoodManager(private val plugin: Plugin) {
     private val nbt = NBT(plugin)
     private val foodIDKey = "foodID"
-    fun foodInfoList(): MutableList<String> {
+    fun foodInfoKeyList(): MutableList<String> {
         return acquisitionFoodInfo().getKeys(false).toMutableList()
     }
+    fun finishedProductKeyList(): MutableList<String> {
+        return finishedProductList().getKeys(false).toMutableList()
+    }
+
     fun makeFoodInfo(foodID: String): FoodInfo {
         val yml = acquisitionFoodInfo()
         val name = yml.getString("$foodID.name") ?: "未設定"
@@ -23,6 +27,9 @@ class FoodManager(private val plugin: Plugin) {
     }
     private fun acquisitionFoodInfo(): YamlConfiguration {
         return Yml(plugin).getYml("", "FoodInfo")
+    }
+    private fun finishedProductList(): YamlConfiguration {
+        return Yml(plugin).getYml("", "FinishedProductList")
     }
     fun makeFoodItem(foodInfo: FoodInfo): ItemStack {
         val itemManager = ItemManager()

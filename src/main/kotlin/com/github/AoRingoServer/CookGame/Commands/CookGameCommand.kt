@@ -34,7 +34,7 @@ class CookGameCommand(private val plugin: Plugin) : CommandExecutor, TabExecutor
     }
     private fun tabReplenishment(subCommand: String): MutableList<String> {
         return when (subCommand) {
-            "giveFood" -> FoodManager(plugin).foodInfoList()
+            "giveFood" -> FoodManager(plugin).foodInfoKeyList()
             else -> mutableListOf()
         }
     }
