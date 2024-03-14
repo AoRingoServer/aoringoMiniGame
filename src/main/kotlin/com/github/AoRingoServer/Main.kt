@@ -1,6 +1,7 @@
 package com.github.AoRingoServer
 
 import com.github.AoRingoServer.CookGame.Commands.CookGameCommand
+import com.github.AoRingoServer.Datas.Yml
 import com.github.AoRingoServer.PlenaryCommands.AoringoCommand
 import com.github.AoRingoServer.PlenaryCommands.LobbyCommand
 import org.bukkit.plugin.java.JavaPlugin
@@ -8,7 +9,7 @@ import org.bukkit.plugin.java.JavaPlugin
 class Main : JavaPlugin() {
     override fun onEnable() {
         super.onEnable()
-        makePluginFolder()
+        Yml(this).makePluginFolder()
         saveDefaultConfig()
         getCommand("lobby")!!.setExecutor(LobbyCommand())
         getCommand("aoringo")!!.setExecutor(AoringoCommand(this))
@@ -17,10 +18,5 @@ class Main : JavaPlugin() {
         saveResource("FoodInfo.yml", true)
         saveResource("FinishedProductList.yml", true)
         saveResource("cookGameConfig.yml", false)
-    }
-    private fun makePluginFolder() {
-        val dataFolder = this.dataFolder
-        if (dataFolder.exists()) { return }
-        dataFolder.mkdirs()
     }
 }
