@@ -54,11 +54,10 @@ class FoodMenu(private val plugin: Plugin) : GUIs {
         installationRecipeGUIItem(gui, cookingFullKey, finishedProduct)
         return gui
     }
-    private fun installationRecipeGUIItem(gui: Inventory, cookingFullKey: String, finishedProduct: ItemStack) {
+    private fun installationRecipeGUIItem(gui: Inventory, recipeData: RecipeData, finishedProduct: ItemStack) {
         val arrow = ItemManager().make(Material.PAPER, "${ChatColor.YELLOW}→", customModelData = 1)
-        val parts = cookingFullKey.split(".")
-        val cookingType = parts[0]
-        val materialID = parts[2]
+        val materialID = recipeData.materialID
+        val cookingType = recipeData.cuisineType
         val materialFoodInfo = foodManager.makeFoodInfo(materialID)
         val materialItem = foodManager.makeFoodItem(materialFoodInfo)
         val cookingItem = cookingMap[cookingType] ?: return
