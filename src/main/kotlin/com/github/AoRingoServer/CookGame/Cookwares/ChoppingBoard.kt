@@ -16,8 +16,9 @@ class ChoppingBoard(private val plugin: Plugin) {
         val food = itemFrame.item
         val completionGoodsItem = foodManager.acquisitionCookingCompletionGoodsData(food, "cut")
         if (completionGoodsItem == null) {
+            //切ったあとのデータが見つからなかったとき
             player.playSound(player, Sound.ITEM_SHIELD_BREAK, 1f, 1f)
-        } else {
+        } else {//切れたとき
             player.playSound(player, Sound.ENTITY_SHEEP_SHEAR, 1f, 1f)
             itemFrame.setItem(completionGoodsItem)
         }
