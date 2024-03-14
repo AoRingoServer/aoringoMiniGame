@@ -1,4 +1,4 @@
-package com.github.Ringoame196
+package com.github.AoRingoServer.Datas
 
 import org.bukkit.configuration.file.YamlConfiguration
 import org.bukkit.plugin.Plugin

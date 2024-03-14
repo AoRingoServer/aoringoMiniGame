@@ -1,7 +1,7 @@
 package com.github.AoRingoServer.CookGame
 
 import com.github.AoRingoServer.ItemManager
-import com.github.Ringoame196.Yml
+import com.github.AoRingoServer.Datas.Yml
 import org.bukkit.ChatColor
 import org.bukkit.Material
 import org.bukkit.entity.Villager

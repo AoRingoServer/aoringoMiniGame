@@ -2,7 +2,7 @@ package com.github.AoRingoServer.CookGame
 
 import com.github.AoRingoServer.Datas.NBT
 import com.github.AoRingoServer.ItemManager
-import com.github.Ringoame196.Yml
+import com.github.AoRingoServer.Datas.Yml
 import org.bukkit.Material
 import org.bukkit.configuration.file.YamlConfiguration
 import org.bukkit.inventory.ItemStack
@@ -14,8 +14,10 @@ class FoodManager(private val plugin: Plugin) {
     fun foodInfoKeyList(): MutableList<String> {
         return acquisitionFoodInfo().getKeys(false).toMutableList()
     }
-    fun finishedProductKeyList(): MutableList<String> {
-        return finishedProductList().getKeys(false).toMutableList()
+    fun finishedProductList(): MutableList<String> {
+        val basicList = finishedProduct().getList("basic")?.mapNotNull { it.toString() } ?: mutableListOf()
+        val additionList = finishedProduct().getList("addition")?.mapNotNull { it.toString() } ?: mutableListOf()
+        return (basicList + additionList).toMutableList()
     }
 
     fun makeFoodInfo(foodID: String): FoodInfo {
@@ -28,7 +30,7 @@ class FoodManager(private val plugin: Plugin) {
     private fun acquisitionFoodInfo(): YamlConfiguration {
         return Yml(plugin).getYml("", "FoodInfo")
     }
-    private fun finishedProductList(): YamlConfiguration {
+    private fun finishedProduct(): YamlConfiguration {
         return Yml(plugin).getYml("", "FinishedProductList")
     }
     fun makeFoodItem(foodInfo: FoodInfo): ItemStack {

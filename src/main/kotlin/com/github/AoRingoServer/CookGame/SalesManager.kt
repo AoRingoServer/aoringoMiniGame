@@ -2,7 +2,7 @@ package com.github.AoRingoServer.CookGame
 
 import com.github.AoRingoServer.AoringoPlayer
 import com.github.Ringoame196.Scoreboard
-import com.github.Ringoame196.Yml
+import com.github.AoRingoServer.Datas.Yml
 import org.bukkit.Bukkit
 import org.bukkit.ChatColor
 import org.bukkit.plugin.Plugin
