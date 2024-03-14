@@ -42,3 +42,15 @@ pizza:
   name: "§eピザ"
   customModelData: 51
   price: 280
+potato:
+  name: "§6じゃがいも"
+  customModelData: 110
+  price: 80
+cutPotato:
+  name: "§6切ったじゃがいも"
+  customModelData: 8
+  price: 80
+veryCutPotato:
+  name: "§6細かく切ったじゃがいも"
+  customModelData: 84
+  price: 80

@@ -17,6 +17,7 @@ class Main : JavaPlugin() {
         server.pluginManager.registerEvents(Events(this), this)
         saveResource("FoodInfo.yml", true)
         saveResource("FinishedProductList.yml", true)
+        saveResource("CookingMethodData.yml", true)
         saveResource("cookGameConfig.yml", false)
     }
 }
