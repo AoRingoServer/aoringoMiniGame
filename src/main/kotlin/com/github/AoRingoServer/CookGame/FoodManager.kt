@@ -27,6 +27,9 @@ class FoodManager(private val plugin: Plugin) {
         val price = yml.getInt("$foodID.price")
         return FoodInfo(foodID, name, customModelData, price)
     }
+    fun acquisitionFoodID(food: ItemStack): String? {
+        return nbt.acquisition(food, foodIDKey)
+    }
     private fun acquisitionFoodInfo(): YamlConfiguration {
         return Yml(plugin).acquisitionYml("", "FoodInfo")
     }

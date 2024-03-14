@@ -1,5 +1,6 @@
 package com.github.AoRingoServer.Datas
 
+import org.bukkit.configuration.ConfigurationSection
 import org.bukkit.configuration.file.YamlConfiguration
 import org.bukkit.plugin.Plugin
 import java.io.File
@@ -22,5 +23,17 @@ class Yml(private val plugin: Plugin) {
     fun getList(path: String, fileName: String, key: String): MutableList<String>? {
         val yml = acquisitionYml(path, fileName)
         return yml.getStringList(key)
+    }
+    fun acquisitionCookingMethodData(cookingKey: String): ConfigurationSection? {
+        val cookingMethodData = acquisitionYml("", "CookingMethodData")
+        return cookingMethodData.getConfigurationSection(cookingKey)
+    }
+    fun acquisitionKey(data: ConfigurationSection, value: String): String? {
+        data.getKeys(false).forEach { key ->
+            if (data.getString(key) == value) {
+                return key
+            }
+        }
+        return null
     }
 }

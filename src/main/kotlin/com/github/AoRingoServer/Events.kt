@@ -1,17 +1,20 @@
 package com.github.AoRingoServer
 
+import com.github.AoRingoServer.CookGame.Cookwares.ChoppingBoard
 import com.github.AoRingoServer.CookGame.CustomerManager
 import com.github.AoRingoServer.CookGame.FoodMenu
 import com.github.Ringoame196.ResourcePack
 import org.bukkit.ChatColor
 import org.bukkit.Material
 import org.bukkit.Sound
+import org.bukkit.entity.ItemFrame
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.block.Action
 import org.bukkit.event.inventory.InventoryClickEvent
 import org.bukkit.event.inventory.InventoryCloseEvent
+import org.bukkit.event.player.PlayerInteractEntityEvent
 import org.bukkit.event.player.PlayerInteractEvent
 import org.bukkit.event.player.PlayerJoinEvent
 import org.bukkit.plugin.Plugin
@@ -99,5 +102,19 @@ class Events(private val plugin: Plugin) : Listener {
         )
         updateTrading[customInfo]?.invoke() ?: return
         customerManager.setCustomorInfo(villager, null)
+    }
+    @EventHandler
+    fun onPlayerInteractItemFrame(e: PlayerInteractEntityEvent) {
+        val player = e.player
+        val itemFrame = e.rightClicked as? ItemFrame ?: return
+        val item = player.inventory.itemInMainHand
+        val choppingBoard = ChoppingBoard(plugin)
+        val itemFrameMap = mapOf(
+            choppingBoard.knifeItem to { choppingBoard.process(itemFrame, player) }
+        )
+        if (itemFrameMap.keys.contains(item)) {
+            e.isCancelled = true
+            itemFrameMap[item]?.invoke()
+        }
     }
 }
