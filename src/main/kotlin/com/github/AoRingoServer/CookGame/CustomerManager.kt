@@ -21,7 +21,7 @@ class CustomerManager(private val plugin: Plugin) {
     val customorRecipManager = CustomorRecipManager(plugin)
     private val salesManager = SalesManager(plugin)
     private val yml = Yml(plugin)
-    private val cookGameConfig = yml.getYml("", "cookGameConfig")
+    private val cookGameConfig = yml.acquisitionYml("", "cookGameConfig")
     private val bonus = cookGameConfig.getInt("bonus")
     private val chip = cookGameConfig.getInt("chip")
     private val max = cookGameConfig.getInt("max")

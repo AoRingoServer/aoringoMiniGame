@@ -27,7 +27,7 @@ class ResourcePack(val plugin: Plugin) {
     }
     fun update() {
         val gasID = "ResourcePack.GET"
-        val configFIle = yml.getYml("", "config")
+        val configFIle = yml.acquisitionYml("", "config")
         val url = configFIle.getString(resourcePackId)
         val gas = configFIle.getString(gasID) ?: return
 

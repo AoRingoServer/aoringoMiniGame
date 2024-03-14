@@ -1,8 +1,8 @@
 package com.github.AoRingoServer.CookGame
 
 import com.github.AoRingoServer.Datas.NBT
-import com.github.AoRingoServer.ItemManager
 import com.github.AoRingoServer.Datas.Yml
+import com.github.AoRingoServer.ItemManager
 import org.bukkit.Material
 import org.bukkit.configuration.file.YamlConfiguration
 import org.bukkit.inventory.ItemStack
@@ -28,10 +28,10 @@ class FoodManager(private val plugin: Plugin) {
         return FoodInfo(foodID, name, customModelData, price)
     }
     private fun acquisitionFoodInfo(): YamlConfiguration {
-        return Yml(plugin).getYml("", "FoodInfo")
+        return Yml(plugin).acquisitionYml("", "FoodInfo")
     }
     private fun finishedProduct(): YamlConfiguration {
-        return Yml(plugin).getYml("", "FinishedProductList")
+        return Yml(plugin).acquisitionYml("", "FinishedProductList")
     }
     fun makeFoodItem(foodInfo: FoodInfo): ItemStack {
         val itemManager = ItemManager()
