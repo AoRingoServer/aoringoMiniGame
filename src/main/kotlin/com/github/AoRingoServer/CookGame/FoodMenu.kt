@@ -15,8 +15,11 @@ import org.bukkit.plugin.Plugin
 class FoodMenu(private val plugin: Plugin) : GUIs {
     override val guiName: String = "${ChatColor.DARK_BLUE}メニュー"
     private val foodManager = FoodManager(plugin)
+    private val itemManager = ItemManager()
     private val cookingMap = mapOf(
-        "cut" to ChoppingBoard(plugin).knifeItem
+        "cut" to ChoppingBoard(plugin).knifeItem,
+        "fly" to itemManager.make(Material.CAULDRON, "${ChatColor.YELLOW}揚げる", customModelData = 1),
+        "bake" to itemManager.make(Material.SMOKER, "${ChatColor.GOLD}焼く")
     )
     override fun make(player: Player): Inventory {
         val playerGamemode = player.gameMode
