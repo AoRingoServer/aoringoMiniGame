@@ -68,11 +68,17 @@ class Events(private val plugin: Plugin) : Listener {
         val makeGUIs = mapOf(
             "レシピ" to FoodMenu(plugin)
         )
+        val clickNGBlocks = mutableListOf(Material.SMOKER)
         val player = e.player
-        val item = e.item ?: return
-        val itemName = item.itemMeta?.displayName ?: return
+        val item = e.item
+        val block = e.clickedBlock
+        val itemName = item?.itemMeta?.displayName ?: return
         val action = e.action
         if (action != Action.RIGHT_CLICK_BLOCK && action != Action.RIGHT_CLICK_AIR) { return }
+        if (clickNGBlocks.contains(block?.type)) {
+            e.isCancelled = true
+            return
+        }
         if (makeGUIs.keys.contains(itemName)) {
             val gui = makeGUIs[item.itemMeta?.displayName]?.make(player) ?: return
             player.openInventory(gui)
