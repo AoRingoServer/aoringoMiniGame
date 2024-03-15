@@ -24,12 +24,14 @@ class Cookware(private val plugin: Plugin) {
                 time ++
                 if (itemFrameItem != food && itemFrameItem != completionGoodsItem) {
                     this.cancel()
+                    itemFrame.isVisible = true
                     return
                 }
                 when (time) {
                     completionTime -> changeItemFrameItem(itemFrame, completionGoodsItem, completionSound, player)
                     overTime -> {
                         this.cancel()
+                        itemFrame.isVisible = true
                         val airItem = ItemStack(Material.AIR)
                         changeItemFrameItem(itemFrame, airItem, burnedSound, player)
                     }
