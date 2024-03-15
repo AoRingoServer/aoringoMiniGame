@@ -1,3 +1,5 @@
 cut :
   veryCutPotato : cutPotato
   cutPotato : potato
+fly :
+  frenchFries : veryCutPotato

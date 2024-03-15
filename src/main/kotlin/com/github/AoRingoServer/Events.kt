@@ -1,6 +1,7 @@
 package com.github.AoRingoServer
 
 import com.github.AoRingoServer.CookGame.Cookwares.ChoppingBoard
+import com.github.AoRingoServer.CookGame.Cookwares.Flier
 import com.github.AoRingoServer.CookGame.CustomerManager
 import com.github.AoRingoServer.CookGame.FoodMenu
 import com.github.Ringoame196.ResourcePack
@@ -108,13 +109,24 @@ class Events(private val plugin: Plugin) : Listener {
         val player = e.player
         val itemFrame = e.rightClicked as? ItemFrame ?: return
         val item = player.inventory.itemInMainHand
+        val underBlock = itemFrame.location.clone().add(0.0, -1.0, 0.0).block
         val choppingBoard = ChoppingBoard(plugin)
+        val flier = Flier(plugin)
         val itemFrameMap = mapOf(
             choppingBoard.knifeItem to { choppingBoard.process(itemFrame, player) }
+        )
+        val underBlockMap = mapOf(
+            Material.LAVA_CAULDRON to { flier.fry(itemFrame, player, item) }
         )
         if (itemFrameMap.keys.contains(item)) {
             e.isCancelled = true
             itemFrameMap[item]?.invoke()
+        } else if (underBlockMap.keys.contains(underBlock.type)) {
+            if (itemFrame.item.type == Material.AIR) {
+                underBlockMap[underBlock.type]?.invoke()
+            } else {
+                e.isCancelled = true
+            }
         }
     }
 }
