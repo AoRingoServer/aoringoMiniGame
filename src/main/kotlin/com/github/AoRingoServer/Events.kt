@@ -7,6 +7,7 @@ import com.github.AoRingoServer.CookGame.CustomerManager
 import com.github.AoRingoServer.CookGame.FoodMenu
 import com.github.Ringoame196.ResourcePack
 import org.bukkit.ChatColor
+import org.bukkit.GameMode
 import org.bukkit.Material
 import org.bukkit.Sound
 import org.bukkit.entity.ItemFrame
@@ -14,6 +15,7 @@ import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.block.Action
+import org.bukkit.event.hanging.HangingBreakByEntityEvent
 import org.bukkit.event.inventory.InventoryClickEvent
 import org.bukkit.event.inventory.InventoryCloseEvent
 import org.bukkit.event.player.PlayerInteractEntityEvent
@@ -131,5 +133,12 @@ class Events(private val plugin: Plugin) : Listener {
                 e.isCancelled = true
             }
         }
+    }
+    @EventHandler
+    fun onHangingBreakByEntity(e: HangingBreakByEntityEvent) {
+        val player = e.remover as? Player ?: return
+        if (e.entity !is ItemFrame) return
+        if (player.gameMode == GameMode.CREATIVE) { return }
+        e.isCancelled = true
     }
 }
