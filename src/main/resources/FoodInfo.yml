@@ -54,3 +54,11 @@ veryCutPotato:
   name: "§6細く切ったじゃがいも"
   customModelData: 84
   price: 80
+livingPizza :
+  name: "§e冷凍ピザ"
+  customModelData: 53
+  price: 150
+livingDoria :
+  name: "§e冷凍ドリア"
+  customModelData: 54
+  price: 150

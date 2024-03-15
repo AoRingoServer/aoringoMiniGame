@@ -3,3 +3,6 @@ cut :
   cutPotato : potato
 fly :
   frenchFries : veryCutPotato
+bake:
+  pizza : livingPizza
+  doria : livingDoria

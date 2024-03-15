@@ -10,6 +10,6 @@ class Flier(private val plugin: Plugin) {
     private val cookware = Cookware(plugin)
     fun fry(itemFrame: ItemFrame, player: Player, food: ItemStack) {
         val flySound = Sound.BLOCK_LAVA_POP
-        cookware.bakeItemFrameCooking(itemFrame, food, player, 10, 20, flySound)
+        cookware.bakeItemFrameCooking(itemFrame, food, player, "fly", 10, 20, flySound)
     }
 }

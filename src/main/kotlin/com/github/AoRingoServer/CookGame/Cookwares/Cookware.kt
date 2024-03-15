@@ -11,8 +11,8 @@ import org.bukkit.scheduler.BukkitRunnable
 
 class Cookware(private val plugin: Plugin) {
     private val foodManager = FoodManager(plugin)
-    fun bakeItemFrameCooking(itemFrame: ItemFrame, food: ItemStack, player: Player, completionTime: Int, overTime: Int, bakeSound: Sound) {
-        val completionGoodsItem = foodManager.acquisitionCookingCompletionGoodsData(food, "fly") ?: return
+    fun bakeItemFrameCooking(itemFrame: ItemFrame, food: ItemStack, player: Player, cookingMethod: String, completionTime: Int, overTime: Int, bakeSound: Sound) {
+        val completionGoodsItem = foodManager.acquisitionCookingCompletionGoodsData(food, cookingMethod) ?: return
         val completionSound = Sound.BLOCK_ANVIL_USE
         val burnedSound = Sound.BLOCK_LAVA_EXTINGUISH
         var time = 0
