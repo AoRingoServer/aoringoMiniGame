@@ -15,6 +15,7 @@ class Cookware(private val plugin: Plugin) {
         val completionGoodsItem = foodManager.acquisitionCookingCompletionGoodsData(food, cookingMethod) ?: return
         val completionSound = Sound.BLOCK_ANVIL_USE
         val burnedSound = Sound.BLOCK_LAVA_EXTINGUISH
+        itemFrame.isVisible = false
         var time = 0
         object : BukkitRunnable() {
             override fun run() {

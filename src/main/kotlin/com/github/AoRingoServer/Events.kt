@@ -116,6 +116,7 @@ class Events(private val plugin: Plugin) : Listener {
     @EventHandler
     fun onPlayerInteractItemFrame(e: PlayerInteractEntityEvent) {
         val player = e.player
+        val isSneak = player.isSneaking
         val itemFrame = e.rightClicked as? ItemFrame ?: return
         val item = player.inventory.itemInMainHand
         val underBlock = itemFrame.location.clone().add(0.0, -1.0, 0.0).block
@@ -130,6 +131,10 @@ class Events(private val plugin: Plugin) : Listener {
             Material.SMOKER to { furnace.bake(itemFrame, player, item) }
         )
         if (itemFrameMap.keys.contains(item)) {
+            if (!isSneak) {
+                player.sendMessage("${ChatColor.GOLD}スニークで 使用可能")
+                return
+            }
             e.isCancelled = true
             itemFrameMap[item]?.invoke()
         } else if (underBlockMap.keys.contains(underBlock.type)) {
