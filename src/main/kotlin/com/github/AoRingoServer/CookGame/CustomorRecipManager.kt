@@ -14,29 +14,36 @@ import kotlin.random.Random
 class CustomorRecipManager(private val plugin: Plugin) {
     private val foodManager = FoodManager(plugin)
     private val itemManager = ItemManager()
-    val receiptName = "${ChatColor.YELLOW}レシート"
+
+    val dirtyTryName = "${ChatColor.YELLOW}少し汚れたおぼん"
+    private val tryName = "${ChatColor.GOLD}おぼん"
     val skipItem = itemManager.make(Material.BARRIER, "${ChatColor.RED}スキップ")
-    fun makeMerchantRecipe(foodID: String): MerchantRecipe {
+    fun makeMerchantTray(foodID: String): MerchantRecipe {
         val foodInfoData = foodManager.makeFoodInfo(foodID)
         val food = foodManager.makeFoodItem(foodInfoData)
-        val receipt = makeReceipt(foodInfoData)
-        return makeTradeRecipe(receipt, food, 1)
+        val tray = makeTray(foodInfoData)
+        val recipe = makeTradeRecipe(tray, food, 1)
+        makeTrayRequired(recipe)
+        return recipe
     }
-    private fun makeReceipt(foodInfo: FoodInfo): ItemStack {
+    private fun makeTray(foodInfo: FoodInfo): ItemStack {
         val itemManager = ItemManager()
-        val customModelData = 12
+        val customModelData = 4
         val price = foodInfo.price
-        val foodName = foodInfo.foodName
-        val lore = mutableListOf("注文品：$foodName", "金額：${price}円")
-        return itemManager.make(Material.PAPER, receiptName, lore = lore, customModelData = customModelData)
+        val lore = mutableListOf("金額：${price}円")
+        return itemManager.make(Material.BOWL, dirtyTryName, lore = lore, customModelData = customModelData)
     }
     private fun makeTradeRecipe(tradeItem: ItemStack, paymentItem: ItemStack, tradingTimes: Int): MerchantRecipe {
         val trade = MerchantRecipe(
             tradeItem,
-            tradingTimes
+            tradingTimes,
         )
         trade.addIngredient(paymentItem)
         return trade
+    }
+    private fun makeTrayRequired(trade: MerchantRecipe) {
+        val tray = itemManager.make(Material.BOWL, tryName, customModelData = 3)
+        trade.addIngredient(tray)
     }
     fun makeParfaitRecipeMerchantRecipe(): MerchantRecipe {
         val foodID = "parfait"
@@ -65,7 +72,7 @@ class CustomorRecipManager(private val plugin: Plugin) {
     fun setDefaultRecipe(villager: Villager) {
         val appetizer = "appetizer"
         val parfaitItem = makeParfaitRecipeMerchantRecipe()
-        val appetizerItem = makeMerchantRecipe(appetizer)
+        val appetizerItem = makeMerchantTray(appetizer)
         val tradeRecipe = mutableListOf<MerchantRecipe>()
         val orderPaper = makeOrderPaper(appetizer)
         tradeRecipe.add(parfaitItem)

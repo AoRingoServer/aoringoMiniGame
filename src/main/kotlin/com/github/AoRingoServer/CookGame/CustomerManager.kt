@@ -95,7 +95,7 @@ class CustomerManager(private val plugin: Plugin) {
         player.playSound(player, Sound.ENTITY_FIREWORK_ROCKET_LARGE_BLAST, 1f, 1f)
     }
     private fun acquisitionproductsPrice(recipe: ItemStack): Int? {
-        val loreNumber = 1
+        val loreNumber = 0
         val priceDisplay = recipe.itemMeta?.lore?.get(loreNumber) ?: return null
         val priceString = priceDisplay.replace("金額：", "").replace("円", "")
         return priceString.toInt()
@@ -114,12 +114,12 @@ class CustomerManager(private val plugin: Plugin) {
         val orderPaper = customorRecipManager.makeOrderPaper(additionalRecipe)
         recipes.add(customorRecipManager.makeParfaitRecipeMerchantRecipe())
         recipes.add(orderPaper)
-        recipes.add(customorRecipManager.makeMerchantRecipe(additionalRecipe))
+        recipes.add(customorRecipManager.makeMerchantTray(additionalRecipe))
         customorRecipManager.setTrading(villager, recipes)
     }
     private fun additionalUpdateRecipe(villager: Villager) {
         val additionalRecipe = customorRecipManager.acquisitionCompletionGoodsID() ?: return
-        val recipe = customorRecipManager.makeMerchantRecipe(additionalRecipe)
+        val recipe = customorRecipManager.makeMerchantTray(additionalRecipe)
         val orderPaper = customorRecipManager.makeOrderPaper(additionalRecipe)
         customorRecipManager.additionalTrading(villager, recipe, orderPaper)
     }
