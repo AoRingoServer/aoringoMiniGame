@@ -138,7 +138,7 @@ class Events(private val plugin: Plugin) : Listener {
             }
         } else if (itemFrameMap.keys.contains(item)) {
             if (!isSneak) {
-                player.sendMessage("${ChatColor.GOLD}スニークで 使用可能")
+                player.sendMessage("${ChatColor.GOLD}スニークしながらクリックで 使用可能")
                 return
             }
             e.isCancelled = true
