@@ -130,19 +130,19 @@ class Events(private val plugin: Plugin) : Listener {
             Material.LAVA_CAULDRON to { flier.fry(itemFrame, player, item) },
             Material.SMOKER to { furnace.bake(itemFrame, player, item) }
         )
-        if (itemFrameMap.keys.contains(item)) {
+        if (underBlockMap.keys.contains(underBlock.type)) {
+            if (itemFrame.item.type == Material.AIR) {
+                underBlockMap[underBlock.type]?.invoke()
+            } else {
+                e.isCancelled = true
+            }
+        } else if (itemFrameMap.keys.contains(item)) {
             if (!isSneak) {
                 player.sendMessage("${ChatColor.GOLD}スニークで 使用可能")
                 return
             }
             e.isCancelled = true
             itemFrameMap[item]?.invoke()
-        } else if (underBlockMap.keys.contains(underBlock.type)) {
-            if (itemFrame.item.type == Material.AIR) {
-                underBlockMap[underBlock.type]?.invoke()
-            } else {
-                e.isCancelled = true
-            }
         }
     }
     @EventHandler
