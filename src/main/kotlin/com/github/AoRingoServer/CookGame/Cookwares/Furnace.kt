@@ -16,6 +16,6 @@ class Furnace(private val plugin: Plugin) {
         val smoker = itemFrame.location.clone().add(0.0, -1.0, 0.0).block.state as? Smoker ?: return
         smoker.burnTime = 300
         smoker.update()
-        cookware.bakeItemFrameCooking(itemFrame, food, player, "bake", 10, 20, bakeSound, bakeParticle)
+        cookware.bakeItemFrameCooking(itemFrame, food, "bake", 10, 20, bakeSound, bakeParticle)
     }
 }

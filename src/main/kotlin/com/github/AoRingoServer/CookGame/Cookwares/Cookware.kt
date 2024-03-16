@@ -5,14 +5,13 @@ import org.bukkit.Material
 import org.bukkit.Particle
 import org.bukkit.Sound
 import org.bukkit.entity.ItemFrame
-import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
 import org.bukkit.plugin.Plugin
 import org.bukkit.scheduler.BukkitRunnable
 
 class Cookware(private val plugin: Plugin) {
     private val foodManager = FoodManager(plugin)
-    fun bakeItemFrameCooking(itemFrame: ItemFrame, food: ItemStack, player: Player, cookingMethod: String, completionTime: Int, overTime: Int, sound: Sound, particle: Particle) {
+    fun bakeItemFrameCooking(itemFrame: ItemFrame, food: ItemStack, cookingMethod: String, completionTime: Int, overTime: Int, sound: Sound, particle: Particle) {
         val completionGoodsItem = foodManager.acquisitionCookingCompletionGoodsData(food, cookingMethod) ?: return
         val completionSound = Sound.BLOCK_ANVIL_USE
         val burnedSound = Sound.BLOCK_LAVA_EXTINGUISH
