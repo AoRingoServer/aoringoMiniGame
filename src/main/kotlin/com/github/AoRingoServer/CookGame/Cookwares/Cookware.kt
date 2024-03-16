@@ -17,13 +17,19 @@ class Cookware(private val plugin: Plugin) {
         val completionSound = Sound.BLOCK_ANVIL_USE
         val burnedSound = Sound.BLOCK_LAVA_EXTINGUISH
         val particleLocation = itemFrame.location.clone()
+        val overParticle = Particle.EXPLOSION_LARGE
         itemFrame.isVisible = false
         var time = 0
         object : BukkitRunnable() {
             override fun run() {
                 val itemFrameItem = itemFrame.item
+                val putParticle = if (time <= completionTime) {
+                    particle
+                } else {
+                    overParticle
+                }
                 itemFrame.world.playSound(itemFrame.location, sound, 1f, 1f)
-                itemFrame.world.spawnParticle(particle, particleLocation, 10, 0.5, 0.5, 0.5, 0.1)
+                itemFrame.world.spawnParticle(putParticle, particleLocation, 10, 0.5, 0.5, 0.5, 0.1)
                 time ++
                 if (itemFrameItem != food && itemFrameItem != completionGoodsItem) {
                     this.cancel()

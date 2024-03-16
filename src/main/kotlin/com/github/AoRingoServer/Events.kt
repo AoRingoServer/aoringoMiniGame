@@ -74,7 +74,7 @@ class Events(private val plugin: Plugin) : Listener {
         val block = e.clickedBlock
         val action = e.action
         if (action != Action.RIGHT_CLICK_BLOCK && action != Action.RIGHT_CLICK_AIR) { return }
-        if (clickNGBlocks.contains(block?.type)) {
+        if (clickNGBlocks.contains(block?.type) && player.gameMode != GameMode.CREATIVE) {
             e.isCancelled = true
             return
         }
