@@ -12,7 +12,7 @@ import org.bukkit.scheduler.BukkitRunnable
 
 class Cookware(private val plugin: Plugin) {
     private val foodManager = FoodManager(plugin)
-    fun bakeItemFrameCooking(itemFrame: ItemFrame, food: ItemStack, player: Player, cookingMethod: String, completionTime: Int, overTime: Int, bakeSound: Sound, particle: Particle) {
+    fun bakeItemFrameCooking(itemFrame: ItemFrame, food: ItemStack, player: Player, cookingMethod: String, completionTime: Int, overTime: Int, sound: Sound, particle: Particle) {
         val completionGoodsItem = foodManager.acquisitionCookingCompletionGoodsData(food, cookingMethod) ?: return
         val completionSound = Sound.BLOCK_ANVIL_USE
         val burnedSound = Sound.BLOCK_LAVA_EXTINGUISH
@@ -22,7 +22,7 @@ class Cookware(private val plugin: Plugin) {
         object : BukkitRunnable() {
             override fun run() {
                 val itemFrameItem = itemFrame.item
-                player.playSound(player, bakeSound, 1f, 1f)
+                itemFrame.world.playSound(itemFrame.location, sound, 1f, 1f)
                 itemFrame.world.spawnParticle(particle, particleLocation, 10, 0.5, 0.5, 0.5, 0.1)
                 time ++
                 if (itemFrameItem != food && itemFrameItem != completionGoodsItem) {
@@ -30,18 +30,18 @@ class Cookware(private val plugin: Plugin) {
                     return
                 }
                 when (time) {
-                    completionTime -> changeItemFrameItem(itemFrame, completionGoodsItem, completionSound, player)
+                    completionTime -> changeItemFrameItem(itemFrame, completionGoodsItem, completionSound)
                     overTime -> {
                         this.cancel()
                         val airItem = ItemStack(Material.AIR)
-                        changeItemFrameItem(itemFrame, airItem, burnedSound, player)
+                        changeItemFrameItem(itemFrame, airItem, burnedSound)
                     }
                 }
             }
         }.runTaskTimer(plugin, 0L, 20L) // 1秒間隔 (20 ticks) でタスクを実行
     }
-    private fun changeItemFrameItem(itemFrame: ItemFrame, setItem: ItemStack, installationSound: Sound, player: Player) {
+    private fun changeItemFrameItem(itemFrame: ItemFrame, setItem: ItemStack, installationSound: Sound) {
         itemFrame.setItem(setItem)
-        player.playSound(player, installationSound, 1f, 1f)
+        itemFrame.world.playSound(itemFrame.location, installationSound, 1f, 1f)
     }
 }

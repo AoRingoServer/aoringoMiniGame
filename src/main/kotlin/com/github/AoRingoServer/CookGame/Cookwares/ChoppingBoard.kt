@@ -19,7 +19,7 @@ class ChoppingBoard(private val plugin: Plugin) {
             // 切ったあとのデータが見つからなかったとき
             player.playSound(player, Sound.ITEM_SHIELD_BREAK, 1f, 1f)
         } else { // 切れたとき
-            player.playSound(player, Sound.ENTITY_SHEEP_SHEAR, 1f, 1f)
+            itemFrame.world.playSound(itemFrame.location, Sound.ENTITY_SHEEP_SHEAR, 1f, 1f)
             itemFrame.setItem(completionGoodsItem)
         }
     }
