@@ -23,7 +23,7 @@ class Cookware(private val plugin: Plugin) {
             override fun run() {
                 val itemFrameItem = itemFrame.item
                 player.playSound(player, bakeSound, 1f, 1f)
-                itemFrame.world.spawnParticle(particle, particleLocation, 15, 0.5, 0.5, 0.5, 0.1)
+                itemFrame.world.spawnParticle(particle, particleLocation, 10, 0.5, 0.5, 0.5, 0.1)
                 time ++
                 if (itemFrameItem != food && itemFrameItem != completionGoodsItem) {
                     this.cancel()

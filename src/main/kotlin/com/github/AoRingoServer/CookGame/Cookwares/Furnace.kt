@@ -12,7 +12,7 @@ class Furnace(private val plugin: Plugin) {
     private val cookware = Cookware(plugin)
     fun bake(itemFrame: ItemFrame, player: Player, food: ItemStack) {
         val bakeSound = Sound.BLOCK_FIRE_AMBIENT
-        val bakeParticle = Particle.CAMPFIRE_SIGNAL_SMOKE
+        val bakeParticle = Particle.SMOKE_LARGE
         val smoker = itemFrame.location.clone().add(0.0, -1.0, 0.0).block.state as? Smoker ?: return
         smoker.burnTime = 300
         smoker.update()
