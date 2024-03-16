@@ -55,7 +55,7 @@ class Events(private val plugin: Plugin) : Listener {
             customerManager.customorRecipManager.reduceMaterial(inventory)
             player.playSound(player, Sound.BLOCK_BELL_USE, 1f, 1f)
             customerManager.setCustomorInfo(villager, "skip")
-        } else if (obtainedItem.type == Material.BOWL && itemName == customerManager.customorRecipManager.dirtyTryName) {
+        } else if (obtainedItem.type == Material.BOWL && itemName == customerManager.customorRecipManager.dirtyTrayName) {
             customerManager.takeOrder(villager, obtainedItem, aoringoPlayer, recipeCount)
             player.playSound(player, Sound.BLOCK_ANVIL_USE, 1f, 1f)
             customerManager.setCustomorInfo(villager, "next")

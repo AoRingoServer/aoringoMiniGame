@@ -15,8 +15,8 @@ class CustomorRecipManager(private val plugin: Plugin) {
     private val foodManager = FoodManager(plugin)
     private val itemManager = ItemManager()
 
-    val dirtyTryName = "${ChatColor.YELLOW}少し汚れたおぼん"
-    private val tryName = "${ChatColor.GOLD}おぼん"
+    val dirtyTrayName = "${ChatColor.YELLOW}少し汚れたおぼん"
+    private val tray = itemManager.make(Material.BOWL, "${ChatColor.GOLD}おぼん", customModelData = 3)
     val skipItem = itemManager.make(Material.BARRIER, "${ChatColor.RED}スキップ")
     fun makeMerchantTray(foodID: String): MerchantRecipe {
         val foodInfoData = foodManager.makeFoodInfo(foodID)
@@ -31,7 +31,7 @@ class CustomorRecipManager(private val plugin: Plugin) {
         val customModelData = 4
         val price = foodInfo.price
         val lore = mutableListOf("金額：${price}円")
-        return itemManager.make(Material.BOWL, dirtyTryName, lore = lore, customModelData = customModelData)
+        return itemManager.make(Material.BOWL, dirtyTrayName, lore = lore, customModelData = customModelData)
     }
     private fun makeTradeRecipe(tradeItem: ItemStack, paymentItem: ItemStack, tradingTimes: Int): MerchantRecipe {
         val trade = MerchantRecipe(
@@ -42,7 +42,6 @@ class CustomorRecipManager(private val plugin: Plugin) {
         return trade
     }
     private fun makeTrayRequired(trade: MerchantRecipe) {
-        val tray = itemManager.make(Material.BOWL, tryName, customModelData = 3)
         trade.addIngredient(tray)
     }
     fun makeParfaitRecipeMerchantRecipe(): MerchantRecipe {
