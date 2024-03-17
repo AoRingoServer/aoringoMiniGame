@@ -7,10 +7,10 @@ import org.bukkit.inventory.ItemStack
 import org.bukkit.plugin.Plugin
 
 class Pot(private val plugin: Plugin) : UseItemFrameCookware {
-    private val cookware = Cookware(plugin)
+    private val cookwareManager = CookwareManager(plugin)
     override fun cooking(itemFrame: ItemFrame, food: ItemStack) {
         val boilSound = Sound.BLOCK_STONE_PLACE
         val boilParticle = Particle.SPIT
-        cookware.bakeItemFrameCooking(itemFrame, food, "boil", 10, 20, boilSound, boilParticle)
+        cookwareManager.bakeItemFrameCooking(itemFrame, food, "boil", 10, 20, boilSound, boilParticle)
     }
 }

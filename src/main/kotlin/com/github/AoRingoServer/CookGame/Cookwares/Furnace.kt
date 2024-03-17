@@ -8,7 +8,7 @@ import org.bukkit.inventory.ItemStack
 import org.bukkit.plugin.Plugin
 
 class Furnace(private val plugin: Plugin) : UseItemFrameCookware {
-    private val cookware = Cookware(plugin)
+    private val cookwareManager = CookwareManager(plugin)
 
     override fun cooking(itemFrame: ItemFrame, food: ItemStack) {
         val bakeSound = Sound.BLOCK_FIRE_AMBIENT
@@ -16,6 +16,6 @@ class Furnace(private val plugin: Plugin) : UseItemFrameCookware {
         val smoker = itemFrame.location.clone().add(0.0, -1.0, 0.0).block.state as? Smoker ?: return
         smoker.burnTime = 300
         smoker.update()
-        cookware.bakeItemFrameCooking(itemFrame, food, "bake", 10, 20, bakeSound, bakeParticle)
+        cookwareManager.bakeItemFrameCooking(itemFrame, food, "bake", 10, 20, bakeSound, bakeParticle)
     }
 }
