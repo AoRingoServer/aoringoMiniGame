@@ -6,3 +6,5 @@ fly :
 bake:
   pizza : livingPizza
   doria : livingDoria
+boil:
+  rice : riceSeeds

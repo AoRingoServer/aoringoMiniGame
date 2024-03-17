@@ -3,6 +3,7 @@ package com.github.AoRingoServer
 import com.github.AoRingoServer.CookGame.Cookwares.ChoppingBoard
 import com.github.AoRingoServer.CookGame.Cookwares.Flier
 import com.github.AoRingoServer.CookGame.Cookwares.Furnace
+import com.github.AoRingoServer.CookGame.Cookwares.Pot
 import com.github.AoRingoServer.CookGame.CustomerManager
 import com.github.AoRingoServer.CookGame.FoodMenu
 import com.github.Ringoame196.ResourcePack
@@ -123,12 +124,14 @@ class Events(private val plugin: Plugin) : Listener {
         val choppingBoard = ChoppingBoard(plugin)
         val flier = Flier(plugin)
         val furnace = Furnace(plugin)
+        val pot = Pot(plugin)
         val itemFrameMap = mapOf(
             choppingBoard.knifeItem to { choppingBoard.process(itemFrame, player) }
         )
         val underBlockMap = mapOf(
             Material.LAVA_CAULDRON to { flier.fry(itemFrame, player, item) },
-            Material.SMOKER to { furnace.bake(itemFrame, player, item) }
+            Material.SMOKER to { furnace.bake(itemFrame, player, item) },
+            Material.WATER_CAULDRON to { pot.boil(itemFrame, item) }
         )
         if (underBlockMap.keys.contains(underBlock.type)) {
             if (itemFrame.item.type == Material.AIR) {

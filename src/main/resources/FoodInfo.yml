@@ -62,3 +62,11 @@ livingDoria :
   name: "§e冷凍ドリア"
   customModelData: 54
   price: 150
+riceSeeds:
+  name: "§6稲"
+  customModelData: 4
+  price: 50
+rice:
+  name: "ライス"
+  customModelData: 45
+  price: 100
