@@ -70,3 +70,11 @@ rice:
   name: "ライス"
   customModelData: 45
   price: 100
+rawNoodles:
+  name: "§e生麺"
+  customModelData: 16
+  price: 100
+boiledNoodles:
+  name: "§e茹で麺"
+  customModelData: 17
+  price: 100

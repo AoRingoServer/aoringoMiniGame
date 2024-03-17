@@ -122,20 +122,17 @@ class Events(private val plugin: Plugin) : Listener {
         val item = player.inventory.itemInMainHand
         val underBlock = itemFrame.location.clone().add(0.0, -1.0, 0.0).block
         val choppingBoard = ChoppingBoard(plugin)
-        val flier = Flier(plugin)
-        val furnace = Furnace(plugin)
-        val pot = Pot(plugin)
         val itemFrameMap = mapOf(
             choppingBoard.knifeItem to { choppingBoard.process(itemFrame, player) }
         )
         val underBlockMap = mapOf(
-            Material.LAVA_CAULDRON to { flier.fry(itemFrame, player, item) },
-            Material.SMOKER to { furnace.bake(itemFrame, player, item) },
-            Material.WATER_CAULDRON to { pot.boil(itemFrame, item) }
+            Material.LAVA_CAULDRON to Flier(plugin),
+            Material.SMOKER to Furnace(plugin),
+            Material.WATER_CAULDRON to Pot(plugin)
         )
         if (underBlockMap.keys.contains(underBlock.type)) {
             if (itemFrame.item.type == Material.AIR) {
-                underBlockMap[underBlock.type]?.invoke()
+                underBlockMap[underBlock.type]?.cooking(itemFrame,item)
             } else {
                 e.isCancelled = true
             }

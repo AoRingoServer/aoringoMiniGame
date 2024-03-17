@@ -8,3 +8,4 @@ bake:
   doria : livingDoria
 boil:
   rice : riceSeeds
+  boiledNoodles : rawNoodles

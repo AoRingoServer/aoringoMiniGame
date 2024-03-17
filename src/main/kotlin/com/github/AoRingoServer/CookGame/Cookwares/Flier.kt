@@ -7,9 +7,9 @@ import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
 import org.bukkit.plugin.Plugin
 
-class Flier(private val plugin: Plugin) {
+class Flier(private val plugin: Plugin):UseItemFrameCookware {
     private val cookware = Cookware(plugin)
-    fun fry(itemFrame: ItemFrame, player: Player, food: ItemStack) {
+    override fun cooking(itemFrame: ItemFrame,food: ItemStack) {
         val flySound = Sound.BLOCK_LAVA_POP
         val flyParticle = Particle.LAVA
         cookware.bakeItemFrameCooking(itemFrame, food, "fly", 10, 20, flySound, flyParticle)
