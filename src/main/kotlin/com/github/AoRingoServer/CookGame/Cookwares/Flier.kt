@@ -12,7 +12,7 @@ import org.bukkit.plugin.Plugin
 class Flier(private val plugin: Plugin) : UseItemFrameCookware, Cookware {
     private val cookwareManager = CookwareManager(plugin)
     private val itemManager = ItemManager()
-    override val menuItem: ItemStack = itemManager.make(Material.CARROT, "${ChatColor.YELLOW}揚げる", customModelData = 1)
+    override val menuItem: ItemStack = itemManager.make(Material.CAULDRON, "${ChatColor.YELLOW}揚げる", customModelData = 1)
     override fun cooking(itemFrame: ItemFrame, food: ItemStack) {
         val flySound = Sound.BLOCK_LAVA_POP
         val flyParticle = Particle.LAVA
