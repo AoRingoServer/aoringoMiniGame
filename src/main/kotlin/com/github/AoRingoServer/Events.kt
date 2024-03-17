@@ -132,7 +132,7 @@ class Events(private val plugin: Plugin) : Listener {
         )
         if (underBlockMap.keys.contains(underBlock.type)) {
             if (itemFrame.item.type == Material.AIR) {
-                underBlockMap[underBlock.type]?.cooking(itemFrame,item)
+                underBlockMap[underBlock.type]?.cooking(itemFrame, item)
             } else {
                 e.isCancelled = true
             }

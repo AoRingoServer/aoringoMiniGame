@@ -19,7 +19,8 @@ class FoodMenu(private val plugin: Plugin) : GUIs {
     private val cookingMap = mapOf(
         "cut" to ChoppingBoard(plugin).knifeItem,
         "fly" to itemManager.make(Material.CAULDRON, "${ChatColor.YELLOW}揚げる", customModelData = 1),
-        "bake" to itemManager.make(Material.SMOKER, "${ChatColor.GOLD}焼く")
+        "bake" to itemManager.make(Material.SMOKER, "${ChatColor.GOLD}焼く"),
+        "boil" to itemManager.make(Material.CAULDRON, "${ChatColor.GOLD}茹でる", customModelData = 3)
     )
     override fun make(player: Player): Inventory {
         val playerGamemode = player.gameMode

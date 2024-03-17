@@ -4,11 +4,10 @@ import org.bukkit.Particle
 import org.bukkit.Sound
 import org.bukkit.block.Smoker
 import org.bukkit.entity.ItemFrame
-import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
 import org.bukkit.plugin.Plugin
 
-class Furnace(private val plugin: Plugin):UseItemFrameCookware {
+class Furnace(private val plugin: Plugin) : UseItemFrameCookware {
     private val cookware = Cookware(plugin)
 
     override fun cooking(itemFrame: ItemFrame, food: ItemStack) {
