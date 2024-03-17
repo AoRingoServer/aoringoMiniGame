@@ -16,7 +16,7 @@ class CustomorRecipManager(private val plugin: Plugin) {
     private val itemManager = ItemManager()
 
     val dirtyTrayName = "${ChatColor.YELLOW}少し汚れたおぼん"
-    private val tray = itemManager.make(Material.BOWL, "${ChatColor.GOLD}おぼん", customModelData = 3)
+    val tray = itemManager.make(Material.BOWL, "${ChatColor.GOLD}おぼん", customModelData = 3)
     val skipItem = itemManager.make(Material.BARRIER, "${ChatColor.RED}スキップ")
     fun makeMerchantTray(foodID: String): MerchantRecipe {
         val foodInfoData = foodManager.makeFoodInfo(foodID)

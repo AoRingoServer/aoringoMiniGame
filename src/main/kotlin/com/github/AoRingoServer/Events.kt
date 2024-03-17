@@ -1,6 +1,7 @@
 package com.github.AoRingoServer
 
 import com.github.AoRingoServer.CookGame.Cookwares.ChoppingBoard
+import com.github.AoRingoServer.CookGame.Cookwares.CookwareManager
 import com.github.AoRingoServer.CookGame.Cookwares.Flier
 import com.github.AoRingoServer.CookGame.Cookwares.Furnace
 import com.github.AoRingoServer.CookGame.Cookwares.Pot
@@ -143,6 +144,9 @@ class Events(private val plugin: Plugin) : Listener {
             }
             e.isCancelled = true
             itemFrameMap[item]?.invoke()
+        } else if (item.type == Material.SPONGE) {
+            e.isCancelled = true
+            CookwareManager(plugin).cleanTray(itemFrame, player)
         }
     }
     @EventHandler

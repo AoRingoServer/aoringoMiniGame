@@ -1,13 +1,16 @@
 package com.github.AoRingoServer.CookGame.Cookwares
 
+import com.github.AoRingoServer.CookGame.CustomorRecipManager
 import com.github.AoRingoServer.CookGame.FoodManager
 import org.bukkit.Material
 import org.bukkit.Particle
 import org.bukkit.Sound
 import org.bukkit.entity.ItemFrame
+import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
 import org.bukkit.plugin.Plugin
 import org.bukkit.scheduler.BukkitRunnable
+import kotlin.random.Random
 
 class CookwareManager(private val plugin: Plugin) {
     private val foodManager = FoodManager(plugin)
@@ -48,5 +51,17 @@ class CookwareManager(private val plugin: Plugin) {
     private fun changeItemFrameItem(itemFrame: ItemFrame, setItem: ItemStack, installationSound: Sound) {
         itemFrame.setItem(setItem)
         itemFrame.world.playSound(itemFrame.location, installationSound, 1f, 1f)
+    }
+    fun cleanTray(itemFrame: ItemFrame, player: Player) {
+        val tray = itemFrame.item
+        val probability = 5
+        val customorRecipManager = CustomorRecipManager(plugin)
+        if (tray.itemMeta?.displayName != customorRecipManager.dirtyTrayName) { return }
+        player.playSound(player, Sound.ITEM_BUCKET_FILL, 1f, 1f)
+        if (Random.nextInt(0, probability) != 0) {
+            return
+        }
+        itemFrame.setItem(customorRecipManager.tray)
+        player.playSound(player, Sound.BLOCK_ANVIL_USE, 1f, 1f)
     }
 }
