@@ -131,7 +131,10 @@ class Events(private val plugin: Plugin) : Listener {
             Material.SMOKER to Furnace(plugin),
             Material.WATER_CAULDRON to Pot(plugin)
         )
-        if (underBlockMap.keys.contains(underBlock.type)) {
+        if (item.type == Material.SPONGE) {
+            e.isCancelled = true
+            CookwareManager(plugin).cleanTray(itemFrame, player)
+        } else if (underBlockMap.keys.contains(underBlock.type)) {
             if (itemFrame.item.type == Material.AIR) {
                 underBlockMap[underBlock.type]?.cooking(itemFrame, item)
             } else {
@@ -144,9 +147,6 @@ class Events(private val plugin: Plugin) : Listener {
             }
             e.isCancelled = true
             itemFrameMap[item]?.invoke()
-        } else if (item.type == Material.SPONGE) {
-            e.isCancelled = true
-            CookwareManager(plugin).cleanTray(itemFrame, player)
         }
     }
     @EventHandler
