@@ -7,11 +7,13 @@ import org.bukkit.Material
 import org.bukkit.Sound
 import org.bukkit.entity.ItemFrame
 import org.bukkit.entity.Player
+import org.bukkit.inventory.ItemStack
 import org.bukkit.plugin.Plugin
 
-class ChoppingBoard(private val plugin: Plugin) {
+class ChoppingBoard(private val plugin: Plugin) : Cookware {
     private val foodManager = FoodManager(plugin)
     val knifeItem = ItemManager().make(Material.IRON_SWORD, "${ChatColor.GOLD}包丁", customModelData = 1)
+    override val menuItem: ItemStack = knifeItem
     fun process(itemFrame: ItemFrame, player: Player) {
         val food = itemFrame.item
         val completionGoodsItem = foodManager.acquisitionCookingCompletionGoodsData(food, "cut")
