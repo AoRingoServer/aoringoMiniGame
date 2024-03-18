@@ -126,7 +126,7 @@ class Events(private val plugin: Plugin) : Listener {
         val choppingBoard = ChoppingBoard(plugin)
         val playerHasItemUseMap = mapOf(
             choppingBoard.knifeItem to { choppingBoard.process(itemFrame, player) },
-            ItemStack(Material.SPONGE) to { CookwareManager(plugin).cleanTray(itemFrame, player) }
+            ItemStack(Material.SPONGE) to { CookwareManager(plugin).cleanTray(itemFrame, player, underBlock) }
         )
         val underBlockMap = mapOf(
             Material.LAVA_CAULDRON to Flier(plugin),

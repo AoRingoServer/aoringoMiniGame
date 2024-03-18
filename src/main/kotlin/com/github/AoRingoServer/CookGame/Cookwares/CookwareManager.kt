@@ -2,9 +2,11 @@ package com.github.AoRingoServer.CookGame.Cookwares
 
 import com.github.AoRingoServer.CookGame.CustomorRecipManager
 import com.github.AoRingoServer.CookGame.FoodManager
+import org.bukkit.ChatColor
 import org.bukkit.Material
 import org.bukkit.Particle
 import org.bukkit.Sound
+import org.bukkit.block.Block
 import org.bukkit.entity.ItemFrame
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
@@ -52,10 +54,14 @@ class CookwareManager(private val plugin: Plugin) {
         itemFrame.setItem(setItem)
         itemFrame.world.playSound(itemFrame.location, installationSound, 1f, 1f)
     }
-    fun cleanTray(itemFrame: ItemFrame, player: Player) {
+    fun cleanTray(itemFrame: ItemFrame, player: Player, underBlock: Block) {
         val tray = itemFrame.item
         val probability = 5
         val customorRecipManager = CustomorRecipManager(plugin)
+        if (underBlock.type != Material.WATER_CAULDRON) {
+            player.sendMessage("${ChatColor.RED}台所のみ 使用可能です")
+            return
+        }
         if (tray.itemMeta?.displayName != customorRecipManager.dirtyTrayName) { return }
         player.playSound(player, Sound.ITEM_BUCKET_FILL, 1f, 1f)
         if (Random.nextInt(0, probability) != 0) {
