@@ -124,7 +124,7 @@ class Events(private val plugin: Plugin) : Listener {
         val item = player.inventory.itemInMainHand
         val underBlock = itemFrame.location.clone().add(0.0, -1.0, 0.0).block
         val choppingBoard = ChoppingBoard(plugin)
-        val itemFrameMap = mapOf(
+        val playerHasItemUseMap = mapOf(
             choppingBoard.knifeItem to { choppingBoard.process(itemFrame, player) },
             ItemStack(Material.SPONGE) to { CookwareManager(plugin).cleanTray(itemFrame, player) }
         )
@@ -133,13 +133,13 @@ class Events(private val plugin: Plugin) : Listener {
             Material.SMOKER to Furnace(plugin),
             Material.WATER_CAULDRON to Pot(plugin)
         )
-        if (itemFrameMap.keys.contains(item)) {
+        if (playerHasItemUseMap.keys.contains(item)) {
             if (!isSneak) {
                 player.sendMessage("${ChatColor.GOLD}スニークしながらクリックで 使用可能")
                 return
             }
             e.isCancelled = true
-            itemFrameMap[item]?.invoke()
+            playerHasItemUseMap[item]?.invoke()
         } else if (underBlockMap.keys.contains(underBlock.type)) {
             if (itemFrame.item.type == Material.AIR) {
                 underBlockMap[underBlock.type]?.cooking(itemFrame, item)
