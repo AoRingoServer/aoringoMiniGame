@@ -123,7 +123,7 @@ class Events(private val plugin: Plugin) : Listener {
         val isSneak = player.isSneaking
         val itemFrame = e.rightClicked as? ItemFrame ?: return
         val itemFrameItem = itemFrame.item
-        val item = player.inventory.itemInMainHand
+        val item = player.inventory.itemInMainHand.clone()
         val underBlock = itemFrame.location.clone().add(0.0, -1.0, 0.0).block
         val choppingBoard = ChoppingBoard(plugin)
         val batter = Batter(plugin)

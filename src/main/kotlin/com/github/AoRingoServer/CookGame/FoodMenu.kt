@@ -1,5 +1,6 @@
 package com.github.AoRingoServer.CookGame
 
+import com.github.AoRingoServer.CookGame.Cookwares.Batter
 import com.github.AoRingoServer.CookGame.Cookwares.ChoppingBoard
 import com.github.AoRingoServer.CookGame.Cookwares.Flier
 import com.github.AoRingoServer.CookGame.Cookwares.Furnace
@@ -22,7 +23,8 @@ class FoodMenu(private val plugin: Plugin) : GUIs {
         "cut" to ChoppingBoard(plugin),
         "fly" to Flier(plugin),
         "bake" to Furnace(plugin),
-        "boil" to Pot(plugin)
+        "boil" to Pot(plugin),
+        "batter" to Batter(plugin)
     )
     override fun make(player: Player): Inventory {
         val playerGamemode = player.gameMode
