@@ -90,3 +90,17 @@ chicken:
   name: "§c鶏肉"
   customModelData: 80
   price: 130
+  amount : 5
+beef:
+  name: "§c牛肉"
+  customModelData: 78
+  price: 130
+  amount : 5
+chunksOfChicken:
+  name: "§c鶏肉の塊"
+  customModelData: 26
+  price: 130
+chunksOfBeef:
+  name: "§c牛肉の塊"
+  customModelData: 21
+  price: 130
