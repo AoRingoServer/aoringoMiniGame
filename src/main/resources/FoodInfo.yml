@@ -78,3 +78,15 @@ boiledNoodles:
   name: "§e茹で麺"
   customModelData: 17
   price: 100
+cutChickenMeat:
+  name: "§e切った鶏肉"
+  customModelData: 27
+  price: 100
+livingFriedChicken:
+  name: "§e衣付き鶏肉"
+  customModelData: 23
+  price: 100
+chicken:
+  name: "§c鶏肉"
+  customModelData: 80
+  price: 130

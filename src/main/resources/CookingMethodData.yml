@@ -1,11 +1,15 @@
 cut :
   veryCutPotato : cutPotato
   cutPotato : potato
+  cutChickenMeat : chicken
 fly :
   frenchFries : veryCutPotato
+  friedChicken : livingFriedChicken
 bake:
   pizza : livingPizza
   doria : livingDoria
 boil:
   rice : riceSeeds
   boiledNoodles : rawNoodles
+batter:
+  livingFriedChicken : cutChickenMeat

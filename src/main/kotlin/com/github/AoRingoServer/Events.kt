@@ -1,5 +1,6 @@
 package com.github.AoRingoServer
 
+import com.github.AoRingoServer.CookGame.Cookwares.Batter
 import com.github.AoRingoServer.CookGame.Cookwares.ChoppingBoard
 import com.github.AoRingoServer.CookGame.Cookwares.CookwareManager
 import com.github.AoRingoServer.CookGame.Cookwares.Flier
@@ -121,12 +122,18 @@ class Events(private val plugin: Plugin) : Listener {
         val player = e.player
         val isSneak = player.isSneaking
         val itemFrame = e.rightClicked as? ItemFrame ?: return
+        val itemFrameItem = itemFrame.item
         val item = player.inventory.itemInMainHand
         val underBlock = itemFrame.location.clone().add(0.0, -1.0, 0.0).block
         val choppingBoard = ChoppingBoard(plugin)
+        val batter = Batter(plugin)
+        val sneakGuidanceMessage = "${ChatColor.GOLD}スニークしながらクリックで 使用可能"
         val playerHasItemUseMap = mapOf(
             choppingBoard.knifeItem to { choppingBoard.process(itemFrame, player) },
             ItemStack(Material.SPONGE) to { CookwareManager(plugin).cleanTray(itemFrame, player, underBlock) }
+        )
+        val itemFrameItemUseMap = mapOf(
+            batter.batterItem to { batter.cover(item, player, itemFrame) }
         )
         val underBlockMap = mapOf(
             Material.LAVA_CAULDRON to Flier(plugin),
@@ -135,11 +142,18 @@ class Events(private val plugin: Plugin) : Listener {
         )
         if (playerHasItemUseMap.keys.contains(item)) {
             if (!isSneak) {
-                player.sendMessage("${ChatColor.GOLD}スニークしながらクリックで 使用可能")
+                player.sendMessage(sneakGuidanceMessage)
                 return
             }
             e.isCancelled = true
             playerHasItemUseMap[item]?.invoke()
+        } else if (itemFrameItemUseMap.keys.contains(itemFrameItem)) {
+            if (!isSneak) {
+                player.sendMessage(sneakGuidanceMessage)
+                return
+            }
+            e.isCancelled = true
+            itemFrameItemUseMap[itemFrameItem]?.invoke()
         } else if (underBlockMap.keys.contains(underBlock.type)) {
             if (itemFrame.item.type == Material.AIR) {
                 underBlockMap[underBlock.type]?.cooking(itemFrame, item)
