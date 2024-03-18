@@ -1,4 +1,6 @@
 rewardScoreboardName : ""
 bonus :
 chip :
-max :
+tradingLimit :
+  lowest:
+  max :

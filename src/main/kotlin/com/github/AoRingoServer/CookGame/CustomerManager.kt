@@ -14,6 +14,8 @@ import org.bukkit.inventory.Inventory
 import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.MerchantRecipe
 import org.bukkit.plugin.Plugin
+import kotlin.random.Random
+import kotlin.random.nextInt
 
 class CustomerManager(private val plugin: Plugin) {
     private val name = "${ChatColor.YELLOW}お客様"
@@ -24,7 +26,6 @@ class CustomerManager(private val plugin: Plugin) {
     private val cookGameConfig = yml.acquisitionYml("", "cookGameConfig")
     private val bonus = cookGameConfig.getInt("bonus")
     private val chip = cookGameConfig.getInt("chip")
-    private val max = cookGameConfig.getInt("max")
     private val nbt = NBT(plugin)
     private val customorInfoKey = "customInfo"
 
@@ -65,12 +66,17 @@ class CustomerManager(private val plugin: Plugin) {
         return Location(world, x, y, z)
     }
     fun takeOrder(villager: Villager, recipe: ItemStack, aoringoPlayer: AoringoPlayer, recipeCount: Int) {
+        val count = villager.recipeCount
         val price = acquisitionproductsPrice(recipe) ?: return
         continuousBonus(recipeCount, aoringoPlayer)
         salesManager.addition(price, aoringoPlayer)
-        if (customorRecipManager.isRecipeCountMax(villager, max)) {
+        if (isSatisfaction(count) && count >= 10) {
             customorReplacement(villager, aoringoPlayer)
         }
+    }
+    private fun isSatisfaction(tradingTimes: Int): Boolean {
+        val probability = 10
+        return Random.nextInt(0, probability) == 0
     }
     fun newTradingPreparation(villager: Villager) {
         additionalUpdateRecipe(villager)
