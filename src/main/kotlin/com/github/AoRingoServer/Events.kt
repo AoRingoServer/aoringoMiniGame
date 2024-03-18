@@ -23,6 +23,7 @@ import org.bukkit.event.inventory.InventoryCloseEvent
 import org.bukkit.event.player.PlayerInteractEntityEvent
 import org.bukkit.event.player.PlayerInteractEvent
 import org.bukkit.event.player.PlayerJoinEvent
+import org.bukkit.inventory.ItemStack
 import org.bukkit.plugin.Plugin
 
 class Events(private val plugin: Plugin) : Listener {
@@ -124,29 +125,27 @@ class Events(private val plugin: Plugin) : Listener {
         val underBlock = itemFrame.location.clone().add(0.0, -1.0, 0.0).block
         val choppingBoard = ChoppingBoard(plugin)
         val itemFrameMap = mapOf(
-            choppingBoard.knifeItem to { choppingBoard.process(itemFrame, player) }
+            choppingBoard.knifeItem to { choppingBoard.process(itemFrame, player) },
+            ItemStack(Material.SPONGE) to { CookwareManager(plugin).cleanTray(itemFrame, player) }
         )
         val underBlockMap = mapOf(
             Material.LAVA_CAULDRON to Flier(plugin),
             Material.SMOKER to Furnace(plugin),
             Material.WATER_CAULDRON to Pot(plugin)
         )
-        if (item.type == Material.SPONGE) {
-            e.isCancelled = true
-            CookwareManager(plugin).cleanTray(itemFrame, player)
-        } else if (underBlockMap.keys.contains(underBlock.type)) {
-            if (itemFrame.item.type == Material.AIR) {
-                underBlockMap[underBlock.type]?.cooking(itemFrame, item)
-            } else {
-                e.isCancelled = true
-            }
-        } else if (itemFrameMap.keys.contains(item)) {
+        if (itemFrameMap.keys.contains(item)) {
             if (!isSneak) {
                 player.sendMessage("${ChatColor.GOLD}スニークしながらクリックで 使用可能")
                 return
             }
             e.isCancelled = true
             itemFrameMap[item]?.invoke()
+        } else if (underBlockMap.keys.contains(underBlock.type)) {
+            if (itemFrame.item.type == Material.AIR) {
+                underBlockMap[underBlock.type]?.cooking(itemFrame, item)
+            } else {
+                e.isCancelled = true
+            }
         }
     }
     @EventHandler
