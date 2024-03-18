@@ -64,6 +64,8 @@ class CookwareManager(private val plugin: Plugin) {
         }
         if (tray.itemMeta?.displayName != customorRecipManager.dirtyTrayName) { return }
         player.playSound(player, Sound.ITEM_BUCKET_FILL, 1f, 1f)
+        itemFrame.isVisible = false
+        itemFrame.world.spawnParticle(Particle.WATER_DROP, itemFrame.location, 10, 0.5, 0.5, 0.5, 0.1)
         if (Random.nextInt(0, probability) != 0) {
             return
         }
