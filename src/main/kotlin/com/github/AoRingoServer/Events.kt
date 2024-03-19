@@ -25,6 +25,7 @@ import org.bukkit.event.inventory.InventoryCloseEvent
 import org.bukkit.event.player.PlayerInteractEntityEvent
 import org.bukkit.event.player.PlayerInteractEvent
 import org.bukkit.event.player.PlayerJoinEvent
+import org.bukkit.event.player.PlayerToggleSneakEvent
 import org.bukkit.inventory.ItemStack
 import org.bukkit.plugin.Plugin
 
@@ -187,5 +188,14 @@ class Events(private val plugin: Plugin) : Listener {
         if (e.entity !is ItemFrame) return
         if (player.gameMode == GameMode.CREATIVE) { return }
         e.isCancelled = true
+    }
+    @EventHandler
+    fun onPlayerToggleSneak(e: PlayerToggleSneakEvent) {
+        val player = e.player
+        val blockUnderTwo = player.location.clone().add(0.0, -2.0, 0.0).block
+        if (!e.isSneaking) { return }
+        if (blockUnderTwo.type == Material.COMMAND_BLOCK) {
+            Teleporter(plugin).teleport(player)
+        }
     }
 }
