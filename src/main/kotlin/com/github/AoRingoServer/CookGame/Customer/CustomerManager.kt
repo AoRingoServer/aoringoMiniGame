@@ -1,6 +1,7 @@
-package com.github.AoRingoServer.CookGame
+package com.github.AoRingoServer.CookGame.Customer
 
 import com.github.AoRingoServer.AoringoPlayer
+import com.github.AoRingoServer.CookGame.SalesManager
 import com.github.AoRingoServer.Datas.NBT
 import com.github.AoRingoServer.Datas.Yml
 import org.bukkit.ChatColor
@@ -15,7 +16,6 @@ import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.MerchantRecipe
 import org.bukkit.plugin.Plugin
 import kotlin.random.Random
-import kotlin.random.nextInt
 
 class CustomerManager(private val plugin: Plugin) {
     private val name = "${ChatColor.YELLOW}お客様"
@@ -70,11 +70,15 @@ class CustomerManager(private val plugin: Plugin) {
         val price = acquisitionproductsPrice(recipe) ?: return
         continuousBonus(recipeCount, aoringoPlayer)
         salesManager.addition(price, aoringoPlayer)
-        if (isSatisfaction(count) && count >= 10) {
-            customorReplacement(villager, aoringoPlayer)
-        }
     }
-    private fun isSatisfaction(tradingTimes: Int): Boolean {
+    fun satisfactionLevel(count: Int, villager: Villager, aoringoPlayer: AoringoPlayer): Boolean {
+        if (isSatisfaction() && count >= 10) {
+            customorReplacement(villager, aoringoPlayer)
+            return true
+        }
+        return false
+    }
+    private fun isSatisfaction(): Boolean {
         val probability = 10
         return Random.nextInt(0, probability) == 0
     }

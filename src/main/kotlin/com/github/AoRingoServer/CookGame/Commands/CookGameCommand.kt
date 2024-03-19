@@ -1,6 +1,6 @@
 package com.github.AoRingoServer.CookGame.Commands
 
-import com.github.AoRingoServer.CookGame.CustomerManager
+import com.github.AoRingoServer.CookGame.Customer.CustomerManager
 import com.github.AoRingoServer.CookGame.FoodManager
 import org.bukkit.command.Command
 import org.bukkit.command.CommandExecutor

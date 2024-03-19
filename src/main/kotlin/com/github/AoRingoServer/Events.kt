@@ -6,7 +6,7 @@ import com.github.AoRingoServer.CookGame.Cookwares.CookwareManager
 import com.github.AoRingoServer.CookGame.Cookwares.Flier
 import com.github.AoRingoServer.CookGame.Cookwares.Furnace
 import com.github.AoRingoServer.CookGame.Cookwares.Pot
-import com.github.AoRingoServer.CookGame.CustomerManager
+import com.github.AoRingoServer.CookGame.Customer.CustomerManager
 import com.github.AoRingoServer.CookGame.FoodMenu
 import com.github.Ringoame196.ResourcePack
 import org.bukkit.ChatColor
@@ -108,12 +108,18 @@ class Events(private val plugin: Plugin) : Listener {
     fun onInventoryClose(e: InventoryCloseEvent) {
         val customerManager = CustomerManager(plugin)
         val inventory = e.inventory
+        val player = e.player as Player
         val villager = customerManager.acquisitionCustomer(inventory) ?: return
         val customInfo = customerManager.acquisitionCustomorInfo(villager)
+        val aoringoPlayer = AoringoPlayer(player)
+        val recipeCount = villager.recipeCount
         val updateTrading = mapOf(
             "skip" to { customerManager.skipTrade(villager) },
             "next" to { customerManager.newTradingPreparation(villager) }
         )
+        if (customerManager.satisfactionLevel(recipeCount, villager, aoringoPlayer)) {
+            return
+        }
         updateTrading[customInfo]?.invoke() ?: return
         customerManager.setCustomorInfo(villager, null)
     }

@@ -1,6 +1,6 @@
 package com.github.AoRingoServer.CookGame.Cookwares
 
-import com.github.AoRingoServer.CookGame.CustomorRecipManager
+import com.github.AoRingoServer.CookGame.Customer.CustomorRecipManager
 import com.github.AoRingoServer.CookGame.FoodManager
 import org.bukkit.ChatColor
 import org.bukkit.Material

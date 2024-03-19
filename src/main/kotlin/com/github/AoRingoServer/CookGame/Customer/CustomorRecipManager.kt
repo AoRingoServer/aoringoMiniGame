@@ -1,5 +1,7 @@
-package com.github.AoRingoServer.CookGame
+package com.github.AoRingoServer.CookGame.Customer
 
+import com.github.AoRingoServer.CookGame.FoodInfo
+import com.github.AoRingoServer.CookGame.FoodManager
 import com.github.AoRingoServer.Datas.Yml
 import com.github.AoRingoServer.ItemManager
 import org.bukkit.ChatColor
@@ -98,9 +100,5 @@ class CustomorRecipManager(private val plugin: Plugin) {
         newRecipes.add(2, recipe)
         newRecipes[1] = orderPaper
         setTrading(villager, newRecipes)
-    }
-    fun isRecipeCountMax(villager: Villager, max: Int): Boolean {
-        val count = villager.recipeCount
-        return count == max
     }
 }
