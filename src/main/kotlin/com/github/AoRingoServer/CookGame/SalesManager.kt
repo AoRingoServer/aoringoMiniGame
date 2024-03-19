@@ -8,7 +8,7 @@ import org.bukkit.ChatColor
 import org.bukkit.plugin.Plugin
 
 class SalesManager(private val plugin: Plugin) {
-    private fun acquisitionScoreboardName(): String? {
+    fun acquisitionScoreboardName(): String? {
         val config = Yml(plugin).acquisitionYml("", "cookGameConfig")
         return config.getString("rewardScoreboardName")
     }
@@ -19,8 +19,7 @@ class SalesManager(private val plugin: Plugin) {
             return
         }
         val scoreboard = Scoreboard(scoreboardName)
-        val teamName = aoringoPlayer.teamName
-        val target = teamName ?: aoringoPlayer.player.name
+        val target = aoringoPlayer.scoreboardTargetName
         scoreboard.add(target, price)
     }
 }

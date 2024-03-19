@@ -8,6 +8,7 @@ import com.github.AoRingoServer.CookGame.Cookwares.Furnace
 import com.github.AoRingoServer.CookGame.Cookwares.Pot
 import com.github.AoRingoServer.CookGame.Customer.CustomerManager
 import com.github.AoRingoServer.CookGame.FoodMenu
+import com.github.AoRingoServer.CookGame.Register
 import com.github.Ringoame196.ResourcePack
 import org.bukkit.ChatColor
 import org.bukkit.GameMode
@@ -69,29 +70,41 @@ class Events(private val plugin: Plugin) : Listener {
     }
     @EventHandler
     fun onPlayerInteract(e: PlayerInteractEvent) {
+        val player = e.player
         val makeGUIs = mapOf(
             "レシピ" to FoodMenu(plugin)
         )
-        val clickNGBlocks = mutableListOf(Material.SMOKER)
-        val player = e.player
+        val clickNGBlocks = mutableListOf(
+            Material.SMOKER,
+            Material.LAVA_CAULDRON,
+            Material.WATER_CAULDRON,
+            Material.CAULDRON
+        )
+        val blockMap = mapOf(
+            Material.ENCHANTING_TABLE to { player.openInventory(Register(plugin).make(player)) }
+        )
         val item = e.item
         val block = e.clickedBlock
         val action = e.action
+        val itemName = item?.itemMeta?.displayName
         if (action != Action.RIGHT_CLICK_BLOCK && action != Action.RIGHT_CLICK_AIR) { return }
         if (clickNGBlocks.contains(block?.type) && player.gameMode != GameMode.CREATIVE) {
             e.isCancelled = true
-            return
         }
-        val itemName = item?.itemMeta?.displayName ?: return
-        if (makeGUIs.keys.contains(itemName)) {
-            val gui = makeGUIs[item.itemMeta?.displayName]?.make(player) ?: return
+        if (blockMap.contains(block?.type)) {
+            e.isCancelled = true
+            blockMap[block?.type]?.invoke()
+        } else if (makeGUIs.keys.contains(itemName)) {
+            e.isCancelled = true
+            val gui = makeGUIs[item?.itemMeta?.displayName]?.make(player) ?: return
             player.openInventory(gui)
         }
     }
     @EventHandler
     fun onInventoryClick(e: InventoryClickEvent) {
         val makeGUIs = mapOf(
-            FoodMenu(plugin).let { foodMenu -> foodMenu.guiName to foodMenu }
+            FoodMenu(plugin).let { foodMenu -> foodMenu.guiName to foodMenu },
+            Register(plugin).let { register -> register.guiName to register }
         )
         val player = e.whoClicked as? Player ?: return
         val gui = e.view
