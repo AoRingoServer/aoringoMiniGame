@@ -9,7 +9,8 @@ import org.bukkit.plugin.java.JavaPlugin
 class Main : JavaPlugin() {
     override fun onEnable() {
         super.onEnable()
-        Yml(this).makePluginFolder()
+        val yml = Yml(this)
+        yml.makePluginFolder()
         saveDefaultConfig()
         getCommand("lobby")!!.setExecutor(LobbyCommand())
         getCommand("aoringo")!!.setExecutor(AoringoCommand(this))
@@ -19,5 +20,6 @@ class Main : JavaPlugin() {
         saveResource("FinishedProductList.yml", true)
         saveResource("CookingMethodData.yml", true)
         saveResource("cookGameConfig.yml", false)
+        PluginData.DataManager.foodInfo = yml.acquisitionYml("", "FoodInfo")
     }
 }

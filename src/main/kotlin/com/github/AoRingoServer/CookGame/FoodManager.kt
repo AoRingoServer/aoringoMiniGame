@@ -3,6 +3,7 @@ package com.github.AoRingoServer.CookGame
 import com.github.AoRingoServer.Datas.NBT
 import com.github.AoRingoServer.Datas.Yml
 import com.github.AoRingoServer.ItemManager
+import com.github.AoRingoServer.PluginData
 import org.bukkit.Material
 import org.bukkit.configuration.file.YamlConfiguration
 import org.bukkit.inventory.ItemStack
@@ -12,7 +13,7 @@ class FoodManager(private val plugin: Plugin) {
     private val nbt = NBT(plugin)
     private val foodIDKey = "foodID"
     fun foodInfoKeyList(): MutableList<String> {
-        return acquisitionFoodInfo().getKeys(false).toMutableList()
+        return acquisitionFoodInfo()?.getKeys(false)?.toMutableList() ?: mutableListOf()
     }
     fun finishedProductList(): MutableList<String> {
         val basicList = finishedProduct().getList("basic")?.mapNotNull { it.toString() } ?: mutableListOf()
@@ -22,16 +23,16 @@ class FoodManager(private val plugin: Plugin) {
 
     fun makeFoodInfo(foodID: String): FoodInfo {
         val yml = acquisitionFoodInfo()
-        val name = yml.getString("$foodID.name") ?: "未設定"
-        val customModelData = yml.getInt("$foodID.customModelData")
-        val price = yml.getInt("$foodID.price")
+        val name = yml?.getString("$foodID.name") ?: "未設定"
+        val customModelData = yml?.getInt("$foodID.customModelData") ?: 1
+        val price = yml?.getInt("$foodID.price") ?: 100
         return FoodInfo(foodID, name, customModelData, price)
     }
     fun acquisitionFoodID(food: ItemStack): String? {
         return nbt.acquisition(food, foodIDKey)
     }
-    private fun acquisitionFoodInfo(): YamlConfiguration {
-        return Yml(plugin).acquisitionYml("", "FoodInfo")
+    private fun acquisitionFoodInfo(): YamlConfiguration? {
+        return PluginData.DataManager.foodInfo
     }
     private fun finishedProduct(): YamlConfiguration {
         return Yml(plugin).acquisitionYml("", "FinishedProductList")
