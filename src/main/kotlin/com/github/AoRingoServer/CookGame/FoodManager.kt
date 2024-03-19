@@ -11,9 +11,11 @@ import org.bukkit.plugin.Plugin
 
 class FoodManager(private val plugin: Plugin) {
     private val nbt = NBT(plugin)
+    private val yml = Yml(plugin)
     private val foodIDKey = "foodID"
+    private val foodInfoFile = PluginData.DataManager.foodInfo
     fun foodInfoKeyList(): MutableList<String> {
-        return acquisitionFoodInfo()?.getKeys(false)?.toMutableList() ?: mutableListOf()
+        return foodInfoFile?.getKeys(false)?.toMutableList() ?: mutableListOf()
     }
     fun finishedProductList(): MutableList<String> {
         val basicList = finishedProduct().getList("basic")?.mapNotNull { it.toString() } ?: mutableListOf()
@@ -22,20 +24,16 @@ class FoodManager(private val plugin: Plugin) {
     }
 
     fun makeFoodInfo(foodID: String): FoodInfo {
-        val yml = acquisitionFoodInfo()
-        val name = yml?.getString("$foodID.name") ?: "未設定"
-        val customModelData = yml?.getInt("$foodID.customModelData") ?: 1
-        val price = yml?.getInt("$foodID.price") ?: 100
+        val name = foodInfoFile?.getString("$foodID.name") ?: "未設定"
+        val customModelData = foodInfoFile?.getInt("$foodID.customModelData") ?: 1
+        val price = foodInfoFile?.getInt("$foodID.price") ?: 100
         return FoodInfo(foodID, name, customModelData, price)
     }
     fun acquisitionFoodID(food: ItemStack): String? {
         return nbt.acquisition(food, foodIDKey)
     }
-    private fun acquisitionFoodInfo(): YamlConfiguration? {
-        return PluginData.DataManager.foodInfo
-    }
     private fun finishedProduct(): YamlConfiguration {
-        return Yml(plugin).acquisitionYml("", "FinishedProductList")
+        return yml.acquisitionYml("", "FinishedProductList")
     }
     fun makeFoodItem(foodInfo: FoodInfo): ItemStack {
         val itemManager = ItemManager()
@@ -64,7 +62,6 @@ class FoodManager(private val plugin: Plugin) {
         return null
     }
     private fun acquisitionCompletionGoodsId(ingredientId: String, method: String): String? {
-        val yml = Yml(plugin)
         val cutCookingData = yml.acquisitionCookingMethodData(method) ?: return null
         return yml.acquisitionKey(cutCookingData, ingredientId)
     }
