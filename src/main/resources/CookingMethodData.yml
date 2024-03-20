@@ -14,5 +14,7 @@ bake:
 boil:
   rice : riceSeeds
   boiledNoodles : rawNoodles
+  udon : boiledNoodles
+  cutTomato : tomato
 batter:
   livingFriedChicken : cutChickenMeat

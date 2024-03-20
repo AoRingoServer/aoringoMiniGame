@@ -104,3 +104,11 @@ chunksOfBeef:
   name: "§c牛肉の塊"
   customModelData: 21
   price: 130
+tomato:
+  name: "§cトマト"
+  customModelData: 7
+  price: 80
+cutTomato:
+  name: "§cトマトペースト"
+  customModelData: 12
+  price: 80
