@@ -2,6 +2,7 @@ package com.github.AoRingoServer
 
 import com.github.AoRingoServer.CookGame.Cookwares.Batter
 import com.github.AoRingoServer.CookGame.Cookwares.ChoppingBoard
+import com.github.AoRingoServer.CookGame.Cookwares.Coalescence
 import com.github.AoRingoServer.CookGame.Cookwares.CookwareManager
 import com.github.AoRingoServer.CookGame.Cookwares.Flier
 import com.github.AoRingoServer.CookGame.Cookwares.Furnace
@@ -161,6 +162,7 @@ class Events(private val plugin: Plugin) : Listener {
             Material.SMOKER to Furnace(plugin),
             Material.WATER_CAULDRON to Pot(plugin)
         )
+        Coalescence(plugin).cooking(itemFrame, player)
         if (playerHasItemUseMap.keys.contains(item)) {
             if (!isSneak) {
                 player.sendMessage(sneakGuidanceMessage)

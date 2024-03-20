@@ -1,6 +1,7 @@
 package com.github.AoRingoServer
 
 import org.bukkit.Material
+import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
 
 class ItemManager {
@@ -12,5 +13,11 @@ class ItemManager {
         meta?.setCustomModelData(customModelData)
         item.setItemMeta(meta)
         return item
+    }
+    fun reducePlayermainitem(player: Player) {
+        val item = player.inventory.itemInMainHand.clone()
+        val amount = item.amount
+        item.amount = amount - 1
+        player.setItemInHand(item)
     }
 }
