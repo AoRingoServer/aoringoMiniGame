@@ -12,7 +12,7 @@ class Main : JavaPlugin() {
         val yml = Yml(this)
         yml.makePluginFolder()
         saveDefaultConfig()
-        getCommand("lobby")!!.setExecutor(LobbyCommand())
+        getCommand("lobby")!!.setExecutor(LobbyCommand(this))
         getCommand("aoringo")!!.setExecutor(AoringoCommand(this))
         getCommand("cookgame")!!.setExecutor(CookGameCommand(this))
         server.pluginManager.registerEvents(Events(this), this)

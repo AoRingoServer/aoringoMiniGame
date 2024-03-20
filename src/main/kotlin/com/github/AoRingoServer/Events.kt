@@ -195,7 +195,7 @@ class Events(private val plugin: Plugin) : Listener {
         val blockUnderTwo = player.location.clone().add(0.0, -2.0, 0.0).block
         if (!e.isSneaking) { return }
         if (blockUnderTwo.type == Material.COMMAND_BLOCK) {
-            Teleporter(plugin).teleport(player)
+            Teleporter(plugin).sneakTeleport(player)
         }
     }
 }
