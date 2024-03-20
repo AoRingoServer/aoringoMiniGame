@@ -58,17 +58,6 @@ class FoodManager(private val plugin: Plugin) {
         val completionGoodsFoodInfo = makeFoodInfo(completionGoodsId)
         return makeFoodItem(completionGoodsFoodInfo)
     }
-    fun acquisitionCookingMethodKey(foodID: String): RecipeData? {
-        val cookingMethodData = Yml(plugin).cookingMethodData()
-        val keys = cookingMethodData.getKeys(true)
-        for (key in keys) {
-            if (!key.contains(".$foodID")) { continue }
-            val materialId = cookingMethodData.getString(key)
-            val fullKey = "$key.$materialId"
-            return makeRecipeData(fullKey)
-        }
-        return null
-    }
     private fun acquisitionCompletionGoodsId(ingredientId: String, method: String): String? {
         val cutCookingData = yml.acquisitionCookingMethodData(method) ?: return null
         return yml.acquisitionKey(cutCookingData, ingredientId)
