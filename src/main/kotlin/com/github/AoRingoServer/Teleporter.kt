@@ -22,7 +22,7 @@ class Teleporter(private val plugin: Plugin) {
     }
     fun teleport(player: Player, teleportWorldName: String) {
         val location = Bukkit.getWorld(teleportWorldName)?.spawnLocation ?: return
-        player.playSound(player, Sound.ENTITY_ENDERMAN_TELEPORT, 1f, 1f)
         player.teleport(location)
+        player.playSound(player, Sound.ENTITY_ENDERMAN_TELEPORT, 1f, 1f)
     }
 }
