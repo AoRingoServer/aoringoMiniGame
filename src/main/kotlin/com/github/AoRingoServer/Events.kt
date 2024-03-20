@@ -150,7 +150,7 @@ class Events(private val plugin: Plugin) : Listener {
         val underBlock = itemFrame.location.clone().add(0.0, -1.0, 0.0).block
         val choppingBoard = ChoppingBoard(plugin)
         val batter = Batter(plugin)
-        val sneakGuidanceMessage = "${ChatColor.GOLD}スニークしながらクリックで 使用可能"
+        val sneakGuidanceMessage = "${ChatColor.GOLD}調理する場合は スニークしながらクリックしてください"
         val playerHasItemUseMap = mapOf(
             choppingBoard.knifeItem to { choppingBoard.process(itemFrame, player) },
             ItemStack(Material.SPONGE) to { CookwareManager(plugin).cleanTray(itemFrame, player, underBlock) }
