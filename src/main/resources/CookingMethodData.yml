@@ -18,3 +18,7 @@ boil:
   cutTomato : tomato
 batter:
   livingFriedChicken : cutChickenMeat
+coalescence :
+  riceBall:
+    - rice
+    - seaweed

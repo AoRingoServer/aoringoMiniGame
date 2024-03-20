@@ -112,3 +112,11 @@ cutTomato:
   name: "§cトマトペースト"
   customModelData: 12
   price: 80
+takeguji:
+  name: "§6竹串"
+  customModelData: 111
+  price: 130
+seaweed:
+  name: "§0海苔"
+  customModelData: 111
+  price: 130
