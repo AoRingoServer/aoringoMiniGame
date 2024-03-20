@@ -22,3 +22,9 @@ coalescence :
   riceBall:
     - rice
     - seaweed
+  spaghetti:
+    - boiledNoodles
+    - cutTomato
+  yakitori:
+    - cutChickenMeat
+    - takeguji
