@@ -8,6 +8,7 @@ import com.github.AoRingoServer.CookGame.Cookwares.Furnace
 import com.github.AoRingoServer.CookGame.Cookwares.Pot
 import com.github.AoRingoServer.GUIs
 import com.github.AoRingoServer.ItemManager
+import com.github.AoRingoServer.PluginData
 import org.bukkit.Bukkit
 import org.bukkit.ChatColor
 import org.bukkit.GameMode
@@ -20,7 +21,6 @@ import org.bukkit.plugin.Plugin
 class FoodMenu(private val plugin: Plugin) : GUIs {
     override val guiName: String = "${ChatColor.DARK_BLUE}メニュー"
     private val foodManager = FoodManager(plugin)
-    private val arrow = ItemManager().make(Material.PAPER, "${ChatColor.YELLOW}→", customModelData = 1)
     private val cookingMap = mapOf(
         "cut" to ChoppingBoard(plugin),
         "fly" to Flier(plugin),
@@ -61,35 +61,51 @@ class FoodMenu(private val plugin: Plugin) : GUIs {
         val guiSize = 9
         val gui = Bukkit.createInventory(null, guiSize, guiName)
         val finishedProductID = foodManager.acquisitionFoodID(finishedProduct) ?: return null
-        val cookingFullKey = foodManager.acquisitionCookingMethodKey(finishedProductID) ?: return null
-        installationRecipeGUIItem(gui, cookingFullKey, finishedProduct)
+        val methodData = acquireCookingMethodData(finishedProductID)
+        typeProcessingChange(methodData?.acquisitionData, gui, methodData?.cookingMethod ?: return null, finishedProduct)
         return gui
     }
-    private fun installationRecipeGUIItem(gui: Inventory, recipeData: RecipeData, finishedProduct: ItemStack) {
-        val materialID = recipeData.materialID
-        val cookingType = recipeData.cuisineType
-        val materialFoodInfo = foodManager.makeFoodInfo(materialID)
-        val materialItem = foodManager.makeFoodItem(materialFoodInfo)
-        val cookingItem = cookingMap[cookingType]?.menuItem ?: return
-        when (cookingType) {
-            "cut", "fly", "bake", "boil", "batter" -> singleDisplay(gui, materialItem, cookingItem, finishedProduct)
+    private fun acquireCookingMethodData(foodID: String): FoodMenuAcquisitionData? {
+        val cookingMethodData = PluginData.DataManager.cookingMethodData ?: return null
+        for (cookingMethod in cookingMap.keys) {
+            val data = cookingMethodData.get("$cookingMethod.$foodID") ?: continue
+            return FoodMenuAcquisitionData(cookingMethod, data)
+        }
+        return null
+    }
+    private fun typeProcessingChange(data: Any?, gui: Inventory, cookingMethod: String, finishedProduct: ItemStack) {
+        when (data) {
+            null -> return
+            is String -> singleDisplay(data, gui, cookingMethod, finishedProduct)
+            is List<*> -> multiDisplay(data, gui, cookingMethod, finishedProduct)
         }
     }
-    private fun singleDisplay(gui: Inventory, materialItem: ItemStack, cookingItem: ItemStack, finishedProduct: ItemStack) {
-        val materialItemSlot = 1
-        val cookingTypeSlot = 2
-        val arrowSlot = 4
-        val finishedProductSlot = 6
-        gui.setItem(materialItemSlot, materialItem)
-        gui.setItem(cookingTypeSlot, cookingItem)
+    private fun singleDisplay(data: String, gui: Inventory, cookingMethod: String, finishedProduct: ItemStack) {
+        val foodInfo = foodManager.makeFoodInfo(data)
+        val food = foodManager.makeFoodItem(foodInfo)
+        installGUI(gui, food, cookingMethod, finishedProduct)
+    }
+    private fun multiDisplay(data: List<*>, gui: Inventory, cookingMethod: String, finishedProduct: ItemStack) {
+        val additionFoodID = data[0].toString()
+        val foundationFoodID = data[1].toString()
+        val additionFoodInfo = foodManager.makeFoodInfo(additionFoodID)
+        val foundationFoodInfo = foodManager.makeFoodInfo(foundationFoodID)
+        val additionFood = foodManager.makeFoodItem(additionFoodInfo)
+        val foundationFood = foodManager.makeFoodItem(foundationFoodInfo)
+        installGUI(gui, additionFood, cookingMethod, finishedProduct, foundationFood)
+    }
+    private fun installGUI(gui: Inventory, leftFood: ItemStack, cookingMethod: String, finishedProduct: ItemStack, rightFood: ItemStack = ItemStack(Material.AIR)) {
+        val cookingMethodItem = cookingMap[cookingMethod]?.menuItem ?: return
+        val arrow = ItemManager().make(Material.PAPER, "${ChatColor.YELLOW}→", customModelData = 1)
+        val leftFoodSlot = 2
+        val rightFoodSlot = 3
+        val cookingMethodSlot = 4
+        val arrowSlot = 5
+        val finishedProductSlot = 7
+        gui.setItem(rightFoodSlot, rightFood)
+        gui.setItem(leftFoodSlot, leftFood)
+        gui.setItem(cookingMethodSlot, cookingMethodItem)
         gui.setItem(arrowSlot, arrow)
         gui.setItem(finishedProductSlot, finishedProduct)
-    }
-    private fun multiDisplay(gui: Inventory) {
-        val additionItemSlot = 1
-        val foundationSlot = 2
-        val cookingTypeSlot = 3
-        val arrowSlot = 4
-        val finishedProductSlot = 6
     }
 }
