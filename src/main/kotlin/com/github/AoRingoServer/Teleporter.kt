@@ -13,8 +13,8 @@ class Teleporter(private val plugin: Plugin) {
         val blockID = player.location.clone().add(0.0, -1.0, 0.0).block.type.toString()
         val acquisitionWorldName = acquisitionWorldName(blockID)
         val teleportTargetWorld = if (world == lobbyWorldName) { acquisitionWorldName } else { lobbyWorldName }
-        val location = Bukkit.getWorld(teleportTargetWorld ?: lobbyWorldName)?.spawnLocation ?: return
-        player.teleport(location)
+        val teleportLocation = Bukkit.getWorld(teleportTargetWorld ?: lobbyWorldName)?.spawnLocation ?: return
+        player.teleport(teleportLocation)
         player.playSound(player, Sound.ENTITY_ENDERMAN_TELEPORT, 1f, 1f)
     }
     private fun acquisitionWorldName(blockID: String): String? {
