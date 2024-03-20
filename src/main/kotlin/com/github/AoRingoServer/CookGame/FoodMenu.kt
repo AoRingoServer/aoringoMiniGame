@@ -20,6 +20,7 @@ import org.bukkit.plugin.Plugin
 class FoodMenu(private val plugin: Plugin) : GUIs {
     override val guiName: String = "${ChatColor.DARK_BLUE}メニュー"
     private val foodManager = FoodManager(plugin)
+    private val arrow = ItemManager().make(Material.PAPER, "${ChatColor.YELLOW}→", customModelData = 1)
     private val cookingMap = mapOf(
         "cut" to ChoppingBoard(plugin),
         "fly" to Flier(plugin),
@@ -65,12 +66,16 @@ class FoodMenu(private val plugin: Plugin) : GUIs {
         return gui
     }
     private fun installationRecipeGUIItem(gui: Inventory, recipeData: RecipeData, finishedProduct: ItemStack) {
-        val arrow = ItemManager().make(Material.PAPER, "${ChatColor.YELLOW}→", customModelData = 1)
         val materialID = recipeData.materialID
         val cookingType = recipeData.cuisineType
         val materialFoodInfo = foodManager.makeFoodInfo(materialID)
         val materialItem = foodManager.makeFoodItem(materialFoodInfo)
         val cookingItem = cookingMap[cookingType]?.menuItem ?: return
+        when (cookingType) {
+            "cut", "fly", "bake", "boil", "batter" -> singleDisplay(gui, materialItem, cookingItem, finishedProduct)
+        }
+    }
+    private fun singleDisplay(gui: Inventory, materialItem: ItemStack, cookingItem: ItemStack, finishedProduct: ItemStack) {
         val materialItemSlot = 1
         val cookingTypeSlot = 2
         val arrowSlot = 4
@@ -79,5 +84,12 @@ class FoodMenu(private val plugin: Plugin) : GUIs {
         gui.setItem(cookingTypeSlot, cookingItem)
         gui.setItem(arrowSlot, arrow)
         gui.setItem(finishedProductSlot, finishedProduct)
+    }
+    private fun multiDisplay(gui: Inventory) {
+        val additionItemSlot = 1
+        val foundationSlot = 2
+        val cookingTypeSlot = 3
+        val arrowSlot = 4
+        val finishedProductSlot = 6
     }
 }

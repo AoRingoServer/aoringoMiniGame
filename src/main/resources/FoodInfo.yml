@@ -118,5 +118,5 @@ takeguji:
   price: 130
 seaweed:
   name: "§0海苔"
-  customModelData: 111
-  price: 37
+  customModelData: 37
+  price: 130

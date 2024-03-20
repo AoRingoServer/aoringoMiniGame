@@ -142,6 +142,7 @@ class Events(private val plugin: Plugin) : Listener {
     @EventHandler
     fun onPlayerInteractItemFrame(e: PlayerInteractEntityEvent) {
         val player = e.player
+        val aoringoPlayer = AoringoPlayer(player)
         val isSneak = player.isSneaking
         val itemFrame = e.rightClicked as? ItemFrame ?: return
         val itemFrameItem = itemFrame.item
@@ -162,27 +163,23 @@ class Events(private val plugin: Plugin) : Listener {
             Material.SMOKER to Furnace(plugin),
             Material.WATER_CAULDRON to Pot(plugin)
         )
-        Coalescence(plugin).cooking(itemFrame, player)
-        if (playerHasItemUseMap.keys.contains(item)) {
-            if (!isSneak) {
-                player.sendMessage(sneakGuidanceMessage)
-                return
+        if (underBlockMap.keys.contains(underBlock.type)) {
+            when (itemFrameItem.type) {
+                Material.AIR -> underBlockMap[underBlock.type]?.cooking(itemFrame, item)
+                else -> e.isCancelled = true
             }
-            e.isCancelled = true
+        }
+        if (!isSneak) {
+            aoringoPlayer.sendActionBar(sneakGuidanceMessage)
+            return
+        }
+        e.isCancelled = true
+        if (playerHasItemUseMap.keys.contains(item)) {
             playerHasItemUseMap[item]?.invoke()
         } else if (itemFrameItemUseMap.keys.contains(itemFrameItem)) {
-            if (!isSneak) {
-                player.sendMessage(sneakGuidanceMessage)
-                return
-            }
-            e.isCancelled = true
             itemFrameItemUseMap[itemFrameItem]?.invoke()
-        } else if (underBlockMap.keys.contains(underBlock.type)) {
-            if (itemFrame.item.type == Material.AIR) {
-                underBlockMap[underBlock.type]?.cooking(itemFrame, item)
-            } else {
-                e.isCancelled = true
-            }
+        } else {
+            Coalescence(plugin).cooking(itemFrame, player)
         }
     }
     @EventHandler
