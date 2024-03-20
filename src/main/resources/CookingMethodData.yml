@@ -11,6 +11,7 @@ bake:
   pizza : livingPizza
   doria : livingDoria
   steak : beef
+  yakitori : rawYakitori
 boil:
   rice : riceSeeds
   boiledNoodles : rawNoodles
@@ -25,6 +26,6 @@ coalescence :
   spaghetti:
     - boiledNoodles
     - cutTomato
-  yakitori:
+  rawYakitori:
     - cutChickenMeat
     - takeguji

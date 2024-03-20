@@ -120,3 +120,7 @@ seaweed:
   name: "§0海苔"
   customModelData: 37
   price: 130
+rawYakitori :
+  name: "§c生焼き鳥"
+  customModelData: 99
+  price: 130

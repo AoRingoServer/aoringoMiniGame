@@ -1,5 +1,6 @@
 package com.github.AoRingoServer.Datas
 
+import com.github.AoRingoServer.PluginData
 import org.bukkit.configuration.ConfigurationSection
 import org.bukkit.configuration.file.YamlConfiguration
 import org.bukkit.plugin.Plugin
@@ -25,8 +26,8 @@ class Yml(private val plugin: Plugin) {
         return yml.getStringList(key)
     }
     fun acquisitionCookingMethodData(cookingKey: String): ConfigurationSection? {
-        val cookingMethodData = cookingMethodData()
-        return cookingMethodData.getConfigurationSection(cookingKey)
+        val cookingMethodData = PluginData.DataManager.cookingMethodData
+        return cookingMethodData?.getConfigurationSection(cookingKey)
     }
     fun cookingMethodData(): YamlConfiguration {
         return acquisitionYml("", "CookingMethodData")

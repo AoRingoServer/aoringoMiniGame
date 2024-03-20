@@ -1,9 +1,11 @@
 package com.github.AoRingoServer
 
 import org.bukkit.configuration.file.YamlConfiguration
+import org.yaml.snakeyaml.Yaml
 
 class PluginData {
     object DataManager {
         var foodInfo: YamlConfiguration? = null
+        var cookingMethodData : YamlConfiguration? = null
     }
 }
