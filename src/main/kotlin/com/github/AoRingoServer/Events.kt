@@ -25,6 +25,7 @@ import org.bukkit.event.inventory.InventoryCloseEvent
 import org.bukkit.event.player.PlayerInteractEntityEvent
 import org.bukkit.event.player.PlayerInteractEvent
 import org.bukkit.event.player.PlayerJoinEvent
+import org.bukkit.event.player.PlayerTakeLecternBookEvent
 import org.bukkit.event.player.PlayerToggleSneakEvent
 import org.bukkit.inventory.ItemStack
 import org.bukkit.plugin.Plugin
@@ -197,5 +198,16 @@ class Events(private val plugin: Plugin) : Listener {
         if (blockUnderTwo.type == Material.COMMAND_BLOCK) {
             Teleporter(plugin).sneakTeleport(player)
         }
+    }
+    @EventHandler
+    fun onPlayerTakeLecternBook(e: PlayerTakeLecternBookEvent) {
+        val player = e.player
+        val book = e.book ?: return
+        val adminBookManager = AdminBookManager(book)
+        if (!adminBookManager.isAdminBook()) { return }
+        if (player.gameMode == GameMode.CREATIVE) { return }
+        e.isCancelled = true
+        player.inventory.addItem(book)
+        player.closeInventory()
     }
 }
