@@ -39,4 +39,12 @@ class Yml(private val plugin: Plugin) {
         }
         return null
     }
+    fun acquisitionKey(data: ConfigurationSection, value: MutableList<String>): String? {
+        data.getKeys(false).forEach { key ->
+            if (data.getStringList(key) == value) {
+                return key
+            }
+        }
+        return null
+    }
 }

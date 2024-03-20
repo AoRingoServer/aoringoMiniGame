@@ -50,6 +50,14 @@ class FoodManager(private val plugin: Plugin) {
         val completionGoodsFoodInfo = makeFoodInfo(completionGoodsId)
         return makeFoodItem(completionGoodsFoodInfo)
     }
+    fun acquisitionCookingCompletionGoodsData(foods:CoalescenceRecipeData,method:String):ItemStack?{
+        val addingIngredientId = acquisitionFoodID(foods.addingFood) ?: return null
+        val foundationID = acquisitionFoodID(foods.foundationFood) ?: return null
+        val list = mutableListOf(addingIngredientId,foundationID)
+        val completionGoodsId = acquisitionCompletionGoodsId(list, method) ?: return null
+        val completionGoodsFoodInfo = makeFoodInfo(completionGoodsId)
+        return makeFoodItem(completionGoodsFoodInfo)
+    }
     fun acquisitionCookingMethodKey(foodID: String): RecipeData? {
         val cookingMethodData = Yml(plugin).cookingMethodData()
         val keys = cookingMethodData.getKeys(true)
@@ -64,6 +72,10 @@ class FoodManager(private val plugin: Plugin) {
     private fun acquisitionCompletionGoodsId(ingredientId: String, method: String): String? {
         val cutCookingData = yml.acquisitionCookingMethodData(method) ?: return null
         return yml.acquisitionKey(cutCookingData, ingredientId)
+    }
+    private fun acquisitionCompletionGoodsId(ingredientIds: MutableList<String>, method: String): String? {
+        val cutCookingData = yml.acquisitionCookingMethodData(method) ?: return null
+        return yml.acquisitionKey(cutCookingData, ingredientIds)
     }
     private fun makeRecipeData(fullKey: String): RecipeData {
         val parts = fullKey.split(".")
