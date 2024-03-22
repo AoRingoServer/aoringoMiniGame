@@ -71,7 +71,7 @@ rice:
   customModelData: 45
   price: 100
 rawNoodles:
-  name: "§e生麺"
+  name: "§e冷凍麺"
   customModelData: 16
   price: 100
 boiledNoodles:

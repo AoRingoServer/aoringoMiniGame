@@ -133,11 +133,10 @@ class Events(private val plugin: Plugin) : Listener {
             "skip" to { customerManager.skipTrade(villager) },
             "next" to { customerManager.newTradingPreparation(villager) }
         )
-        if (customerManager.satisfactionLevel(recipeCount, villager, aoringoPlayer)) {
-            return
+        if (!customerManager.satisfactionLevel(recipeCount, villager, aoringoPlayer)) {
+            updateTrading[customInfo]?.invoke() ?: return
+            customerManager.setCustomorInfo(villager, null)
         }
-        updateTrading[customInfo]?.invoke() ?: return
-        customerManager.setCustomorInfo(villager, null)
     }
     @EventHandler
     fun onPlayerInteractItemFrame(e: PlayerInteractEntityEvent) {
@@ -165,7 +164,12 @@ class Events(private val plugin: Plugin) : Listener {
         )
         if (underBlockMap.keys.contains(underBlock.type)) {
             when (itemFrameItem.type) {
-                Material.AIR -> underBlockMap[underBlock.type]?.cooking(itemFrame, item)
+                Material.AIR -> {
+                    val foodstuff = item.clone()
+                    foodstuff.amount = 1
+                    underBlockMap[underBlock.type]?.cooking(itemFrame, foodstuff)
+                    return
+                }
                 else -> e.isCancelled = true
             }
         }

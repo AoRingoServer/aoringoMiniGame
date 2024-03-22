@@ -11,7 +11,7 @@ class Teleporter(private val plugin: Plugin) {
     fun sneakTeleport(player: Player) {
         val world = player.world.name
         val blockID = player.location.clone().add(0.0, -1.0, 0.0).block.type.toString()
-        val acquisitionWorldName = acquisitionWorldName(blockID)
+        val acquisitionWorldName = acquisitionWorldName(blockID) ?: return
         val teleportTargetWorld = if (world == lobbyWorldName) { acquisitionWorldName } else { lobbyWorldName } ?: return
         teleport(player, teleportTargetWorld)
     }
