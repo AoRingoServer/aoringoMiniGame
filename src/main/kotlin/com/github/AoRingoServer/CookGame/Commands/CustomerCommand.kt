@@ -13,7 +13,7 @@ import org.bukkit.plugin.Plugin
 class CustomerCommand(private val plugin: Plugin) : CommandExecutor, TabExecutor {
     private val customerManager = CustomerManager(plugin)
     override fun onCommand(sender: CommandSender, command: Command, label: String, args: Array<out String>): Boolean {
-        val subCommand = args[1]
+        val subCommand = args[0]
         if (!subCommandMap.keys.contains(subCommand)) { return false }
         subCommandMap[subCommand]?.invoke(sender, args)
         return true
@@ -22,8 +22,10 @@ class CustomerCommand(private val plugin: Plugin) : CommandExecutor, TabExecutor
         return mutableListOf()
     }
     private fun summon(sender: CommandSender, args: Array<out String>) {
-        val mode = args[2]
-        val location = if (args.size == 5) { makeLocation(sender, args) } else { acquisitionLocation(sender) }
+        if (args.size < 2) { return }
+        val mode = args[1].toInt()
+        val location = if (args.size == 5) { makeLocation(sender, args) } else { acquisitionLocation(sender) } ?: return
+        customerManager.summonCustomor(location, mode)
     }
     private val subCommandMap = mapOf<String, (sender: CommandSender, args: Array<out String>) -> Unit>(
         "summon" to { sender, args -> summon(sender, args) }
@@ -31,15 +33,15 @@ class CustomerCommand(private val plugin: Plugin) : CommandExecutor, TabExecutor
     private fun acquisitionLocation(sender: CommandSender): Location? {
         return when (sender) {
             is Player -> sender.location
-            is BlockCommandSender -> sender.block.location
+            is BlockCommandSender -> sender.block.location.clone().add(0.0, 1.0, 0.0)
             else -> null
         }
     }
     private fun makeLocation(sender: CommandSender, args: Array<out String>): Location {
         val world = acquisitionLocation(sender)?.world
-        val x = args[3].toDouble()
-        val y = args[4].toDouble()
-        val z = args[5].toDouble()
+        val x = args[2].toDouble()
+        val y = args[3].toDouble()
+        val z = args[4].toDouble()
         return Location(world, x + 0.5, y, z + 0.5)
     }
 }

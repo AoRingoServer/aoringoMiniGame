@@ -17,12 +17,12 @@ import org.bukkit.Material
 import org.bukkit.Sound
 import org.bukkit.entity.ItemFrame
 import org.bukkit.entity.Player
+import org.bukkit.entity.Villager
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.block.Action
 import org.bukkit.event.hanging.HangingBreakByEntityEvent
 import org.bukkit.event.inventory.InventoryClickEvent
-import org.bukkit.event.inventory.InventoryCloseEvent
 import org.bukkit.event.player.PlayerInteractEntityEvent
 import org.bukkit.event.player.PlayerInteractEvent
 import org.bukkit.event.player.PlayerJoinEvent
@@ -38,38 +38,6 @@ class Events(private val plugin: Plugin) : Listener {
         val aoringoPlayer = AoringoPlayer(player)
         ResourcePack(plugin).adaptation(player)
         aoringoPlayer.setPrefix()
-    }
-    @EventHandler
-    fun onVillagePeopleAndTrading(e: InventoryClickEvent) {
-        val obtainedItem = e.currentItem ?: return
-        val itemName = obtainedItem.itemMeta?.displayName ?: return
-        val slot = e.slot
-        val completionGoodsSlot = 2
-        val inventory = e.clickedInventory ?: return
-        val player = e.whoClicked as? Player ?: return
-        val aoringoPlayer = AoringoPlayer(player)
-        val customerManager = CustomerManager(plugin)
-        val villager = customerManager.acquisitionCustomer(inventory) ?: return
-        val recipeCount = villager.recipeCount
-        val customerTag = customerManager.customerTag
-        if (obtainedItem.type == Material.AIR) { return }
-        if (!villager.scoreboardTags.contains(customerTag)) { return }
-        if (slot != completionGoodsSlot) { return }
-
-        val message = "${ChatColor.GOLD}村人のインベントリを閉じ 取引内容を更新してください"
-        player.sendMessage(message)
-        if (obtainedItem == customerManager.customorRecipManager.skipItem) {
-            e.isCancelled = true
-            customerManager.customorRecipManager.reduceMaterial(inventory)
-            player.playSound(player, Sound.BLOCK_BELL_USE, 1f, 1f)
-            customerManager.setCustomorInfo(villager, "skip")
-        } else if (obtainedItem.type == Material.BOWL && itemName == customerManager.customorRecipManager.dirtyTrayName) {
-            customerManager.takeOrder(villager, obtainedItem, aoringoPlayer, recipeCount)
-            player.playSound(player, Sound.BLOCK_ANVIL_USE, 1f, 1f)
-            customerManager.setCustomorInfo(villager, "next")
-        } else if (obtainedItem.type == Material.MOJANG_BANNER_PATTERN) {
-            player.playSound(player, Sound.BLOCK_ENCHANTMENT_TABLE_USE, 1f, 1f)
-        }
     }
     @EventHandler
     fun onPlayerInteract(e: PlayerInteractEvent) {
@@ -121,24 +89,6 @@ class Events(private val plugin: Plugin) : Listener {
         }
     }
     @EventHandler
-    fun onInventoryClose(e: InventoryCloseEvent) {
-        val customerManager = CustomerManager(plugin)
-        val inventory = e.inventory
-        val player = e.player as Player
-        val villager = customerManager.acquisitionCustomer(inventory) ?: return
-        val customInfo = customerManager.acquisitionCustomorInfo(villager)
-        val aoringoPlayer = AoringoPlayer(player)
-        val recipeCount = villager.recipeCount
-        val updateTrading = mapOf(
-            "skip" to { customerManager.skipTrade(villager) },
-            "next" to { customerManager.newTradingPreparation(villager) }
-        )
-        if (!customerManager.satisfactionLevel(recipeCount, villager, aoringoPlayer)) {
-            updateTrading[customInfo]?.invoke() ?: return
-            customerManager.setCustomorInfo(villager, null)
-        }
-    }
-    @EventHandler
     fun onPlayerInteractItemFrame(e: PlayerInteractEntityEvent) {
         val player = e.player
         val aoringoPlayer = AoringoPlayer(player)
@@ -184,6 +134,20 @@ class Events(private val plugin: Plugin) : Listener {
             itemFrameItemUseMap[itemFrameItem]?.invoke()
         } else {
             Coalescence(plugin).cooking(itemFrame, player)
+        }
+    }
+    @EventHandler
+    fun onPlayerInteractCustomer(e: PlayerInteractEntityEvent) {
+        val customerManager = CustomerManager(plugin)
+        val customer = e.rightClicked as? Villager ?: return
+        if (!customerManager.isCustomer(customer)) { return }
+        e.isCancelled = true
+        val player = e.player
+        val tray = customerManager.tray
+        val item = player.inventory.itemInMainHand.clone()
+        item.amount = 1
+        when (item) {
+            tray -> { customerManager.passTray(customer) }
         }
     }
     @EventHandler

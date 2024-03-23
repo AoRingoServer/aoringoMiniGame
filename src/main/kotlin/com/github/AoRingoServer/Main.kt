@@ -16,7 +16,7 @@ class Main : JavaPlugin() {
         getCommand("lobby")!!.setExecutor(LobbyCommand(this))
         getCommand("aoringo")!!.setExecutor(AoringoCommand(this))
         getCommand("cookgame")!!.setExecutor(CookGameCommand(this))
-        getCommand("custmor")!!.setExecutor(CustomerCommand(this))
+        getCommand("customer")!!.setExecutor(CustomerCommand(this))
         server.pluginManager.registerEvents(Events(this), this)
         saveResource("FoodInfo.yml", true)
         saveResource("FinishedProductList.yml", true)

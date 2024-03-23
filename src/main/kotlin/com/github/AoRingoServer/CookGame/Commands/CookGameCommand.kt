@@ -1,6 +1,5 @@
 package com.github.AoRingoServer.CookGame.Commands
 
-import com.github.AoRingoServer.CookGame.Customer.CustomerManager
 import com.github.AoRingoServer.CookGame.FoodManager
 import org.bukkit.command.Command
 import org.bukkit.command.CommandExecutor
@@ -18,9 +17,6 @@ class CookGameCommand(private val plugin: Plugin) : CommandExecutor, TabExecutor
     }
     private fun subCommands(): Map<String, (args: Array<out String>, sender: CommandSender) ->Unit> {
         return mapOf(
-            "summonCustomer" to { args: Array<out String>, sender: CommandSender ->
-                CustomerManager(plugin).summon(sender, args)
-            },
             "giveFood" to { args: Array<out String>, sender: CommandSender ->
                 val foodManager = FoodManager(plugin)
                 if (args.size == 2 && sender is Player) {
