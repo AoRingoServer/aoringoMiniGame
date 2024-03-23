@@ -1,6 +1,7 @@
 package com.github.AoRingoServer
 
 import com.github.AoRingoServer.CookGame.Commands.CookGameCommand
+import com.github.AoRingoServer.CookGame.Commands.CustomerCommand
 import com.github.AoRingoServer.Datas.Yml
 import com.github.AoRingoServer.PlenaryCommands.AoringoCommand
 import com.github.AoRingoServer.PlenaryCommands.LobbyCommand
@@ -15,6 +16,7 @@ class Main : JavaPlugin() {
         getCommand("lobby")!!.setExecutor(LobbyCommand(this))
         getCommand("aoringo")!!.setExecutor(AoringoCommand(this))
         getCommand("cookgame")!!.setExecutor(CookGameCommand(this))
+        getCommand("custmor")!!.setExecutor(CustomerCommand(this))
         server.pluginManager.registerEvents(Events(this), this)
         saveResource("FoodInfo.yml", true)
         saveResource("FinishedProductList.yml", true)

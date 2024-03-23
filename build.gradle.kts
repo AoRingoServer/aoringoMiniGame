@@ -52,6 +52,11 @@ configure<BukkitPluginDescription> {
             usage = "/cookgame"
             permission = "op"
         }
+        register("customer") {
+            description = "クックゲーム用"
+            usage = "/custmor"
+            permission = "op"
+        }
     }
     permissions {
         register("aoringoServer.admin") {
