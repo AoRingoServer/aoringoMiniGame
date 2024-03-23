@@ -31,7 +31,7 @@ class FoodMenu(private val plugin: Plugin) : GUIs {
     )
     override fun make(player: Player): Inventory {
         val playerGamemode = player.gameMode
-        val foodInfoList = if (playerGamemode == GameMode.CREATIVE) { foodManager.foodInfoKeyList() } else { foodManager.finishedProductList() }
+        val foodInfoList = if (playerGamemode == GameMode.CREATIVE) { foodManager.foodInfoKeyList() } else { PluginData.DataManager.finishedProduclist }
         val guiSize = autoGUISize(foodInfoList)
         val gui = Bukkit.createInventory(null, guiSize, guiName)
         for (foodID in foodInfoList) {

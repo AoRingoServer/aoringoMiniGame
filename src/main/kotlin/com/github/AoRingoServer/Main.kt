@@ -2,6 +2,7 @@ package com.github.AoRingoServer
 
 import com.github.AoRingoServer.CookGame.Commands.CookGameCommand
 import com.github.AoRingoServer.CookGame.Commands.CustomerCommand
+import com.github.AoRingoServer.CookGame.FoodManager
 import com.github.AoRingoServer.Datas.Yml
 import com.github.AoRingoServer.PlenaryCommands.AoringoCommand
 import com.github.AoRingoServer.PlenaryCommands.LobbyCommand
@@ -25,5 +26,6 @@ class Main : JavaPlugin() {
         saveResource("World.yml", false)
         PluginData.DataManager.foodInfo = yml.acquisitionYml("", "FoodInfo")
         PluginData.DataManager.cookingMethodData = yml.acquisitionYml("", "CookingMethodData")
+        PluginData.DataManager.finishedProduclist = FoodManager(this).setFinishedProductList()
     }
 }

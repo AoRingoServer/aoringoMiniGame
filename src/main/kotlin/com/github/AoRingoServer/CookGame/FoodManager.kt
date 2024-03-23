@@ -17,10 +17,13 @@ class FoodManager(private val plugin: Plugin) {
     fun foodInfoKeyList(): MutableList<String> {
         return foodInfoFile?.getKeys(false)?.toMutableList() ?: mutableListOf()
     }
-    fun finishedProductList(): MutableList<String> {
-        val basicList = acquireFinishedProduct().getList("basic")?.mapNotNull { it.toString() } ?: mutableListOf()
-        val additionList = acquireFinishedProduct().getList("addition")?.mapNotNull { it.toString() } ?: mutableListOf()
-        return (basicList + additionList).toMutableList()
+    fun setFinishedProductList(): MutableList<String> {
+        val finishedProductList = mutableListOf<String>()
+        for (key in acquireFinishedProduct().getKeys(false)) {
+            val list = acquireFinishedProduct().getList(key) as MutableList<String>
+            finishedProductList.addAll(list)
+        }
+        return finishedProductList
     }
 
     fun makeFoodInfo(foodID: String): FoodInfo {
