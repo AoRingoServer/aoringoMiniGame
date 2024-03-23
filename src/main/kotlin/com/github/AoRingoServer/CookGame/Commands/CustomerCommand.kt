@@ -33,7 +33,7 @@ class CustomerCommand(private val plugin: Plugin) : CommandExecutor, TabExecutor
     private fun acquisitionLocation(sender: CommandSender): Location? {
         return when (sender) {
             is Player -> sender.location
-            is BlockCommandSender -> sender.block.location.clone().add(0.0, 1.0, 0.0)
+            is BlockCommandSender -> sender.block.location.clone().add(0.5, 1.0, 0.5)
             else -> null
         }
     }
