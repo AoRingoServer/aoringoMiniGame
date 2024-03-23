@@ -59,7 +59,7 @@ class CustomerManager(private val plugin: Plugin) {
     }
     fun receiveProducts(villager: Villager, player: Player) {
         val orderFood = villager.equipment?.helmet ?: return
-        val provisionFood = player.inventory.itemInMainHand
+        val provisionFood = player.inventory.itemInMainHand.clone()
         provisionFood.amount = 1
         if (orderFood != provisionFood) { return }
         player.inventory.removeItem(provisionFood)
