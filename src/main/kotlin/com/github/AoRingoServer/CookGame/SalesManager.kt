@@ -5,6 +5,7 @@ import com.github.AoRingoServer.Datas.Yml
 import com.github.Ringoame196.Scoreboard
 import org.bukkit.Bukkit
 import org.bukkit.ChatColor
+import org.bukkit.entity.Player
 import org.bukkit.plugin.Plugin
 
 class SalesManager(private val plugin: Plugin) {
@@ -12,7 +13,9 @@ class SalesManager(private val plugin: Plugin) {
         val config = Yml(plugin).acquisitionYml("", "cookGameConfig")
         return config.getString("rewardScoreboardName")
     }
-    fun addition(price: Int, aoringoPlayer: AoringoPlayer) {
+    fun addition(foodInfo: FoodInfo, player: Player) {
+        val price = foodInfo.price
+        val aoringoPlayer = AoringoPlayer(player)
         val scoreboardName = acquisitionScoreboardName()
         if (scoreboardName == null) {
             Bukkit.broadcastMessage("${ChatColor.RED}[クックゲーム] スコアボード名が未設定です")

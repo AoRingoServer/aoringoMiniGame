@@ -18,8 +18,8 @@ class FoodManager(private val plugin: Plugin) {
         return foodInfoFile?.getKeys(false)?.toMutableList() ?: mutableListOf()
     }
     fun finishedProductList(): MutableList<String> {
-        val basicList = finishedProduct().getList("basic")?.mapNotNull { it.toString() } ?: mutableListOf()
-        val additionList = finishedProduct().getList("addition")?.mapNotNull { it.toString() } ?: mutableListOf()
+        val basicList = acquireFinishedProduct().getList("basic")?.mapNotNull { it.toString() } ?: mutableListOf()
+        val additionList = acquireFinishedProduct().getList("addition")?.mapNotNull { it.toString() } ?: mutableListOf()
         return (basicList + additionList).toMutableList()
     }
 
@@ -32,7 +32,7 @@ class FoodManager(private val plugin: Plugin) {
     fun acquisitionFoodID(food: ItemStack): String? {
         return nbt.acquisition(food, foodIDKey)
     }
-    private fun finishedProduct(): YamlConfiguration {
+    fun acquireFinishedProduct(): YamlConfiguration {
         return yml.acquisitionYml("", "FinishedProductList")
     }
     fun makeFoodItem(foodInfo: FoodInfo): ItemStack {
@@ -65,12 +65,5 @@ class FoodManager(private val plugin: Plugin) {
     private fun acquisitionCompletionGoodsId(ingredientIds: MutableList<String>, method: String): String? {
         val cutCookingData = yml.acquisitionCookingMethodData(method) ?: return null
         return yml.acquisitionKey(cutCookingData, ingredientIds)
-    }
-    private fun makeRecipeData(fullKey: String): RecipeData {
-        val parts = fullKey.split(".")
-        val cookingType = parts[0]
-        val finishedProductID = parts[1]
-        val materialID = parts[2]
-        return RecipeData(cookingType, finishedProductID, materialID)
     }
 }

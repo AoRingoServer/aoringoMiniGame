@@ -145,9 +145,11 @@ class Events(private val plugin: Plugin) : Listener {
         val player = e.player
         val tray = customerManager.tray
         val item = player.inventory.itemInMainHand.clone()
+        if (item.type == Material.AIR) { return }
         item.amount = 1
         when (item) {
-            tray -> { customerManager.passTray(customer) }
+            tray -> { customerManager.passTray(customer, player) }
+            else -> { customerManager.receiveProducts(customer, player) }
         }
     }
     @EventHandler

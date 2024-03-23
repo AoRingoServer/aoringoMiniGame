@@ -1,4 +1,4 @@
-basic :
+level1 :
   - frenchFries
   - doria
   - udon
@@ -8,4 +8,4 @@ basic :
   - spaghetti
   - yakitori
   - pizza
-addition :
+level2 :
