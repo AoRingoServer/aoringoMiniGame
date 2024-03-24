@@ -3,6 +3,7 @@ package com.github.AoRingoServer.PlenaryCommands
 import com.github.AoRingoServer.AdminBookManager
 import com.github.AoRingoServer.Server
 import com.github.Ringoame196.ResourcePack
+import org.bukkit.ChatColor
 import org.bukkit.command.Command
 import org.bukkit.command.CommandExecutor
 import org.bukkit.command.CommandSender
@@ -44,6 +45,12 @@ class AoringoCommand(private val plugin: Plugin) : CommandExecutor, TabExecutor 
                 if (commandSender is Player) {
                     val item = commandSender.inventory.itemInMainHand
                     AdminBookManager(item).adminHolderChange(commandSender)
+                }
+            },
+            "invisibility" to { strings: Array<out String>, commandSender: CommandSender ->
+                if (commandSender is Player) {
+                    commandSender.isInvisible = !commandSender.isInvisible
+                    commandSender.sendMessage("${ChatColor.GOLD}[青りんご] 透明化を切り替えました")
                 }
             }
         )
