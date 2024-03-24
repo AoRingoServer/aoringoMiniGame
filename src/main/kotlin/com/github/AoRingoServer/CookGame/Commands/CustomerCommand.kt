@@ -19,7 +19,14 @@ class CustomerCommand(private val plugin: Plugin) : CommandExecutor, TabExecutor
         return true
     }
     override fun onTabComplete(sender: CommandSender, command: Command, label: String, args: Array<out String>): MutableList<String>? {
-        return mutableListOf()
+        return when (val size = args.size) {
+            0 -> mutableListOf()
+            1 -> subCommandMap.keys.toMutableList()
+            else -> {
+                val subCommand = args[0]
+                tabReinforcementMap[subCommand]?.invoke(sender, size) ?: mutableListOf()
+            }
+        }
     }
     private fun summon(sender: CommandSender, args: Array<out String>) {
         if (args.size < 2) { return }
@@ -30,6 +37,21 @@ class CustomerCommand(private val plugin: Plugin) : CommandExecutor, TabExecutor
     private val subCommandMap = mapOf<String, (sender: CommandSender, args: Array<out String>) -> Unit>(
         "summon" to { sender, args -> summon(sender, args) }
     )
+    private val tabReinforcementMap = mapOf<String, (sender: CommandSender, size: Int) -> MutableList<String>>(
+        "summon" to { sender, size -> summonTabReinforcement(size, sender) }
+    )
+    private fun summonTabReinforcement(size: Int, sender: CommandSender): MutableList<String> {
+        val location = acquisitionLocation(sender)
+        return when (size) {
+            1 -> subCommandMap.keys.toMutableList()
+            2 -> mutableListOf("[level]")
+            3 -> mutableListOf("${location?.x?.toInt()}")
+            4 -> mutableListOf("${location?.y?.toInt()}")
+            5 -> mutableListOf("${location?.z?.toInt()}")
+            6 -> mutableListOf("[yaw]", "0", "90", "180", "270")
+            else -> mutableListOf()
+        }
+    }
     private fun acquisitionLocation(sender: CommandSender): Location? {
         return when (sender) {
             is Player -> sender.location
