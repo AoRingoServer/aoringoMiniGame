@@ -21,6 +21,7 @@ import org.bukkit.entity.Villager
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.block.Action
+import org.bukkit.event.entity.EntityDamageByEntityEvent
 import org.bukkit.event.hanging.HangingBreakByEntityEvent
 import org.bukkit.event.inventory.InventoryClickEvent
 import org.bukkit.event.player.PlayerInteractEntityEvent
@@ -178,5 +179,14 @@ class Events(private val plugin: Plugin) : Listener {
         e.isCancelled = true
         player.inventory.addItem(book)
         player.closeInventory()
+    }
+    @EventHandler
+    fun onEntityDamageByEntity(e: EntityDamageByEntityEvent) {
+        val player = e.damager as? Player ?: return
+        val entity = e.entity as? Villager ?: return
+        val customerManager = CustomerManager(plugin)
+        if (player.gameMode == GameMode.CREATIVE) { return }
+        if (!customerManager.isCustomer(entity)) { return }
+        e.isCancelled = true
     }
 }
