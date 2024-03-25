@@ -16,6 +16,8 @@ class SalesManager(private val plugin: Plugin) {
     }
     fun addition(foodInfo: FoodInfo, player: Player) {
         val price = foodInfo.price
+        val percent = 1.3
+        val sales = (price * percent).toInt()
         val aoringoPlayer = AoringoPlayer(player)
         val scoreboardName = acquisitionScoreboardName()
         if (scoreboardName == null) {
@@ -24,7 +26,7 @@ class SalesManager(private val plugin: Plugin) {
         }
         val scoreboard = Scoreboard(scoreboardName)
         val target = aoringoPlayer.scoreboardTargetName
-        scoreboard.add(target, price)
+        scoreboard.add(target, sales)
     }
     fun acquisitionPossessionGold(player: Player): Int {
         val aoringoPlayer = AoringoPlayer(player)
