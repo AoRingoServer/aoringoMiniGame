@@ -1,4 +1,4 @@
-package com.github.AoRingoServer.CookGame
+package com.github.AoRingoServer.CookGame.DataClasses
 
 data class FoodInfo(
     val foodID: String,

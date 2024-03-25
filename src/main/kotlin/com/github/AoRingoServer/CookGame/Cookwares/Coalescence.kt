@@ -1,6 +1,6 @@
 package com.github.AoRingoServer.CookGame.Cookwares
 
-import com.github.AoRingoServer.CookGame.CoalescenceRecipeData
+import com.github.AoRingoServer.CookGame.DataClasses.CoalescenceRecipeData
 import com.github.AoRingoServer.CookGame.FoodManager
 import com.github.AoRingoServer.ItemManager
 import org.bukkit.ChatColor

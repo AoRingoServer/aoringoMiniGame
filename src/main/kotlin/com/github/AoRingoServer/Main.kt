@@ -22,6 +22,7 @@ class Main : JavaPlugin() {
         saveResource("FoodInfo.yml", true)
         saveResource("FinishedProductList.yml", true)
         saveResource("CookingMethodData.yml", true)
+        saveResource("shop.yml", true)
         saveResource("cookGameConfig.yml", false)
         saveResource("World.yml", false)
         PluginData.DataManager.foodInfo = yml.acquisitionYml("", "FoodInfo")

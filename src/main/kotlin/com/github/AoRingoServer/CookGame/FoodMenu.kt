@@ -6,7 +6,8 @@ import com.github.AoRingoServer.CookGame.Cookwares.Coalescence
 import com.github.AoRingoServer.CookGame.Cookwares.Flier
 import com.github.AoRingoServer.CookGame.Cookwares.Furnace
 import com.github.AoRingoServer.CookGame.Cookwares.Pot
-import com.github.AoRingoServer.GUIs
+import com.github.AoRingoServer.GUI
+import com.github.AoRingoServer.GUIManager
 import com.github.AoRingoServer.ItemManager
 import com.github.AoRingoServer.PluginData
 import org.bukkit.Bukkit
@@ -18,7 +19,7 @@ import org.bukkit.inventory.Inventory
 import org.bukkit.inventory.ItemStack
 import org.bukkit.plugin.Plugin
 
-class FoodMenu(private val plugin: Plugin) : GUIs {
+class FoodMenu(private val plugin: Plugin) : GUI {
     override val guiName: String = "${ChatColor.DARK_BLUE}メニュー"
     private val foodManager = FoodManager(plugin)
     private val cookingMap = mapOf(
@@ -32,7 +33,7 @@ class FoodMenu(private val plugin: Plugin) : GUIs {
     override fun make(player: Player): Inventory {
         val playerGamemode = player.gameMode
         val foodInfoList = if (playerGamemode == GameMode.CREATIVE) { foodManager.foodInfoKeyList() } else { PluginData.DataManager.finishedProduclist }
-        val guiSize = autoGUISize(foodInfoList)
+        val guiSize = GUIManager().autoGUISize(foodInfoList)
         val gui = Bukkit.createInventory(null, guiSize, guiName)
         for (foodID in foodInfoList) {
             val foodInfo = foodManager.makeFoodInfo(foodID)
@@ -40,13 +41,6 @@ class FoodMenu(private val plugin: Plugin) : GUIs {
             gui.addItem(food)
         }
         return gui
-    }
-    private fun autoGUISize(foodInfoList: MutableList<String>): Int {
-        val listSize = foodInfoList.size
-        val maxSize = 54
-        val column = listSize / 9 + 1
-        val size = column * 9
-        return if (size > maxSize) { maxSize } else { size }
     }
 
     override fun clickProcess(item: ItemStack, player: Player, isShift: Boolean) {

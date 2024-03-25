@@ -9,6 +9,7 @@ import com.github.AoRingoServer.CookGame.Cookwares.Furnace
 import com.github.AoRingoServer.CookGame.Cookwares.Pot
 import com.github.AoRingoServer.CookGame.Customer.CustomerManager
 import com.github.AoRingoServer.CookGame.FoodMenu
+import com.github.AoRingoServer.CookGame.Shop
 import com.github.Ringoame196.ResourcePack
 import org.bukkit.ChatColor
 import org.bukkit.GameMode
@@ -51,6 +52,9 @@ class Events(private val plugin: Plugin) : Listener {
             Material.WATER_CAULDRON,
             Material.CAULDRON
         )
+        val blockMap = mapOf(
+            Material.ENCHANTING_TABLE to Shop(plugin)
+        )
         val item = e.item
         val block = e.clickedBlock
         val action = e.action
@@ -59,7 +63,11 @@ class Events(private val plugin: Plugin) : Listener {
         if (clickNGBlocks.contains(block?.type) && player.gameMode != GameMode.CREATIVE) {
             e.isCancelled = true
         }
-        if (makeGUIs.keys.contains(itemName)) {
+        if (blockMap.keys.contains(block?.type)) {
+            e.isCancelled = true
+            val gui = blockMap[block?.type]?.make(player) ?: return
+            player.openInventory(gui)
+        } else if (makeGUIs.keys.contains(itemName)) {
             e.isCancelled = true
             val gui = makeGUIs[item?.itemMeta?.displayName]?.make(player) ?: return
             player.openInventory(gui)
@@ -69,6 +77,7 @@ class Events(private val plugin: Plugin) : Listener {
     fun onInventoryClick(e: InventoryClickEvent) {
         val makeGUIs = mapOf(
             FoodMenu(plugin).let { foodMenu -> foodMenu.guiName to foodMenu },
+            Shop(plugin).let { shop -> shop.guiName to shop }
         )
         val player = e.whoClicked as? Player ?: return
         val gui = e.view

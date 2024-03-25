@@ -1,4 +1,4 @@
-package com.github.AoRingoServer.CookGame
+package com.github.AoRingoServer.CookGame.DataClasses
 
 import org.bukkit.inventory.ItemStack
 
