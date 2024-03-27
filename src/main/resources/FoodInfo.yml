@@ -132,3 +132,27 @@ appleCandy:
   name: "§cりんご飴"
   customModelData: 108
   price: 110
+nigiriOfTuna:
+  name: "§cマグロの握り"
+  customModelData: 70
+  price: 150
+nigiriOfSalmon:
+  name: "§6サーモンの握り"
+  customModelData: 71
+  price: 150
+nigiriOfSquid:
+  name: "イカの握り"
+  customModelData: 72
+  price: 150
+nigiriOfOctopus:
+  name: "§cタコの握り"
+  customModelData: 73
+  price: 150
+kappamaki:
+  name: "§aかっぱ巻"
+  customModelData: 74
+  price: 130
+tekkamaki:
+  name: "§c鉄火巻"
+  customModelData: 75
+  price: 160
