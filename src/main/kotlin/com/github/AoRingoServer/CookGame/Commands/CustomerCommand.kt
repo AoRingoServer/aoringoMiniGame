@@ -30,8 +30,9 @@ class CustomerCommand(private val plugin: Plugin) : CommandExecutor, TabExecutor
     }
     private fun summon(sender: CommandSender, args: Array<out String>) {
         if (args.size < 2) { return }
-        val mode = args[1].toInt()
-        val location = if (args.size == 6) { makeLocation(sender, args) } else { acquisitionLocation(sender) } ?: return
+        val mode = args[1]
+        val coordinateSpecifiedSize = 6
+        val location = if (args.size == coordinateSpecifiedSize) { makeLocation(sender, args) } else { acquisitionLocation(sender) } ?: return
         customerManager.summonCustomor(location, mode)
     }
     private val subCommandMap = mapOf<String, (sender: CommandSender, args: Array<out String>) -> Unit>(

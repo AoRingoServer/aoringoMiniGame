@@ -4,6 +4,7 @@ import com.github.AoRingoServer.CookGame.FoodManager
 import com.github.AoRingoServer.CookGame.SalesManager
 import com.github.AoRingoServer.Datas.Yml
 import com.github.AoRingoServer.ItemManager
+import com.github.Ringoame196.Scoreboard
 import org.bukkit.Bukkit
 import org.bukkit.ChatColor
 import org.bukkit.Location
@@ -24,9 +25,15 @@ class CustomerManager(private val plugin: Plugin) {
     private val yml = Yml(plugin)
     private val cookGameConfig = yml.acquisitionYml("", "cookGameConfig")
 
-    fun summonCustomor(location: Location, level: Int) {
+    fun summonCustomor(location: Location, mode: String) {
         val world = location.world
         val villager: Villager = world!!.spawn(location, org.bukkit.entity.Villager::class.java)
+        val level = try {
+            mode.toInt()
+        } catch (e: NumberFormatException) {
+            villager.scoreboardTags.add("quote%$mode")
+            quoteLevel(mode)
+        }
         villager.customName = name
         villager.setAI(false)
         villager.scoreboardTags.add(customerTag)
@@ -34,6 +41,20 @@ class CustomerManager(private val plugin: Plugin) {
         villager.villagerLevel = level
         villager.isCustomNameVisible = true
         reset(villager)
+    }
+    private fun quoteLevel(quote: String): Int {
+        val scoreboardName = cookGameConfig.getString("settingScoreboardName")
+        val scoreboard = Scoreboard(scoreboardName ?: return 1)
+        return scoreboard.getValue(quote)
+    }
+    private fun changeQuoteLevel(villager: Villager) {
+        for (tag in villager.scoreboardTags) {
+            if (!tag.contains("quote%")) { continue }
+            val qute = tag.replace("quote%", "")
+            val level = quoteLevel(qute)
+            villager.villagerLevel = level
+            return
+        }
     }
     fun isCustomer(villager: Villager): Boolean {
         return villager.scoreboardTags.contains(customerTag)
@@ -44,6 +65,7 @@ class CustomerManager(private val plugin: Plugin) {
         val randomProfession = professions.random()
         villager.profession = randomProfession
         setHelmetItem(villager, tray)
+        changeQuoteLevel(villager)
     }
     private fun setHelmetItem(villager: Villager, item: ItemStack) {
         villager.equipment?.helmet = item
