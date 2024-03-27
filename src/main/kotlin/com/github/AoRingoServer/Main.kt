@@ -1,14 +1,14 @@
 package com.github.AoRingoServer
 
-import org.bukkit.plugin.java.JavaPlugin
 import com.github.AoRingoServer.CookGame.Commands.CookGameCommand
 import com.github.AoRingoServer.CookGame.Commands.CustomerCommand
 import com.github.AoRingoServer.CookGame.FoodManager
 import com.github.AoRingoServer.Datas.Yml
 import com.github.AoRingoServer.PlenaryCommands.AoringoCommand
 import com.github.AoRingoServer.PlenaryCommands.LobbyCommand
+import org.bukkit.plugin.java.JavaPlugin
 
-class Main : JavaPlugin(){
+class Main : JavaPlugin() {
     override fun onEnable() {
         super.onEnable()
         val yml = Yml(this)

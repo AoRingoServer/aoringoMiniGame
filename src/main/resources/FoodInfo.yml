@@ -156,3 +156,55 @@ tekkamaki:
   name: "§c鉄火巻"
   customModelData: 75
   price: 160
+vinegar:
+  name: "§6お酢"
+  customModelData: 40
+  price: 20
+shari:
+  name: "§6お酢"
+  customModelData: 41
+  price: 120
+tuna:
+  name: "§cマグロ"
+  customModelData: 31
+  price: 60
+salmonFish:
+  name: "§6サーモン"
+  customModelData: 32
+  price: 60
+cutTuna:
+  name: "§c切ったマグロ"
+  customModelData: 33
+  price: 60
+cutSalmon:
+  name: "§6切ったサーモン"
+  customModelData: 34
+  price: 60
+squid:
+  name: "イカ"
+  customModelData: 35
+  price: 60
+cutSquid:
+  name: "切ったイカ"
+  customModelData: 36
+  price: 60
+octopus:
+  name: "§cタコ"
+  customModelData: 38
+  price: 60
+cutOctopus:
+  name: "§c切ったタコ"
+  customModelData: 39
+  price: 60
+cucumber:
+  name: "§aきゅうり"
+  customModelData: 1
+  price: 60
+cutCucumber:
+  name: "§a切ったきゅうり"
+  customModelData: 10
+  price: 60
+seafoodBowl:
+  name: "§e海鮮丼"
+  customModelData: 57
+  price: 200

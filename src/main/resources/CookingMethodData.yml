@@ -4,6 +4,11 @@ cut :
   cutChickenMeat : chicken
   chicken : chunksOfChicken
   beef : chunksOfBeef
+  cutTuna : tuna
+  cutSalmon : salmonFish
+  cutSquid : squid
+  cutOctopus : octopus
+  cutCucumber : cucumber
 fly :
   frenchFries : veryCutPotato
   friedChicken : livingFriedChicken
@@ -32,3 +37,27 @@ coalescence :
   appleCandy:
     - takeguji
     - apple
+  shari:
+    - vinegar
+    - rice
+  nigiriOfTuna:
+    - cutTuna
+    - shari
+  nigiriOfSalmon:
+    - cutSalmon
+    - shari
+  nigiriOfSquid:
+    - cutSquid
+    - shari
+  nigiriOfOctopus:
+    - cutOctopus
+    - shari
+  tekkamaki:
+    - nigiriOfTuna
+    - seaweed
+  kappamaki:
+    - cutCucumber
+    - shari
+  seafoodBowl:
+    - nigiriOfTuna
+    - nigiriOfSalmon
