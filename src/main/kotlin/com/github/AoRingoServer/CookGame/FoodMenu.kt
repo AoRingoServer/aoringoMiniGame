@@ -32,14 +32,22 @@ class FoodMenu(private val plugin: Plugin) : GUI {
     )
     override fun make(player: Player): Inventory {
         val playerGamemode = player.gameMode
+        val maxSize = 45
         val foodInfoList = if (playerGamemode == GameMode.CREATIVE) { foodManager.foodInfoKeyList() } else { PluginData.DataManager.finishedProduclist }
-        val guiSize = GUIManager().autoGUISize(foodInfoList)
+        val autoSize = GUIManager().autoGUISize(foodInfoList)
+        val guiSize = if (autoSize < maxSize) { autoSize + 9 } else { 54 }
         val gui = Bukkit.createInventory(null, guiSize, guiName)
+        var c = 0
         for (foodID in foodInfoList) {
+            c ++
             val foodInfo = foodManager.makeFoodInfo(foodID)
             val food = foodManager.makeFoodItem(foodInfo)
             gui.addItem(food)
+            if (c >= maxSize) {
+                break
+            }
         }
+        selectButton(gui)
         return gui
     }
 
@@ -49,6 +57,13 @@ class FoodMenu(private val plugin: Plugin) : GUI {
         } else {
             val gui = makeRecipeGUI(item) ?: return
             player.openInventory(gui)
+        }
+    }
+    private fun selectButton(gui: Inventory) {
+        val itemManager = ItemManager()
+        for (i in 1..9) {
+            val button = itemManager.make(Material.RED_STAINED_GLASS_PANE, "${ChatColor.GOLD}${i}番目")
+            gui.addItem(button)
         }
     }
     private fun makeRecipeGUI(finishedProduct: ItemStack): Inventory? {
