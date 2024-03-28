@@ -20,23 +20,31 @@ class Shop(private val plugin: Plugin) : GUI {
     override val guiName: String = "${ChatColor.DARK_BLUE}ショップ"
     private val foodKey = "food"
     override fun make(player: Player): Inventory {
-        val shopFile = Yml(plugin).acquisitionYml("", "shop")
-        val shopItemList = shopFile.getMapList("itemsList") as Map<String, String>
-        val commercialProductItemList = makeCommercialProductItemList(shopItemList)
-        val guiSize = GUIManager().autoGUISize(commercialProductItemList)
+        val shopFile = Yml(plugin).acquisitionYml("", "shopCommercialProductList")
+        val commercialProductList = mutableListOf<ItemStack>()
+        for (key in shopFile.getKeys(true)) {
+            val list = shopFile.getList(key) as List<String>
+            when (key) {
+                foodKey -> acquisitionFoodItem(list, commercialProductList)
+            }
+        }
+        val guiSize = GUIManager().autoGUISize(commercialProductList)
         val gui = Bukkit.createInventory(null, guiSize, guiName)
-        for (foodID in shopItemList) {
-            val foodInfo = foodManager.makeFoodInfo(foodID)
-            val price = foodInfo.price
-            val foodItem = foodManager.makeFoodItem(foodInfo)
-            val meta = foodItem.itemMeta
-            meta?.lore = mutableListOf("${price}円")
-            foodItem.setItemMeta(meta)
-            gui.addItem(foodItem)
+        for (item in commercialProductList) {
+            gui.addItem(item)
         }
         return gui
     }
-
+    private fun acquisitionFoodItem(list: List<String>, commercialProductList: MutableList<ItemStack>) {
+        for (foodID in list) {
+            val foodInfo = foodManager.makeFoodInfo(foodID)
+            val foodItem = foodManager.makeFoodItem(foodInfo)
+            val meta = foodItem.itemMeta
+            meta?.lore = mutableListOf("${ChatColor.GOLD}値段：${foodInfo.price}円")
+            foodItem.setItemMeta(meta)
+            commercialProductList.add(foodItem)
+        }
+    }
     override fun clickProcess(item: ItemStack, player: Player, isShift: Boolean) {
         if (item.type != Material.MELON_SLICE) { return }
         val salesManager = SalesManager(plugin)
