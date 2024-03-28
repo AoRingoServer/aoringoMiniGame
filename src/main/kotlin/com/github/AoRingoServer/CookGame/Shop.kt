@@ -18,9 +18,12 @@ class Shop(private val plugin: Plugin) : GUI {
     private val foodManager = FoodManager(plugin)
     private val itemManager = ItemManager()
     override val guiName: String = "${ChatColor.DARK_BLUE}ショップ"
+    private val foodKey = "food"
     override fun make(player: Player): Inventory {
-        val shopItemList = Yml(plugin).acquisitionYml("", "shop").getList("itemsList") as MutableList<String>
-        val guiSize = GUIManager().autoGUISize(shopItemList)
+        val shopFile = Yml(plugin).acquisitionYml("", "shop")
+        val shopItemList = shopFile.getMapList("itemsList") as Map<String, String>
+        val commercialProductItemList = makeCommercialProductItemList(shopItemList)
+        val guiSize = GUIManager().autoGUISize(commercialProductItemList)
         val gui = Bukkit.createInventory(null, guiSize, guiName)
         for (foodID in shopItemList) {
             val foodInfo = foodManager.makeFoodInfo(foodID)
