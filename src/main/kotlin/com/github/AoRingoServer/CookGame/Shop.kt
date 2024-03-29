@@ -4,7 +4,6 @@ import com.github.AoRingoServer.AoringoPlayer
 import com.github.AoRingoServer.Datas.Yml
 import com.github.AoRingoServer.GUI
 import com.github.AoRingoServer.GUIManager
-import com.github.AoRingoServer.ItemManager
 import org.bukkit.Bukkit
 import org.bukkit.ChatColor
 import org.bukkit.Material
@@ -16,7 +15,7 @@ import org.bukkit.plugin.Plugin
 
 class Shop(private val plugin: Plugin) : GUI {
     private val foodManager = FoodManager(plugin)
-    private val itemManager = ItemManager()
+    private val shopItemManager = ShopItemManager(plugin)
     override val guiName: String = "${ChatColor.DARK_BLUE}ショップ"
     private val foodKey = "food"
     override fun make(player: Player): Inventory {
@@ -26,6 +25,7 @@ class Shop(private val plugin: Plugin) : GUI {
             val list = shopFile.getList(key) as List<String>
             when (key) {
                 foodKey -> acquisitionFoodItem(list, commercialProductList)
+                else -> acquisitionShopItem(list, commercialProductList)
             }
         }
         val guiSize = GUIManager().autoGUISize(commercialProductList)
@@ -43,6 +43,16 @@ class Shop(private val plugin: Plugin) : GUI {
             meta?.lore = mutableListOf("${ChatColor.GOLD}値段：${foodInfo.price}円")
             foodItem.setItemMeta(meta)
             commercialProductList.add(foodItem)
+        }
+    }
+    private fun acquisitionShopItem(list: List<String>, commercialProductList: MutableList<ItemStack>) {
+        for (itemID in list) {
+            val itemInfo = shopItemManager.makeShopItemInfo(itemID)
+            val shopItem = shopItemManager.makeShopItem(itemInfo)
+            val meta = shopItem.itemMeta
+            meta?.lore = mutableListOf("${ChatColor.GOLD}値段：${itemInfo.price}円")
+            shopItem.setItemMeta(meta)
+            commercialProductList.add(shopItem)
         }
     }
     override fun clickProcess(item: ItemStack, player: Player, isShift: Boolean) {
