@@ -14,8 +14,9 @@ import org.bukkit.plugin.Plugin
 class FoodManager(private val plugin: Plugin) {
     private val nbt = NBT(plugin)
     private val yml = Yml(plugin)
-    private val foodIDKey = "foodID"
-    private val foodInfoFile = PluginData.DataManager.foodInfo
+    private val itemManager = ItemManager()
+    private val key = itemManager.cookGameItemIDKey
+    val foodInfoFile = PluginData.DataManager.foodInfo
     fun foodInfoKeyList(): MutableList<String> {
         return foodInfoFile?.getKeys(false)?.toMutableList() ?: mutableListOf()
     }
@@ -35,18 +36,17 @@ class FoodManager(private val plugin: Plugin) {
         return FoodInfo(foodID, name, customModelData, price)
     }
     fun acquisitionFoodID(food: ItemStack): String? {
-        return nbt.acquisition(food, foodIDKey)
+        return nbt.acquisition(food, key)
     }
     fun acquireFinishedProduct(): YamlConfiguration {
         return yml.acquisitionYml("", "FinishedProductList")
     }
     fun makeFoodItem(foodInfo: FoodInfo): ItemStack {
-        val itemManager = ItemManager()
         val name = foodInfo.foodName
         val foodID = foodInfo.foodID
         val customModelData = foodInfo.customModelData
         val food = itemManager.make(Material.MELON_SLICE, name, customModelData = customModelData)
-        nbt.set(food, foodIDKey, foodID)
+        nbt.set(food, key, foodID)
         return food
     }
     fun acquisitionCookingCompletionGoodsData(food: ItemStack, method: String): ItemStack? {

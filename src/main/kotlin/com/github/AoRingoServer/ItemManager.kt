@@ -5,6 +5,7 @@ import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
 
 class ItemManager {
+    val cookGameItemIDKey = "cookGameItemID"
     fun make(itemType: Material, displayName: String, lore: MutableList<String>? = null, amount: Int = 1, customModelData: Int? = null): ItemStack {
         val item = ItemStack(itemType, amount)
         val meta = item.itemMeta

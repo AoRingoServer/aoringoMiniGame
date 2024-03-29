@@ -39,7 +39,7 @@ class SalesManager(private val plugin: Plugin) {
         val target = aoringoPlayer.scoreboardTargetName
         return scoreboard.getValue(target)
     }
-    fun reduce(player: Player, foodInfo: FoodInfo) {
+    fun reduce(player: Player, price: Int) {
         val aoringoPlayer = AoringoPlayer(player)
         val scoreboardName = acquisitionScoreboardName()
         if (scoreboardName == null) {
@@ -48,7 +48,6 @@ class SalesManager(private val plugin: Plugin) {
         }
         val scoreboard = Scoreboard(scoreboardName)
         val target = aoringoPlayer.scoreboardTargetName
-        val price = foodInfo.price
         return scoreboard.reduce(target, price)
     }
 }

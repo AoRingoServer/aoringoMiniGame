@@ -1,9 +1,11 @@
 package com.github.AoRingoServer.CookGame
 
 import com.github.AoRingoServer.AoringoPlayer
+import com.github.AoRingoServer.Datas.NBT
 import com.github.AoRingoServer.Datas.Yml
 import com.github.AoRingoServer.GUI
 import com.github.AoRingoServer.GUIManager
+import com.github.AoRingoServer.ItemManager
 import org.bukkit.Bukkit
 import org.bukkit.ChatColor
 import org.bukkit.Material
@@ -56,20 +58,32 @@ class Shop(private val plugin: Plugin) : GUI {
         }
     }
     override fun clickProcess(item: ItemStack, player: Player, isShift: Boolean) {
-        if (item.type != Material.MELON_SLICE) { return }
+        if (item.type == Material.AIR) { return }
         val salesManager = SalesManager(plugin)
-        val foodID = foodManager.acquisitionFoodID(item) ?: return
-        val foodInfo = foodManager.makeFoodInfo(foodID)
-        val price = foodInfo.price
-        val foodItem = foodManager.makeFoodItem(foodInfo)
+        val itemManager = ItemManager()
+        val key = itemManager.cookGameItemIDKey
+        val itemID = NBT(plugin).acquisition(item, key) ?: return
+        val productsPrice = if (item.type == Material.MELON_SLICE) {
+            foodManager.foodInfoFile
+        } else {
+            shopItemManager.file
+        }
+        val price = productsPrice?.getInt("$itemID.price") ?: return
         val possessionMoney = salesManager.acquisitionPossessionGold(player)
         if (possessionMoney < price) {
             AoringoPlayer(player).sendErrorMessage("所持金が足りません")
             return
         }
-        player.inventory.addItem(foodItem)
-        salesManager.reduce(player, foodInfo)
+        val passingItem = unsetPriceLabel(item)
+        player.inventory.addItem(passingItem)
+        salesManager.reduce(player, price)
         player.sendMessage("${ChatColor.GOLD}商品購入")
         player.playSound(player, Sound.BLOCK_ANVIL_USE, 1f, 1f)
+    }
+    private fun unsetPriceLabel(item: ItemStack): ItemStack {
+        val meta = item.itemMeta
+        meta?.lore = mutableListOf()
+        item.clone().setItemMeta(meta)
+        return item
     }
 }
