@@ -1,7 +1,6 @@
 package com.github.AoRingoServer.CookGame
 
 import com.github.AoRingoServer.AoringoPlayer
-import com.github.AoRingoServer.CookGame.DataClasses.FoodInfo
 import com.github.AoRingoServer.Datas.Yml
 import com.github.Ringoame196.Scoreboard
 import org.bukkit.Bukkit
@@ -14,8 +13,8 @@ class SalesManager(private val plugin: Plugin) {
         val config = Yml(plugin).acquisitionYml("", "cookGameConfig")
         return config.getString("rewardScoreboardName")
     }
-    fun addition(foodInfo: FoodInfo, player: Player) {
-        val price = foodInfo.price
+    fun addition(cookgameItemInfo: CookGameItemInfo, player: Player) {
+        val price = cookgameItemInfo.price
         val percent = 1.3
         val sales = (price * percent).toInt()
         val aoringoPlayer = AoringoPlayer(player)

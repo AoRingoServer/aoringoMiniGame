@@ -22,8 +22,10 @@ class CookGameCommand(private val plugin: Plugin) : CommandExecutor, TabExecutor
                 if (args.size == 2 && sender is Player) {
                     val input = args[1]
                     val foodInfo = foodManager.makeFoodInfo(input)
-                    val foodItem = foodManager.makeFoodItem(foodInfo)
-                    sender.inventory.addItem(foodItem)
+                    if (foodInfo != null) {
+                        val foodItem = foodManager.makeFoodItem(foodInfo)
+                        sender.inventory.addItem(foodItem)
+                    }
                 }
             }
         )

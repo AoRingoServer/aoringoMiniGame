@@ -1,7 +1,6 @@
 package com.github.AoRingoServer.CookGame
 
 import com.github.AoRingoServer.CookGame.DataClasses.CoalescenceRecipeData
-import com.github.AoRingoServer.CookGame.DataClasses.FoodInfo
 import com.github.AoRingoServer.Datas.NBT
 import com.github.AoRingoServer.Datas.Yml
 import com.github.AoRingoServer.ItemManager
@@ -17,6 +16,7 @@ class FoodManager(private val plugin: Plugin) {
     private val itemManager = ItemManager()
     private val key = itemManager.cookGameItemIDKey
     val foodInfoFile = PluginData.DataManager.foodInfo
+    private val cookgameItemManager = CookGameItemManager(plugin)
     fun foodInfoKeyList(): MutableList<String> {
         return foodInfoFile?.getKeys(false)?.toMutableList() ?: mutableListOf()
     }
@@ -29,11 +29,9 @@ class FoodManager(private val plugin: Plugin) {
         return finishedProductList
     }
 
-    fun makeFoodInfo(foodID: String): FoodInfo {
-        val name = foodInfoFile?.getString("$foodID.name") ?: "未設定"
-        val customModelData = foodInfoFile?.getInt("$foodID.customModelData") ?: 1
-        val price = foodInfoFile?.getInt("$foodID.price") ?: 100
-        return FoodInfo(foodID, name, customModelData, price)
+    fun makeFoodInfo(foodID: String): CookGameItemInfo? {
+        foodInfoFile ?: return null
+        return cookgameItemManager.makeInfo(foodID, foodInfoFile, Material.MELON_SLICE)
     }
     fun acquisitionFoodID(food: ItemStack): String? {
         return nbt.acquisition(food, key)
@@ -41,18 +39,13 @@ class FoodManager(private val plugin: Plugin) {
     fun acquireFinishedProduct(): YamlConfiguration {
         return yml.acquisitionYml("", "FinishedProductList")
     }
-    fun makeFoodItem(foodInfo: FoodInfo): ItemStack {
-        val name = foodInfo.foodName
-        val foodID = foodInfo.foodID
-        val customModelData = foodInfo.customModelData
-        val food = itemManager.make(Material.MELON_SLICE, name, customModelData = customModelData)
-        nbt.set(food, key, foodID)
-        return food
+    fun makeFoodItem(cookGameItemInfo: CookGameItemInfo): ItemStack {
+        return cookgameItemManager.makeItem(cookGameItemInfo)
     }
     fun acquisitionCookingCompletionGoodsData(food: ItemStack, method: String): ItemStack? {
         val foodID = acquisitionFoodID(food) ?: return null
         val completionGoodsId = acquisitionCompletionGoodsId(foodID, method) ?: return null
-        val completionGoodsFoodInfo = makeFoodInfo(completionGoodsId)
+        val completionGoodsFoodInfo = makeFoodInfo(completionGoodsId) ?: return null
         return makeFoodItem(completionGoodsFoodInfo)
     }
     fun acquisitionCookingCompletionGoodsData(foods: CoalescenceRecipeData, method: String): ItemStack? {
@@ -60,7 +53,7 @@ class FoodManager(private val plugin: Plugin) {
         val foundationID = acquisitionFoodID(foods.foundationFood) ?: return null
         val list = mutableListOf(addingIngredientId, foundationID)
         val completionGoodsId = acquisitionCompletionGoodsId(list, method) ?: return null
-        val completionGoodsFoodInfo = makeFoodInfo(completionGoodsId)
+        val completionGoodsFoodInfo = makeFoodInfo(completionGoodsId) ?: return null
         return makeFoodItem(completionGoodsFoodInfo)
     }
     private fun acquisitionCompletionGoodsId(ingredientId: String, method: String): String? {

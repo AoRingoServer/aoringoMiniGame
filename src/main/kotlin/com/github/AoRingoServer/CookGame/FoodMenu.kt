@@ -22,6 +22,7 @@ import org.bukkit.plugin.Plugin
 class FoodMenu(private val plugin: Plugin) : GUI {
     override val guiName: String = "${ChatColor.DARK_BLUE}メニュー"
     private val foodManager = FoodManager(plugin)
+    private val guiManager = GUIManager()
     private val cookingMap = mapOf(
         "cut" to ChoppingBoard(plugin),
         "fly" to Flier(plugin),
@@ -35,50 +36,26 @@ class FoodMenu(private val plugin: Plugin) : GUI {
     }
     private fun makeMenuGUI(pageNumber: Int, player: Player): Inventory {
         val playerGamemode = player.gameMode
-        val maxSize = 45
         val foodInfoList = if (playerGamemode == GameMode.CREATIVE) { foodManager.foodInfoKeyList() } else { PluginData.DataManager.finishedProduclist }
-        val startNumber = (pageNumber - 1) * maxSize
-        if (foodInfoList.size < startNumber) {
-            return player.openInventory.topInventory
+        val foodList = mutableListOf<ItemStack>()
+        for (foodID in foodInfoList) {
+            val foodInfo = foodManager.makeFoodInfo(foodID) ?: return player.openInventory.topInventory
+            val foodItem = foodManager.makeFoodItem(foodInfo)
+            foodList.add(foodItem)
         }
-        val newFoodInfoList = foodInfoList.subList(startNumber, foodInfoList.size - 1)
-        val autoSize = GUIManager().autoGUISize(newFoodInfoList)
-        val guiSize = if (autoSize < maxSize) { autoSize + 9 } else { 54 }
-        val gui = Bukkit.createInventory(null, guiSize, guiName)
-        for (n in 0 until maxSize) {
-            if (n >= newFoodInfoList.size) { break }
-            val foodID = newFoodInfoList[n]
-            val foodInfo = foodManager.makeFoodInfo(foodID)
-            val food = foodManager.makeFoodItem(foodInfo)
-            if (gui.contains(food)) { continue }
-            gui.addItem(food)
-        }
-        selectButton(gui)
-        return gui
+        return guiManager.makeMultiplePageSupportedGUI(foodList, pageNumber, guiName)
     }
 
     override fun clickProcess(item: ItemStack, player: Player, isShift: Boolean) {
         if (player.gameMode == GameMode.CREATIVE && isShift) {
             player.inventory.addItem(item)
         } else if (item.type == Material.RED_STAINED_GLASS_PANE) {
-            val itemName = item.itemMeta?.displayName ?: return
-            try {
-                val number = itemName.replace("${ChatColor.GOLD}", "").replace("番目", "").toInt()
-                val gui = makeMenuGUI(number, player)
-                player.openInventory(gui)
-            } catch (e: NumberFormatException) { return }
+            val number = guiManager.acquisitionSelectButton(item) ?: return
+            val gui = makeMenuGUI(number, player)
+            player.openInventory(gui)
         } else {
             val gui = makeRecipeGUI(item) ?: return
             player.openInventory(gui)
-        }
-    }
-    private fun selectButton(gui: Inventory) {
-        val itemManager = ItemManager()
-        val guiNumber = gui.size - 9
-        for (i in guiNumber..guiNumber + 8) {
-            val number = i - guiNumber + 1
-            val button = itemManager.make(Material.RED_STAINED_GLASS_PANE, "${ChatColor.GOLD}${number}番目")
-            gui.setItem(i, button)
         }
     }
     private fun makeRecipeGUI(finishedProduct: ItemStack): Inventory? {
@@ -105,15 +82,15 @@ class FoodMenu(private val plugin: Plugin) : GUI {
         }
     }
     private fun singleDisplay(data: String, gui: Inventory, cookingMethod: String, finishedProduct: ItemStack) {
-        val foodInfo = foodManager.makeFoodInfo(data)
+        val foodInfo = foodManager.makeFoodInfo(data) ?: return
         val food = foodManager.makeFoodItem(foodInfo)
         installGUI(gui, food, cookingMethod, finishedProduct)
     }
     private fun multiDisplay(data: List<*>, gui: Inventory, cookingMethod: String, finishedProduct: ItemStack) {
         val additionFoodID = data[0].toString()
         val foundationFoodID = data[1].toString()
-        val additionFoodInfo = foodManager.makeFoodInfo(additionFoodID)
-        val foundationFoodInfo = foodManager.makeFoodInfo(foundationFoodID)
+        val additionFoodInfo = foodManager.makeFoodInfo(additionFoodID) ?: return
+        val foundationFoodInfo = foodManager.makeFoodInfo(foundationFoodID) ?: return
         val additionFood = foodManager.makeFoodItem(additionFoodInfo)
         val foundationFood = foodManager.makeFoodItem(foundationFoodInfo)
         installGUI(gui, additionFood, cookingMethod, finishedProduct, foundationFood)

@@ -6,7 +6,6 @@ import com.github.AoRingoServer.Datas.Yml
 import com.github.AoRingoServer.GUI
 import com.github.AoRingoServer.GUIManager
 import com.github.AoRingoServer.ItemManager
-import org.bukkit.Bukkit
 import org.bukkit.ChatColor
 import org.bukkit.Material
 import org.bukkit.Sound
@@ -20,7 +19,11 @@ class Shop(private val plugin: Plugin) : GUI {
     private val shopItemManager = ShopItemManager(plugin)
     override val guiName: String = "${ChatColor.DARK_BLUE}ショップ"
     private val foodKey = "food"
+    private val guiManager = GUIManager()
     override fun make(player: Player): Inventory {
+        return makeGUI(1)
+    }
+    private fun makeGUI(pageNumber: Int): Inventory {
         val shopFile = Yml(plugin).acquisitionYml("", "shopCommercialProductList")
         val commercialProductList = mutableListOf<ItemStack>()
         for (key in shopFile.getKeys(true)) {
@@ -30,16 +33,11 @@ class Shop(private val plugin: Plugin) : GUI {
                 else -> acquisitionShopItem(list, commercialProductList)
             }
         }
-        val guiSize = GUIManager().autoGUISize(commercialProductList)
-        val gui = Bukkit.createInventory(null, guiSize, guiName)
-        for (item in commercialProductList) {
-            gui.addItem(item)
-        }
-        return gui
+        return guiManager.makeMultiplePageSupportedGUI(commercialProductList, pageNumber, guiName)
     }
     private fun acquisitionFoodItem(list: List<String>, commercialProductList: MutableList<ItemStack>) {
         for (foodID in list) {
-            val foodInfo = foodManager.makeFoodInfo(foodID)
+            val foodInfo = foodManager.makeFoodInfo(foodID) ?: return
             val foodItem = foodManager.makeFoodItem(foodInfo)
             val meta = foodItem.itemMeta
             meta?.lore = mutableListOf("${ChatColor.GOLD}値段：${foodInfo.price}円")
@@ -62,6 +60,12 @@ class Shop(private val plugin: Plugin) : GUI {
         val salesManager = SalesManager(plugin)
         val itemManager = ItemManager()
         val key = itemManager.cookGameItemIDKey
+        if (item.type == Material.RED_STAINED_GLASS_PANE) {
+            val number = guiManager.acquisitionSelectButton(item) ?: return
+            val gui = makeGUI(number)
+            player.openInventory(gui)
+            return
+        }
         val itemID = NBT(plugin).acquisition(item, key) ?: return
         val productsPrice = if (item.type == Material.MELON_SLICE) {
             foodManager.foodInfoFile

@@ -1,5 +1,5 @@
 hindranceItem:
   Material : CLOCK
-  CustomModelData : 1
-  ItemName : "§eお邪魔アイテム"
+  customModelData : 1
+  name : "§eお邪魔アイテム"
   price : 100

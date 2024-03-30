@@ -86,7 +86,7 @@ class CustomerManager(private val plugin: Plugin) {
         if (orderFood != provisionFood) { return }
         player.inventory.removeItem(provisionFood)
         val foodID = foodManager.acquisitionFoodID(orderFood) ?: return
-        val foodInfo = foodManager.makeFoodInfo(foodID)
+        val foodInfo = foodManager.makeFoodInfo(foodID) ?: return
         val dirtyTray = customorRecipManager.makeTray(foodInfo)
         player.inventory.addItem(dirtyTray)
         SalesManager(plugin).addition(foodInfo, player)
