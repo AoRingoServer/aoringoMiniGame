@@ -14,16 +14,17 @@ import org.bukkit.inventory.Inventory
 import org.bukkit.inventory.ItemStack
 import org.bukkit.plugin.Plugin
 
-class Shop(private val plugin: Plugin) : GUI {
+class Shop(private val plugin: Plugin) : GUI, MultiplePageGUI {
     private val foodManager = FoodManager(plugin)
     private val shopItemManager = ShopItemManager(plugin)
     override val guiName: String = "${ChatColor.DARK_BLUE}ショップ"
     private val foodKey = "food"
     private val guiManager = GUIManager()
     override fun make(player: Player): Inventory {
-        return makeGUI(1)
+        return makeMenuGUI(1, player)
     }
-    private fun makeGUI(pageNumber: Int): Inventory {
+
+    override fun makeMenuGUI(pageNumber: Int, player: Player): Inventory {
         val shopFile = Yml(plugin).acquisitionYml("", "shopCommercialProductList")
         val commercialProductList = mutableListOf<ItemStack>()
         for (key in shopFile.getKeys(true)) {
@@ -61,9 +62,7 @@ class Shop(private val plugin: Plugin) : GUI {
         val itemManager = ItemManager()
         val key = itemManager.cookGameItemIDKey
         if (item.type == Material.RED_STAINED_GLASS_PANE) {
-            val number = guiManager.acquisitionSelectButton(item) ?: return
-            val gui = makeGUI(number)
-            player.openInventory(gui)
+            guiManager.changePage(item, player, this)
             return
         }
         val itemID = NBT(plugin).acquisition(item, key) ?: return

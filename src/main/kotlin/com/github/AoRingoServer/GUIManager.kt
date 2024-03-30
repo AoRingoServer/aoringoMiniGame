@@ -1,8 +1,10 @@
 package com.github.AoRingoServer
 
+import com.github.AoRingoServer.CookGame.MultiplePageGUI
 import org.bukkit.Bukkit
 import org.bukkit.ChatColor
 import org.bukkit.Material
+import org.bukkit.entity.Player
 import org.bukkit.inventory.Inventory
 import org.bukkit.inventory.ItemStack
 
@@ -53,5 +55,10 @@ class GUIManager {
         } catch (e: NumberFormatException) {
             null
         }
+    }
+    fun changePage(button: ItemStack, player: Player, multiplePageGUI: MultiplePageGUI) {
+        val number = acquisitionSelectButton(button) ?: return
+        val gui = multiplePageGUI.makeMenuGUI(number, player)
+        player.openInventory(gui)
     }
 }

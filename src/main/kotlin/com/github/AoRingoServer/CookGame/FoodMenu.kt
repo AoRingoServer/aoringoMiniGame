@@ -19,7 +19,7 @@ import org.bukkit.inventory.Inventory
 import org.bukkit.inventory.ItemStack
 import org.bukkit.plugin.Plugin
 
-class FoodMenu(private val plugin: Plugin) : GUI {
+class FoodMenu(private val plugin: Plugin) : GUI, MultiplePageGUI {
     override val guiName: String = "${ChatColor.DARK_BLUE}メニュー"
     private val foodManager = FoodManager(plugin)
     private val guiManager = GUIManager()
@@ -34,7 +34,7 @@ class FoodMenu(private val plugin: Plugin) : GUI {
     override fun make(player: Player): Inventory {
         return makeMenuGUI(1, player)
     }
-    private fun makeMenuGUI(pageNumber: Int, player: Player): Inventory {
+    override fun makeMenuGUI(pageNumber: Int, player: Player): Inventory {
         val playerGamemode = player.gameMode
         val foodInfoList = if (playerGamemode == GameMode.CREATIVE) { foodManager.foodInfoKeyList() } else { PluginData.DataManager.finishedProduclist }
         val foodList = mutableListOf<ItemStack>()
@@ -50,9 +50,7 @@ class FoodMenu(private val plugin: Plugin) : GUI {
         if (player.gameMode == GameMode.CREATIVE && isShift) {
             player.inventory.addItem(item)
         } else if (item.type == Material.RED_STAINED_GLASS_PANE) {
-            val number = guiManager.acquisitionSelectButton(item) ?: return
-            val gui = makeMenuGUI(number, player)
-            player.openInventory(gui)
+            guiManager.changePage(item, player, this)
         } else {
             val gui = makeRecipeGUI(item) ?: return
             player.openInventory(gui)
