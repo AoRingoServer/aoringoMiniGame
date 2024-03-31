@@ -16,12 +16,13 @@ import kotlin.random.Random
 
 class CookwareManager(private val plugin: Plugin) {
     private val foodManager = FoodManager(plugin)
-    fun bakeItemFrameCooking(itemFrame: ItemFrame, food: ItemStack, cookingMethod: String, completionTime: Int, overTime: Int, sound: Sound, particle: Particle) {
+    fun bakeItemFrameCooking(itemFrame: ItemFrame, food: ItemStack, cookingMethod: String, completionTime: Int, sound: Sound, particle: Particle) {
         val completionGoodsItem = foodManager.acquisitionCookingCompletionGoodsData(food, cookingMethod) ?: return
         val completionSound = Sound.BLOCK_ANVIL_USE
         val burnedSound = Sound.BLOCK_LAVA_EXTINGUISH
         val particleLocation = itemFrame.location.clone()
         val overParticle = Particle.EXPLOSION_LARGE
+        val overTime = completionTime * 2
         itemFrame.isVisible = false
         var time = 0
         object : BukkitRunnable() {

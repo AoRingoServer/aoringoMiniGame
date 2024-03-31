@@ -1,5 +1,6 @@
 package com.github.AoRingoServer.CookGame
 
+import com.github.AoRingoServer.CookGame.DataClasses.CookGameItemInfo
 import com.github.AoRingoServer.Datas.NBT
 import com.github.AoRingoServer.ItemManager
 import org.bukkit.Material

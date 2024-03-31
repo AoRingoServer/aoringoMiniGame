@@ -4,5 +4,6 @@ import org.bukkit.entity.ItemFrame
 import org.bukkit.inventory.ItemStack
 
 interface UseItemFrameCookware {
-    fun cooking(itemFrame: ItemFrame, food: ItemStack)
+    val timeKey: String
+    fun cooking(itemFrame: ItemFrame, food: ItemStack, cookTime: Int)
 }

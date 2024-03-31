@@ -1,6 +1,7 @@
 package com.github.AoRingoServer.CookGame
 
 import com.github.AoRingoServer.AoringoPlayer
+import com.github.AoRingoServer.CookGame.DataClasses.CookGameItemInfo
 import com.github.AoRingoServer.Datas.Yml
 import com.github.Ringoame196.Scoreboard
 import org.bukkit.Bukkit

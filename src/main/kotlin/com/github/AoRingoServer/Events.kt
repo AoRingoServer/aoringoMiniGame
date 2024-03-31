@@ -7,9 +7,11 @@ import com.github.AoRingoServer.CookGame.Cookwares.CookwareManager
 import com.github.AoRingoServer.CookGame.Cookwares.Flier
 import com.github.AoRingoServer.CookGame.Cookwares.Furnace
 import com.github.AoRingoServer.CookGame.Cookwares.Pot
+import com.github.AoRingoServer.CookGame.Cookwares.UseItemFrameCookware
 import com.github.AoRingoServer.CookGame.Customer.CustomerManager
 import com.github.AoRingoServer.CookGame.FoodMenu
 import com.github.AoRingoServer.CookGame.Shop
+import com.github.AoRingoServer.CookGame.TeamScoreBoard
 import com.github.Ringoame196.ResourcePack
 import org.bukkit.ChatColor
 import org.bukkit.GameMode
@@ -109,7 +111,7 @@ class Events(private val plugin: Plugin) : Listener {
         val itemFrameItemUseMap = mapOf(
             batter.batterItem to { batter.cover(item, player, itemFrame) }
         )
-        val underBlockMap = mapOf(
+        val underBlockMap = mapOf<Material, UseItemFrameCookware>(
             Material.LAVA_CAULDRON to Flier(plugin),
             Material.SMOKER to Furnace(plugin),
             Material.WATER_CAULDRON to Pot(plugin)
@@ -119,7 +121,8 @@ class Events(private val plugin: Plugin) : Listener {
                 Material.AIR -> {
                     val foodstuff = item.clone()
                     foodstuff.amount = 1
-                    underBlockMap[underBlock.type]?.cooking(itemFrame, foodstuff)
+                    val cookTime = TeamScoreBoard(plugin, aoringoPlayer.scoreboardTargetName).acquisitionTime(underBlock)
+                    underBlockMap[underBlock.type]?.cooking(itemFrame, foodstuff, cookTime)
                     return
                 }
                 else -> e.isCancelled = true

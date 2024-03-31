@@ -69,7 +69,7 @@ class Shop(private val plugin: Plugin) : GUI, MultiplePageGUI {
         val productsPrice = if (item.type == Material.MELON_SLICE) {
             foodManager.foodInfoFile
         } else {
-            shopItemManager.file
+            shopItemManager.itemInfoData
         }
         val price = productsPrice?.getInt("$itemID.price") ?: return
         val possessionMoney = salesManager.acquisitionPossessionGold(player)

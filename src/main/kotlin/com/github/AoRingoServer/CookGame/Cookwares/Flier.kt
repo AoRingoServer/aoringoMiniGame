@@ -13,9 +13,10 @@ class Flier(private val plugin: Plugin) : UseItemFrameCookware, Cookware {
     private val cookwareManager = CookwareManager(plugin)
     private val itemManager = ItemManager()
     override val menuItem: ItemStack = itemManager.make(Material.CAULDRON, "${ChatColor.YELLOW}揚げる", customModelData = 1)
-    override fun cooking(itemFrame: ItemFrame, food: ItemStack) {
+    override val timeKey: String = "flierTime"
+    override fun cooking(itemFrame: ItemFrame, food: ItemStack, cookTime: Int) {
         val flySound = Sound.BLOCK_LAVA_POP
         val flyParticle = Particle.LAVA
-        cookwareManager.bakeItemFrameCooking(itemFrame, food, "fly", 10, 20, flySound, flyParticle)
+        cookwareManager.bakeItemFrameCooking(itemFrame, food, "fly", cookTime, flySound, flyParticle)
     }
 }
