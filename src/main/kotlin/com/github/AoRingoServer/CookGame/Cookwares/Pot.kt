@@ -7,10 +7,8 @@ import org.bukkit.Particle
 import org.bukkit.Sound
 import org.bukkit.entity.ItemFrame
 import org.bukkit.inventory.ItemStack
-import org.bukkit.plugin.Plugin
 
-class Pot(private val plugin: Plugin) : UseItemFrameCookware, Cookware {
-    private val cookwareManager = CookwareManager(plugin)
+class Pot(private val cookwareManager: CookwareManager) : UseItemFrameCookware, Cookware {
     private val itemManager = ItemManager()
     override val timeKey: String = "potTime"
     override val menuItem: ItemStack = itemManager.make(Material.CAULDRON, "${ChatColor.GOLD}茹でる", customModelData = 3)

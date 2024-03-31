@@ -4,10 +4,6 @@ import com.github.AoRingoServer.CookGame.Cookwares.Batter
 import com.github.AoRingoServer.CookGame.Cookwares.ChoppingBoard
 import com.github.AoRingoServer.CookGame.Cookwares.Coalescence
 import com.github.AoRingoServer.CookGame.Cookwares.CookwareManager
-import com.github.AoRingoServer.CookGame.Cookwares.Flier
-import com.github.AoRingoServer.CookGame.Cookwares.Furnace
-import com.github.AoRingoServer.CookGame.Cookwares.Pot
-import com.github.AoRingoServer.CookGame.Cookwares.UseItemFrameCookware
 import com.github.AoRingoServer.CookGame.Customer.CustomerManager
 import com.github.AoRingoServer.CookGame.FoodMenu
 import com.github.AoRingoServer.CookGame.Shop
@@ -111,11 +107,7 @@ class Events(private val plugin: Plugin) : Listener {
         val itemFrameItemUseMap = mapOf(
             batter.batterItem to { batter.cover(item, player, itemFrame) }
         )
-        val underBlockMap = mapOf<Material, UseItemFrameCookware>(
-            Material.LAVA_CAULDRON to Flier(plugin),
-            Material.SMOKER to Furnace(plugin),
-            Material.WATER_CAULDRON to Pot(plugin)
-        )
+        val underBlockMap = CookwareManager(plugin).underBlockMap
         if (underBlockMap.keys.contains(underBlock.type)) {
             when (itemFrameItem.type) {
                 Material.AIR -> {

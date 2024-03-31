@@ -3,6 +3,7 @@ package com.github.AoRingoServer.CookGame
 import com.github.AoRingoServer.CookGame.Cookwares.Batter
 import com.github.AoRingoServer.CookGame.Cookwares.ChoppingBoard
 import com.github.AoRingoServer.CookGame.Cookwares.Coalescence
+import com.github.AoRingoServer.CookGame.Cookwares.CookwareManager
 import com.github.AoRingoServer.CookGame.Cookwares.Flier
 import com.github.AoRingoServer.CookGame.Cookwares.Furnace
 import com.github.AoRingoServer.CookGame.Cookwares.Pot
@@ -23,11 +24,12 @@ class FoodMenu(private val plugin: Plugin) : GUI, MultiplePageGUI {
     override val guiName: String = "${ChatColor.DARK_BLUE}メニュー"
     private val foodManager = FoodManager(plugin)
     private val guiManager = GUIManager()
+    private val cookwareManager = CookwareManager(plugin)
     private val cookingMap = mapOf(
         "cut" to ChoppingBoard(plugin),
-        "fly" to Flier(plugin),
-        "bake" to Furnace(plugin),
-        "boil" to Pot(plugin),
+        "fly" to Flier(cookwareManager),
+        "bake" to Furnace(cookwareManager),
+        "boil" to Pot(cookwareManager),
         "batter" to Batter(plugin),
         "coalescence" to Coalescence(plugin)
     )

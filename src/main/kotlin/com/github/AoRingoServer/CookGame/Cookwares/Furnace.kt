@@ -8,10 +8,8 @@ import org.bukkit.Sound
 import org.bukkit.block.Smoker
 import org.bukkit.entity.ItemFrame
 import org.bukkit.inventory.ItemStack
-import org.bukkit.plugin.Plugin
 
-class Furnace(private val plugin: Plugin) : UseItemFrameCookware, Cookware {
-    private val cookwareManager = CookwareManager(plugin)
+class Furnace(private val cookwareManager: CookwareManager) : UseItemFrameCookware, Cookware {
     private val itemManager = ItemManager()
     override val menuItem: ItemStack = itemManager.make(Material.SMOKER, "${ChatColor.YELLOW}焼く")
     override val timeKey: String = "furnaceTime"

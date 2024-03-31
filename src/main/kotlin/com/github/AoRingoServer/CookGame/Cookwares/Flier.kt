@@ -7,10 +7,8 @@ import org.bukkit.Particle
 import org.bukkit.Sound
 import org.bukkit.entity.ItemFrame
 import org.bukkit.inventory.ItemStack
-import org.bukkit.plugin.Plugin
 
-class Flier(private val plugin: Plugin) : UseItemFrameCookware, Cookware {
-    private val cookwareManager = CookwareManager(plugin)
+class Flier(private val cookwareManager: CookwareManager) : UseItemFrameCookware, Cookware {
     private val itemManager = ItemManager()
     override val menuItem: ItemStack = itemManager.make(Material.CAULDRON, "${ChatColor.YELLOW}揚げる", customModelData = 1)
     override val timeKey: String = "flierTime"

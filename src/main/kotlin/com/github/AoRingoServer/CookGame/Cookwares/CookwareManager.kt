@@ -16,6 +16,11 @@ import kotlin.random.Random
 
 class CookwareManager(private val plugin: Plugin) {
     private val foodManager = FoodManager(plugin)
+    val underBlockMap = mapOf<Material, UseItemFrameCookware>(
+        Material.LAVA_CAULDRON to Flier(this),
+        Material.SMOKER to Furnace(this),
+        Material.WATER_CAULDRON to Pot(this)
+    )
     fun bakeItemFrameCooking(itemFrame: ItemFrame, food: ItemStack, cookingMethod: String, completionTime: Int, sound: Sound, particle: Particle) {
         val completionGoodsItem = foodManager.acquisitionCookingCompletionGoodsData(food, cookingMethod) ?: return
         val completionSound = Sound.BLOCK_ANVIL_USE
