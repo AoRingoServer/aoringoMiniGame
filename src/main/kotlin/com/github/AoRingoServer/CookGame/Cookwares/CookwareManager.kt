@@ -15,7 +15,7 @@ import org.bukkit.scheduler.BukkitRunnable
 import kotlin.random.Random
 
 class CookwareManager(private val plugin: Plugin) {
-    private val foodManager = FoodManager(plugin)
+    val foodManager = FoodManager(plugin)
     val underBlockMap = mapOf<Material, UseItemFrameCookware>(
         Material.LAVA_CAULDRON to Flier(this),
         Material.SMOKER to Furnace(this),

@@ -1,7 +1,6 @@
 package com.github.AoRingoServer.CookGame.Cookwares
 
 import com.github.AoRingoServer.CookGame.DataClasses.CoalescenceRecipeData
-import com.github.AoRingoServer.CookGame.FoodManager
 import com.github.AoRingoServer.ItemManager
 import org.bukkit.ChatColor
 import org.bukkit.Material
@@ -9,11 +8,10 @@ import org.bukkit.Sound
 import org.bukkit.entity.ItemFrame
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
-import org.bukkit.plugin.Plugin
 
-class Coalescence(private val plugin: Plugin) : Cookware {
+class Coalescence(private val cookwareManager: CookwareManager) : Cookware {
     private val itemManager = ItemManager()
-    private val foodManager = FoodManager(plugin)
+    private val foodManager = cookwareManager.foodManager
     override val menuItem: ItemStack = itemManager.make(Material.STICK, "${ChatColor.YELLOW}合体", customModelData = 2)
     fun cooking(itemFrame: ItemFrame, player: Player) {
         val additionalFood = player.inventory.itemInMainHand

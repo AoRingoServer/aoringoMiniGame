@@ -26,12 +26,12 @@ class FoodMenu(private val plugin: Plugin) : GUI, MultiplePageGUI {
     private val guiManager = GUIManager()
     private val cookwareManager = CookwareManager(plugin)
     private val cookingMap = mapOf(
-        "cut" to ChoppingBoard(plugin),
+        "cut" to ChoppingBoard(cookwareManager),
         "fly" to Flier(cookwareManager),
         "bake" to Furnace(cookwareManager),
         "boil" to Pot(cookwareManager),
-        "batter" to Batter(plugin),
-        "coalescence" to Coalescence(plugin)
+        "batter" to Batter(cookwareManager),
+        "coalescence" to Coalescence(cookwareManager)
     )
     override fun make(player: Player): Inventory {
         return makeMenuGUI(1, player)

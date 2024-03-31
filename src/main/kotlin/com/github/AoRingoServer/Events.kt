@@ -91,14 +91,15 @@ class Events(private val plugin: Plugin) : Listener {
     @EventHandler
     fun onPlayerInteractItemFrame(e: PlayerInteractEntityEvent) {
         val player = e.player
+        val cookwareManager = CookwareManager(plugin)
         val aoringoPlayer = AoringoPlayer(player)
         val isSneak = player.isSneaking
         val itemFrame = e.rightClicked as? ItemFrame ?: return
         val itemFrameItem = itemFrame.item
         val item = player.inventory.itemInMainHand.clone()
         val underBlock = itemFrame.location.clone().add(0.0, -1.0, 0.0).block
-        val choppingBoard = ChoppingBoard(plugin)
-        val batter = Batter(plugin)
+        val choppingBoard = ChoppingBoard(cookwareManager)
+        val batter = Batter(cookwareManager)
         val sneakGuidanceMessage = "${ChatColor.GOLD}調理する場合は スニークしながらクリックしてください"
         val playerHasItemUseMap = mapOf(
             choppingBoard.knifeItem to { choppingBoard.process(itemFrame, player) },
@@ -130,7 +131,7 @@ class Events(private val plugin: Plugin) : Listener {
         } else if (itemFrameItemUseMap.keys.contains(itemFrameItem)) {
             itemFrameItemUseMap[itemFrameItem]?.invoke()
         } else {
-            Coalescence(plugin).cooking(itemFrame, player)
+            Coalescence(cookwareManager).cooking(itemFrame, player)
         }
     }
     @EventHandler
