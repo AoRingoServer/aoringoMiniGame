@@ -23,8 +23,10 @@ class ServerMenu(private val plugin: Plugin) : GUI {
     }
     private fun addTeleportWorldIcon(gui: Inventory) {
         val worldList = yml.acquisitionYml("", "World").getList("worldList") ?: return
+        val worldInfo = yml.acquisitionYml("", "WorldInfo")
         for (worldName in worldList) {
-            val item = itemManager.make(Material.ENDER_PEARL, "${ChatColor.GOLD}$worldName")
+            val worldDisplayName = worldInfo.getString(worldName.toString()) ?: "未登録"
+            val item = itemManager.make(Material.ENDER_PEARL, "${ChatColor.GOLD}$worldName", mutableListOf(worldDisplayName))
             gui.addItem(item)
         }
     }
