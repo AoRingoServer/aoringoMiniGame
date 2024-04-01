@@ -1,6 +1,7 @@
-package com.github.AoRingoServer
+package com.github.AoRingoServer.GUIs
 
 import com.github.AoRingoServer.CookGame.MultiplePageGUI
+import com.github.AoRingoServer.ItemManager
 import org.bukkit.Bukkit
 import org.bukkit.ChatColor
 import org.bukkit.Material
@@ -48,7 +49,7 @@ class GUIManager {
             gui.setItem(i, button)
         }
     }
-    fun acquisitionSelectButton(button: ItemStack): Int? {
+    private fun acquisitionSelectButton(button: ItemStack): Int? {
         val itemName = button.itemMeta?.displayName
         return try {
             itemName?.replace("${ChatColor.GOLD}", "")?.replace("番目", "")?.toInt() ?: 1

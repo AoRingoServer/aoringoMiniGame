@@ -1,4 +1,4 @@
-package com.github.AoRingoServer
+package com.github.AoRingoServer.GUIs
 
 import org.bukkit.entity.Player
 import org.bukkit.inventory.Inventory

@@ -7,8 +7,8 @@ import com.github.AoRingoServer.CookGame.Cookwares.CookwareManager
 import com.github.AoRingoServer.CookGame.Cookwares.Flier
 import com.github.AoRingoServer.CookGame.Cookwares.Furnace
 import com.github.AoRingoServer.CookGame.Cookwares.Pot
-import com.github.AoRingoServer.GUI
-import com.github.AoRingoServer.GUIManager
+import com.github.AoRingoServer.GUIs.GUI
+import com.github.AoRingoServer.GUIs.GUIManager
 import com.github.AoRingoServer.ItemManager
 import com.github.AoRingoServer.PluginData
 import org.bukkit.Bukkit

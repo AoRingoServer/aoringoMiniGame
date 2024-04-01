@@ -8,6 +8,7 @@ import com.github.AoRingoServer.CookGame.Customer.CustomerManager
 import com.github.AoRingoServer.CookGame.FoodMenu
 import com.github.AoRingoServer.CookGame.Shop
 import com.github.AoRingoServer.CookGame.TeamScoreBoard
+import com.github.AoRingoServer.GUIs.ServerMenu
 import com.github.Ringoame196.ResourcePack
 import org.bukkit.ChatColor
 import org.bukkit.GameMode
@@ -22,6 +23,7 @@ import org.bukkit.event.block.Action
 import org.bukkit.event.entity.EntityDamageByEntityEvent
 import org.bukkit.event.hanging.HangingBreakByEntityEvent
 import org.bukkit.event.inventory.InventoryClickEvent
+import org.bukkit.event.player.PlayerChangedWorldEvent
 import org.bukkit.event.player.PlayerInteractEntityEvent
 import org.bukkit.event.player.PlayerInteractEvent
 import org.bukkit.event.player.PlayerJoinEvent
@@ -37,10 +39,13 @@ class Events(private val plugin: Plugin) : Listener {
         val aoringoPlayer = AoringoPlayer(player)
         ResourcePack(plugin).adaptation(player)
         aoringoPlayer.setPrefix()
+        aoringoPlayer.giveServerMenuItem(plugin)
     }
     @EventHandler
     fun onPlayerInteract(e: PlayerInteractEvent) {
         val player = e.player
+        val serverMenu = ServerMenu(plugin)
+        val serverMenuItem = serverMenu.item
         val makeGUIs = mapOf(
             "レシピ" to FoodMenu(plugin)
         )
@@ -69,13 +74,17 @@ class Events(private val plugin: Plugin) : Listener {
             e.isCancelled = true
             val gui = makeGUIs[item?.itemMeta?.displayName]?.make(player) ?: return
             player.openInventory(gui)
+        } else if (item == serverMenuItem) {
+            val gui = serverMenu.make(player)
+            player.openInventory(gui)
         }
     }
     @EventHandler
     fun onInventoryClick(e: InventoryClickEvent) {
         val makeGUIs = mapOf(
             FoodMenu(plugin).let { foodMenu -> foodMenu.guiName to foodMenu },
-            Shop(plugin).let { shop -> shop.guiName to shop }
+            Shop(plugin).let { shop -> shop.guiName to shop },
+            ServerMenu(plugin).let { serverMenu -> serverMenu.guiName to serverMenu }
         )
         val player = e.whoClicked as? Player ?: return
         val gui = e.view
@@ -185,5 +194,11 @@ class Events(private val plugin: Plugin) : Listener {
         if (player.gameMode == GameMode.CREATIVE) { return }
         if (!customerManager.isCustomer(entity)) { return }
         e.isCancelled = true
+    }
+    @EventHandler
+    fun onPlayerChangedWorld(e: PlayerChangedWorldEvent) {
+        val player = e.player
+        val aoringoPlayer = AoringoPlayer(player)
+        aoringoPlayer.giveServerMenuItem(plugin)
     }
 }

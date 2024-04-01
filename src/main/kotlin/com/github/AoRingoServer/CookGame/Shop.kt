@@ -3,8 +3,8 @@ package com.github.AoRingoServer.CookGame
 import com.github.AoRingoServer.AoringoPlayer
 import com.github.AoRingoServer.Datas.NBT
 import com.github.AoRingoServer.Datas.Yml
-import com.github.AoRingoServer.GUI
-import com.github.AoRingoServer.GUIManager
+import com.github.AoRingoServer.GUIs.GUI
+import com.github.AoRingoServer.GUIs.GUIManager
 import com.github.AoRingoServer.ItemManager
 import org.bukkit.ChatColor
 import org.bukkit.Material
