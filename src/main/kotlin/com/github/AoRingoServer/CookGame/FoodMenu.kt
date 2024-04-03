@@ -59,7 +59,7 @@ class FoodMenu(private val plugin: Plugin) : GUI, MultiplePageGUI {
         }
     }
     private fun makeRecipeGUI(finishedProduct: ItemStack): Inventory? {
-        val guiSize = 9
+        val guiSize = 18
         val gui = Bukkit.createInventory(null, guiSize, guiName)
         val finishedProductID = foodManager.acquisitionFoodID(finishedProduct) ?: return null
         val methodData = acquireCookingMethodData(finishedProductID)

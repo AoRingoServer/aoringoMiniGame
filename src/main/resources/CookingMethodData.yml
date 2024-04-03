@@ -58,6 +58,10 @@ coalescence :
   kappamaki:
     - cutCucumber
     - shari
+    - seaweed
   seafoodBowl:
-    - nigiriOfTuna
-    - nigiriOfSalmon
+    - rice
+    - cutTuna
+    - cutSalmon
+    - cutSquid
+    - cutOctopus
