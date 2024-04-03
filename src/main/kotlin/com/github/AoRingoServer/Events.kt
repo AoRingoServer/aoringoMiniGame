@@ -45,7 +45,7 @@ class Events(private val plugin: Plugin) : Listener {
     fun onPlayerInteract(e: PlayerInteractEvent) {
         val player = e.player
         val serverMenu = ServerMenu(plugin)
-        val serverMenuItem = serverMenu.item
+        val serverMenuItem = serverMenu.serverMenuItem
         val makeGUIs = mapOf(
             "レシピ" to FoodMenu(plugin)
         )

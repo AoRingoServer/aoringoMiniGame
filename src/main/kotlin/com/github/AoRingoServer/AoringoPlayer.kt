@@ -6,7 +6,6 @@ import org.bukkit.ChatColor
 import org.bukkit.Sound
 import org.bukkit.entity.Player
 import org.bukkit.plugin.Plugin
-import java.awt.TextComponent
 
 class AoringoPlayer(val player: Player) {
     private val adminPermissionName = "aoringoserver.admin"
@@ -34,7 +33,7 @@ class AoringoPlayer(val player: Player) {
     }
     fun giveServerMenuItem(plugin: Plugin) {
         val serverMenu = ServerMenu(plugin)
-        val serverMenuItem = serverMenu.item
+        val serverMenuItem = serverMenu.serverMenuItem
         if (!player.inventory.contains(serverMenuItem)) {
             player.inventory.addItem(serverMenuItem)
         }

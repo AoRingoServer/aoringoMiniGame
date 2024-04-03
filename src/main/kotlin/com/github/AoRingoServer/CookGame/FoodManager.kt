@@ -63,6 +63,6 @@ class FoodManager(private val plugin: Plugin) {
     }
     private fun acquisitionCompletionGoodsId(ingredientIds: MutableList<String>, method: String): String? {
         val cutCookingData = yml.acquisitionCookingMethodData(method) ?: return null
-        return yml.acquisitionKey(cutCookingData, ingredientIds)
+        return yml.acquisitionKey(cutCookingData, ingredientIds.toSet())
     }
 }

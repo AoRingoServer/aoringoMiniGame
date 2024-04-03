@@ -14,7 +14,8 @@ import org.bukkit.plugin.Plugin
 class ServerMenu(private val plugin: Plugin) : GUI {
     private val itemManager = ItemManager()
     private val yml = Yml(plugin)
-    val item = itemManager.make(Material.NETHER_STAR, "${ChatColor.YELLOW}サーバーメニュー")
+    private val teleportWorldItemType = Material.ENDER_PEARL
+    val serverMenuItem = itemManager.make(Material.NETHER_STAR, "${ChatColor.YELLOW}サーバーメニュー")
     override val guiName: String = "${ChatColor.DARK_GREEN}サーバーメニュー"
     override fun make(player: Player): Inventory {
         val gui = Bukkit.createInventory(null, 9, guiName)
@@ -26,14 +27,14 @@ class ServerMenu(private val plugin: Plugin) : GUI {
         val worldInfo = yml.acquisitionYml("", "WorldInfo")
         for (worldName in worldList) {
             val worldDisplayName = worldInfo.getString(worldName.toString()) ?: "未登録"
-            val item = itemManager.make(Material.ENDER_PEARL, "${ChatColor.GOLD}$worldName", mutableListOf(worldDisplayName))
+            val item = itemManager.make(teleportWorldItemType, "${ChatColor.GOLD}$worldName", mutableListOf(worldDisplayName))
             gui.addItem(item)
         }
     }
 
     override fun clickProcess(item: ItemStack, player: Player, isShift: Boolean) {
         when (item.type) {
-            Material.ENDER_PEARL -> {
+            teleportWorldItemType -> {
                 val worldName = item.itemMeta?.displayName?.replace("${ChatColor.GOLD}", "") ?: return
                 Teleporter(plugin).teleport(player, worldName)
             }

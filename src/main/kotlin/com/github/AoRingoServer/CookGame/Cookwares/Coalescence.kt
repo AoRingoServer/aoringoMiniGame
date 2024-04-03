@@ -16,8 +16,7 @@ class Coalescence(private val cookwareManager: CookwareManager) : Cookware {
     fun cooking(itemFrame: ItemFrame, player: Player) {
         val additionalFood = player.inventory.itemInMainHand
         val foundationFood = itemFrame.item
-        if (additionalFood.type == Material.AIR) { return }
-        if (foundationFood.type == Material.AIR) { return }
+        if (additionalFood.type == Material.AIR || foundationFood.type == Material.AIR) { return }
         val coalescenceRecipeData = CoalescenceRecipeData(additionalFood, foundationFood)
         val completionGoodsItem = foodManager.acquisitionCookingCompletionGoodsData(coalescenceRecipeData, "coalescence") ?: return
         itemFrame.setItem(completionGoodsItem)

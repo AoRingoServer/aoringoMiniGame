@@ -21,16 +21,9 @@ class Yml(private val plugin: Plugin) {
         if (dataFolder.exists()) { return }
         dataFolder.mkdirs()
     }
-    fun getList(path: String, fileName: String, key: String): MutableList<String>? {
-        val yml = acquisitionYml(path, fileName)
-        return yml.getStringList(key)
-    }
     fun acquisitionCookingMethodData(cookingKey: String): ConfigurationSection? {
         val cookingMethodData = PluginData.DataManager.cookingMethodData
         return cookingMethodData?.getConfigurationSection(cookingKey)
-    }
-    fun cookingMethodData(): YamlConfiguration {
-        return acquisitionYml("", "CookingMethodData")
     }
     fun acquisitionKey(data: ConfigurationSection, value: String): String? {
         data.getKeys(false).forEach { key ->
@@ -40,9 +33,9 @@ class Yml(private val plugin: Plugin) {
         }
         return null
     }
-    fun acquisitionKey(data: ConfigurationSection, value: MutableList<String>): String? {
+    fun acquisitionKey(data: ConfigurationSection, value: Set<String>): String? {
         data.getKeys(false).forEach { key ->
-            if (data.getStringList(key) == value) {
+            if (data.getStringList(key).toSet() == value) {
                 return key
             }
         }
