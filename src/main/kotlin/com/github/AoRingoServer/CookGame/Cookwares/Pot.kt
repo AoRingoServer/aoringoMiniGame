@@ -12,9 +12,9 @@ class Pot(private val cookwareManager: CookwareManager) : UseItemFrameCookware, 
     private val itemManager = ItemManager()
     override val timeKey: String = "potTime"
     override val menuItem: ItemStack = itemManager.make(Material.CAULDRON, "${ChatColor.GOLD}茹でる", customModelData = 3)
-    override fun cooking(itemFrame: ItemFrame, food: ItemStack, cookTime: Int) {
+    override fun cooking(itemFrame: ItemFrame, containItem: ItemStack, cookTime: Int) {
         val boilSound = Sound.BLOCK_STONE_PLACE
         val boilParticle = Particle.SPIT
-        cookwareManager.bakeItemFrameCooking(itemFrame, food, "boil", cookTime, boilSound, boilParticle)
+        cookwareManager.bakeItemFrameCooking(itemFrame, containItem, "boil", cookTime, boilSound, boilParticle)
     }
 }

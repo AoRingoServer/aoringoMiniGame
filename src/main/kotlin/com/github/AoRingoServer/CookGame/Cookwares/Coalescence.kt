@@ -1,6 +1,5 @@
 package com.github.AoRingoServer.CookGame.Cookwares
 
-import com.github.AoRingoServer.CookGame.DataClasses.CoalescenceRecipeData
 import com.github.AoRingoServer.ItemManager
 import org.bukkit.ChatColor
 import org.bukkit.Material
@@ -17,8 +16,8 @@ class Coalescence(private val cookwareManager: CookwareManager) : Cookware {
         val additionalFood = player.inventory.itemInMainHand
         val foundationFood = itemFrame.item
         if (additionalFood.type == Material.AIR || foundationFood.type == Material.AIR) { return }
-        val coalescenceRecipeData = CoalescenceRecipeData(additionalFood, foundationFood)
-        val completionGoodsItem = foodManager.acquisitionCookingCompletionGoodsData(coalescenceRecipeData, "coalescence") ?: return
+        val foods = mutableListOf(additionalFood, foundationFood)
+        val completionGoodsItem = foodManager.acquisitionCookingCompletionGoodsData(foods, "coalescence") ?: return
         itemFrame.setItem(completionGoodsItem)
         itemManager.reducePlayermainitem(player)
         player.playSound(player, Sound.BLOCK_ANVIL_USE, 1f, 1f)

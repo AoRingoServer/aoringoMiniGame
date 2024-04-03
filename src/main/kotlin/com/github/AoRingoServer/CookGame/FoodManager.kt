@@ -1,6 +1,5 @@
 package com.github.AoRingoServer.CookGame
 
-import com.github.AoRingoServer.CookGame.DataClasses.CoalescenceRecipeData
 import com.github.AoRingoServer.CookGame.DataClasses.CookGameItemInfo
 import com.github.AoRingoServer.Datas.NBT
 import com.github.AoRingoServer.Datas.Yml
@@ -49,11 +48,13 @@ class FoodManager(private val plugin: Plugin) {
         val completionGoodsFoodInfo = makeFoodInfo(completionGoodsId) ?: return null
         return makeFoodItem(completionGoodsFoodInfo)
     }
-    fun acquisitionCookingCompletionGoodsData(foods: CoalescenceRecipeData, method: String): ItemStack? {
-        val addingIngredientId = acquisitionFoodID(foods.addingFood) ?: return null
-        val foundationID = acquisitionFoodID(foods.foundationFood) ?: return null
-        val list = mutableListOf(addingIngredientId, foundationID)
-        val completionGoodsId = acquisitionCompletionGoodsId(list, method) ?: return null
+    fun acquisitionCookingCompletionGoodsData(foods: MutableList<ItemStack>, method: String): ItemStack? {
+        val foodIDList = mutableListOf<String>()
+        for (food in foods) {
+            val foodID = acquisitionFoodID(food) ?: return null
+            foodIDList.add(foodID)
+        }
+        val completionGoodsId = acquisitionCompletionGoodsId(foodIDList, method) ?: return null
         val completionGoodsFoodInfo = makeFoodInfo(completionGoodsId) ?: return null
         return makeFoodItem(completionGoodsFoodInfo)
     }

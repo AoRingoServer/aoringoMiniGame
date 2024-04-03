@@ -4,6 +4,7 @@ import com.github.AoRingoServer.CookGame.Cookwares.Batter
 import com.github.AoRingoServer.CookGame.Cookwares.ChoppingBoard
 import com.github.AoRingoServer.CookGame.Cookwares.Coalescence
 import com.github.AoRingoServer.CookGame.Cookwares.CookwareManager
+import com.github.AoRingoServer.CookGame.Cookwares.Mixer
 import com.github.AoRingoServer.CookGame.Customer.CustomerManager
 import com.github.AoRingoServer.CookGame.FoodMenu
 import com.github.AoRingoServer.CookGame.Shop
@@ -129,6 +130,9 @@ class Events(private val plugin: Plugin) : Listener {
                 }
                 else -> e.isCancelled = true
             }
+        } else if (underBlock.type == Material.DISPENSER) {
+            Mixer(cookwareManager).mix(itemFrame)
+            return
         }
         if (!isSneak) {
             aoringoPlayer.sendActionBar(sneakGuidanceMessage)
