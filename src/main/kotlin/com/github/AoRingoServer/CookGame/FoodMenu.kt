@@ -84,29 +84,31 @@ class FoodMenu(private val plugin: Plugin) : GUI, MultiplePageGUI {
     private fun singleDisplay(data: String, gui: Inventory, cookingMethod: String, finishedProduct: ItemStack) {
         val foodInfo = foodManager.makeFoodInfo(data) ?: return
         val food = foodManager.makeFoodItem(foodInfo)
-        installGUI(gui, food, cookingMethod, finishedProduct)
+        val materials = mutableListOf(food)
+        installGUI(gui, materials, cookingMethod, finishedProduct)
     }
     private fun multiDisplay(data: List<*>, gui: Inventory, cookingMethod: String, finishedProduct: ItemStack) {
-        val additionFoodID = data[0].toString()
-        val foundationFoodID = data[1].toString()
-        val additionFoodInfo = foodManager.makeFoodInfo(additionFoodID) ?: return
-        val foundationFoodInfo = foodManager.makeFoodInfo(foundationFoodID) ?: return
-        val additionFood = foodManager.makeFoodItem(additionFoodInfo)
-        val foundationFood = foodManager.makeFoodItem(foundationFoodInfo)
-        installGUI(gui, additionFood, cookingMethod, finishedProduct, foundationFood)
+        val materials = mutableListOf<ItemStack>()
+        for (foodID in data) {
+            val foodInfo = foodManager.makeFoodInfo(foodID.toString()) ?: return
+            materials.add(foodManager.makeFoodItem(foodInfo))
+        }
+        installGUI(gui, materials, cookingMethod, finishedProduct)
     }
-    private fun installGUI(gui: Inventory, leftFood: ItemStack, cookingMethod: String, finishedProduct: ItemStack, rightFood: ItemStack = ItemStack(Material.AIR)) {
+    private fun installGUI(gui: Inventory, materials: MutableList<ItemStack>, cookingMethod: String, finishedProduct: ItemStack) {
         val cookingMethodItem = cookingMap[cookingMethod]?.menuItem ?: return
         val arrow = ItemManager().make(Material.PAPER, "${ChatColor.YELLOW}→", customModelData = 1)
-        val leftFoodSlot = 2
-        val rightFoodSlot = 3
-        val cookingMethodSlot = 4
-        val arrowSlot = 5
-        val finishedProductSlot = 7
-        gui.setItem(rightFoodSlot, rightFood)
-        gui.setItem(leftFoodSlot, leftFood)
+        val cookingMethodSlot = 11
+        val arrowSlot = 13
+        val finishedProductSlot = 15
         gui.setItem(cookingMethodSlot, cookingMethodItem)
         gui.setItem(arrowSlot, arrow)
         gui.setItem(finishedProductSlot, finishedProduct)
+        setIngredient(gui, materials)
+    }
+    private fun setIngredient(gui: Inventory, materials: MutableList<ItemStack>) {
+        for (materialFood in materials) {
+            gui.addItem(materialFood)
+        }
     }
 }
