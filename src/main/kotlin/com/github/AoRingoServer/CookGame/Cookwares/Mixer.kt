@@ -22,6 +22,7 @@ class Mixer(private val cookwareManager: CookwareManager) : Cookware {
         val foods = mutableListOf<ItemStack>()
         if (item.itemMeta?.displayName != "${ChatColor.YELLOW}混ぜハンドル") { return }
         location.world?.playSound(location, Sound.BLOCK_BREWING_STAND_BREW, 1f, 1f)
+        itemFrame.isVisible = false
         if (!drawing()) { return }
         for (i in inventory.indices) {
             val food = inventory[i] ?: continue

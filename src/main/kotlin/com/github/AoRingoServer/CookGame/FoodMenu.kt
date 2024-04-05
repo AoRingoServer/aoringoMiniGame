@@ -98,7 +98,7 @@ class FoodMenu(private val plugin: Plugin) : GUI, MultiplePageGUI {
     private fun installGUI(gui: Inventory, materials: MutableList<ItemStack>, cookingMethod: String, finishedProduct: ItemStack) {
         val cookingMethodItem = cookingMap[cookingMethod]?.menuItem ?: return
         val arrow = ItemManager().make(Material.PAPER, "${ChatColor.YELLOW}→", customModelData = 1)
-        val cookingMethodSlot = 11
+        val cookingMethodSlot = 12
         val arrowSlot = 13
         val finishedProductSlot = 15
         gui.setItem(cookingMethodSlot, cookingMethodItem)
