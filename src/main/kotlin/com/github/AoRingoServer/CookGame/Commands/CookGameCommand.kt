@@ -1,6 +1,11 @@
 package com.github.AoRingoServer.CookGame.Commands
 
+import com.github.AoRingoServer.AoringoPlayer
 import com.github.AoRingoServer.CookGame.FoodManager
+import com.github.AoRingoServer.CookGame.SalesManager
+import org.bukkit.Location
+import org.bukkit.Sound
+import org.bukkit.command.BlockCommandSender
 import org.bukkit.command.Command
 import org.bukkit.command.CommandExecutor
 import org.bukkit.command.CommandSender
@@ -12,10 +17,9 @@ class CookGameCommand(private val plugin: Plugin) : CommandExecutor, TabExecutor
     override fun onCommand(sender: CommandSender, command: Command, label: String, args: Array<out String>): Boolean {
         if (args.isEmpty()) { return false }
         val subCommand = args[0]
-        subCommands()[subCommand]?.invoke(args, sender)
-        return true
+        return subCommands()[subCommand]?.invoke(args, sender) ?: false
     }
-    private fun subCommands(): Map<String, (args: Array<out String>, sender: CommandSender) ->Unit> {
+    private fun subCommands(): Map<String, (args: Array<out String>, sender: CommandSender) ->Boolean> {
         return mapOf(
             "giveFood" to { args: Array<out String>, sender: CommandSender ->
                 val foodManager = FoodManager(plugin)
@@ -27,6 +31,14 @@ class CookGameCommand(private val plugin: Plugin) : CommandExecutor, TabExecutor
                         sender.inventory.addItem(foodItem)
                     }
                 }
+                true
+            },
+            "buy" to { args: Array<out String>, sender: CommandSender ->
+                if (args.size >= 3 && sender is BlockCommandSender) {
+                    val price = args[1].toInt()
+                    buyTeamItem(price, sender, args)
+                }
+                true
             }
         )
     }
@@ -45,5 +57,41 @@ class CookGameCommand(private val plugin: Plugin) : CommandExecutor, TabExecutor
             }
             else -> mutableListOf()
         }
+    }
+    private fun buyTeamItem(price: Int, commandBlock: BlockCommandSender, args: Array<out String>): Boolean {
+        val location = commandBlock.block.location
+        val closePlayer = acquisitionClosePlayer(location) ?: return false
+        val aoringoPlayer = AoringoPlayer(closePlayer)
+        val salesManager = SalesManager(plugin)
+        val playerPossessionGold = salesManager.acquisitionPossessionGold(closePlayer)
+        if (playerPossessionGold < price) {
+            aoringoPlayer.sendErrorMessage("所持金が足りませんでした")
+            return false
+        }
+        salesManager.reduce(closePlayer, price)
+        closePlayer.playSound(closePlayer, Sound.BLOCK_ANVIL_USE, 1f, 1f)
+        var command = ""
+        for (i in 2 until args.size) {
+            command += "${args[i]} "
+        }
+        commandBlock.server.dispatchCommand(commandBlock, command)
+        return true
+    }
+    private fun acquisitionClosePlayer(location: Location): Player? {
+        var nearestPlayer: Player? = null
+        var nearestDistanceSquared = Double.MAX_VALUE
+        val world = location.world
+        if (world?.players?.size == 0) { return null }
+
+        for (player in (world?.players)!!) {
+            val playerLocation = player.location
+            val distanceSquared = location.distanceSquared(playerLocation)
+            if (distanceSquared < nearestDistanceSquared) {
+                nearestPlayer = player
+                nearestDistanceSquared = distanceSquared
+            }
+        }
+
+        return nearestPlayer
     }
 }
