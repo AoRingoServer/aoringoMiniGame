@@ -139,7 +139,9 @@ class Events(private val plugin: Plugin) : Listener {
             return
         }
         e.isCancelled = true
-        if (playerHasItemUseMap.keys.contains(item)) {
+        val playerHasCheckItem = item.clone()
+        playerHasCheckItem.amount = 1
+        if (playerHasItemUseMap.keys.contains(playerHasCheckItem)) {
             playerHasItemUseMap[item]?.invoke()
         } else if (itemFrameItemUseMap.keys.contains(itemFrameItem)) {
             itemFrameItemUseMap[itemFrameItem]?.invoke()
