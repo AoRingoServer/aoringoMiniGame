@@ -7,6 +7,7 @@ import com.github.AoRingoServer.CookGame.Cookwares.CookwareManager
 import com.github.AoRingoServer.CookGame.Cookwares.Flier
 import com.github.AoRingoServer.CookGame.Cookwares.Furnace
 import com.github.AoRingoServer.CookGame.Cookwares.Pot
+import com.github.AoRingoServer.CookGame.DataClasses.CookGameItemInfo
 import com.github.AoRingoServer.GUIs.GUI
 import com.github.AoRingoServer.GUIs.GUIManager
 import com.github.AoRingoServer.ItemManager
@@ -42,15 +43,27 @@ class FoodMenu(private val plugin: Plugin) : GUI, MultiplePageGUI {
         val foodList = mutableListOf<ItemStack>()
         for (foodID in foodInfoList) {
             val foodInfo = foodManager.makeFoodInfo(foodID) ?: return player.openInventory.topInventory
-            val foodItem = foodManager.makeFoodItem(foodInfo)
+            val foodItem = makeFoodForMenu(foodInfo)
             foodList.add(foodItem)
         }
         return guiManager.makeMultiplePageSupportedGUI(foodList, pageNumber, guiName)
     }
+    private fun makeFoodForMenu(cookGameItemInfo: CookGameItemInfo): ItemStack {
+        val salesManager = SalesManager(plugin)
+        val price = cookGameItemInfo.price
+        val sellingPrice = salesManager.sellingPriceCalculating(price)
+        val item = foodManager.makeFoodItem(cookGameItemInfo)
+        val meta = item.itemMeta
+        meta?.lore = mutableListOf("原価：${price}円", "販売価格：${sellingPrice}円")
+        item.setItemMeta(meta)
+        return item
+    }
 
     override fun clickProcess(item: ItemStack, player: Player, isShift: Boolean) {
         if (player.gameMode == GameMode.CREATIVE && isShift) {
-            player.inventory.addItem(item)
+            val giveItem = item.clone()
+            deletingInfo(giveItem)
+            player.inventory.addItem(giveItem)
         } else if (item.type == Material.RED_STAINED_GLASS_PANE) {
             guiManager.changePage(item, player, this)
         } else {
@@ -58,6 +71,12 @@ class FoodMenu(private val plugin: Plugin) : GUI, MultiplePageGUI {
             player.openInventory(gui)
         }
     }
+    private fun deletingInfo(item: ItemStack) {
+        val meta = item.itemMeta
+        meta?.lore = mutableListOf()
+        item.setItemMeta(meta)
+    }
+
     private fun makeRecipeGUI(finishedProduct: ItemStack): Inventory? {
         val guiSize = 18
         val gui = Bukkit.createInventory(null, guiSize, guiName)

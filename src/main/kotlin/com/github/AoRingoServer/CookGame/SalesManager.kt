@@ -14,10 +14,13 @@ class SalesManager(private val plugin: Plugin) {
         val config = Yml(plugin).acquisitionYml("", "cookGameConfig")
         return config.getString("rewardScoreboardName")
     }
+    fun sellingPriceCalculating(price: Int): Int {
+        val percent = 1.3
+        return (price * percent).toInt()
+    }
     fun addition(cookgameItemInfo: CookGameItemInfo, player: Player) {
         val price = cookgameItemInfo.price
-        val percent = 1.3
-        val sales = (price * percent).toInt()
+        val sales = sellingPriceCalculating(price)
         val aoringoPlayer = AoringoPlayer(player)
         val scoreboardName = acquisitionScoreboardName()
         if (scoreboardName == null) {

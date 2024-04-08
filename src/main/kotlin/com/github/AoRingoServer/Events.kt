@@ -142,7 +142,7 @@ class Events(private val plugin: Plugin) : Listener {
         val playerHasCheckItem = item.clone()
         playerHasCheckItem.amount = 1
         if (playerHasItemUseMap.keys.contains(playerHasCheckItem)) {
-            playerHasItemUseMap[item]?.invoke()
+            playerHasItemUseMap[playerHasCheckItem]?.invoke()
         } else if (itemFrameItemUseMap.keys.contains(itemFrameItem)) {
             itemFrameItemUseMap[itemFrameItem]?.invoke()
         } else {
